@@ -4,3 +4,6 @@ Starting with GIMBAL control codes.
 A good website to start with 'apart from wiki'
 http://www.olliw.eu/2013/storm32bgc/
 
+23/02/2020
+Added code for gimbal controls in .ino and .py.
+    
