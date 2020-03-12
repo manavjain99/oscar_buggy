@@ -7,3 +7,16 @@ http://www.olliw.eu/2013/storm32bgc/
 23/02/2020
 Added code for gimbal controls in .ino and .py.
     
+11/03/2020
+9.40 PM
+Resuming testing Gimbal code.
+
+12/03/2020
+8.59PM
+Fixed VSCODE arduino and platformIO, installed STM32 Programmer added as a path to environment variable.
+STM32 blinky blinky code works good with ARDUINO extension. PlatformIO not tested, neither willing COZ of 
+MAVLINK codes ? 
+Maybe I might PORT the CODES. Might !
+Currently soldering UART PINS on the Storm32.
+
+
