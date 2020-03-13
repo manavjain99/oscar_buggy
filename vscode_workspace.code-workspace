@@ -5,10 +5,6 @@
 		},
 		{
 			"name": "gimbal control",
-			"path": "/home/param/Documents/PlatformIO/Projects/gimbal control"
-		},
-		{
-			"name": "gimbal control",
 			"path": "code/gimbal control"
 		}
 	],

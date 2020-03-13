@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "/home/param/.arduino15/packages/stm32duino/tools/**",
-                "/home/param/.arduino15/packages/stm32duino/hardware/STM32F1/2019.12.31/**"
+                "/home/param/.arduino15/packages/stm32duino/hardware/STM32F1/2019.12.31/**",
+                "C:\\Users\\Param\\AppData\\Local\\Arduino15\\packages\\stm32duino\\hardware\\STM32F1\\2019.12.31\\**",
+                "C:\\Users\\Param\\AppData\\Local\\Arduino15\\packages\\stm32duino\\tools\\**"
             ],
             "forcedInclude": [],
             "intelliSenseMode": "gcc-x64",

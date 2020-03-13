@@ -19,4 +19,20 @@ MAVLINK codes ?
 Maybe I might PORT the CODES. Might !
 Currently soldering UART PINS on the Storm32.
 
+13/03/2020
+5.56PM 
+ 
+ Still busy trying to figure out MAVLINK codes ,
+
+ Maybe the code i downloaded was firmware code for the STORM32 and not for arduino or any other microcontroller. 
+ 
+ USed FTDI for STORM32 connected well But has version 0.90
+ Latest is 2.xx Older version is no longer supported by newer oliwells GUI (Windows) 
+ Will be installating older GUI, to see if I can PAN / steer GIMBAL Then move to upgrading and inverting GIMBAL with {fingers cross} newer firmware.
+ Shifted to windows for ease of WORK (Sed) bcoz installation is difficult on linux.
+
+ Found a nice design quote 
+ "An important thing to look for in a gimbal is how this attachment is done. The little rubber balls commonly used for this suspension are designed to work in compression not tension. What that means is that the gimbal should hang on the balls not from them."
+ ie The gimbal used in this project *should* be inverted. For better vibration cancelling response.
+ src https://www.rcgroups.com/forums/showthread.php?2818200-Gimbals-101
 

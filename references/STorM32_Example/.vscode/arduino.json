@@ -1,0 +1,7 @@
+{
+    "programmer": "AVRISP mkII",
+    "board": "STM32:stm32:Nucleo_64",
+    "configuration": "pnum=NUCLEO_F411RE,upload_method=swdMethod,xserial=generic,usb=none,xusb=FS,opt=osstd,rtlib=nano",
+    "sketch": "STorM32_Example.ino",
+    "port": "/dev/ttyACM0"
+}
