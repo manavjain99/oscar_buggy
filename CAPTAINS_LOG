@@ -54,3 +54,13 @@ Accessing the gimbalGUI connection to GUI **through** a MCU/(or a autopilot etc.
 12.48PM 
 
 Tested motion control via GUI now moving to STM32 CODE simple UART MAVLINK SWEEP CODE.
+
+2.20 PM 
+Trying D2 and D8 as first attempt for STM32 UART via arduino.
+Now in elementary, Arduino / maple leaf leaflabs resources really suck at telling which port is port 2 and which port is port 3 and their respective pins.
+Had to dig deep into platformio core to see the definitions now trying to test them.
+
+5.17 PM 
+Finally. 
+Managed to fix the 2 uart ISSUE, NOW can communicate via two UARTS. 
+Also the GIMBAL code compiled using platformIO.

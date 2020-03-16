@@ -1,4 +1,5 @@
 {
     "board": "stm32duino:STM32F1:nucleo_f103rb",
-    "configuration": "device_variant=NucleoF103_HSI,opt=osstd"
+    "configuration": "device_variant=NucleoF103_HSI,opt=osstd",
+    "sketch": "references\\STorM32_Example\\STorM32_Example.ino"
 }

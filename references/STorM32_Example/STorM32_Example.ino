@@ -3,6 +3,12 @@
 
 #define ToDeg(x) (x*57.2957795131)  // *180/pi
 
+#define MODIFIED
+
+#ifdef MODIFIED
+HardWareSerial Serial2 (PA11, PA12);
+
+#endif 
 union byteToFloat
 {
     struct
@@ -33,6 +39,8 @@ union intFloat
 
 void setup(){
   Serial.begin(115200);
+  Serial2.begin(115200);
+  
 }
 
 void loop(){   
@@ -168,3 +176,5 @@ void setRc(byte type, uint16_t val){
 }
 
 
+/*
+*/
