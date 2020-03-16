@@ -8,7 +8,9 @@
   #define ToDeg(x) (x*57.2957795131)  // *180/pi
   #define to_PC Serial2 
   #define to_GIMBAL Serial1
-
+  #define INCREASING HIGH
+  #define DECREASING LOW
+  
   //#define MODIFIED
 
   #ifdef MODIFIED
@@ -50,9 +52,9 @@
     mavlink_message_t msg;
     mavlink_status_t status;
     
-    while (to_PC.available() > 0) {
+    while (to_GIMBAL.available() > 0) {
       
-      uint8_t c = to_PC.read();
+      uint8_t c = to_GIMBAL.read();
       //trying to grab msg
       if (mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {   
         switch (msg.msgid) {
@@ -85,7 +87,7 @@
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_command_long_pack(255, 1, &msg, 71, 67, 1234, 0, 0, 0, 0, 0, 0, 0, 0);
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    to_PC.write(buf, len);
+    to_GIMBAL.write(buf, len);
   
   }
 
@@ -95,7 +97,7 @@
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_param_request_read_pack(255, 1, &msg, 71, 67, "", id);
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    to_PC.write(buf, len);   
+    to_GIMBAL.write(buf, len);   
     
   }
 
@@ -108,7 +110,7 @@
       uint8_t buf[MAVLINK_MAX_PACKET_LEN];
       mavlink_msg_command_long_pack(255, 1, &msg, 71, 67, 180, 0, id, parameterValue.f, 0.0, 0.0, 0.0, 0.0, 0.0);
       uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-      to_PC.write(buf, len); 
+      to_GIMBAL.write(buf, len); 
         
   }
 
@@ -119,7 +121,7 @@
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_command_long_pack(255, 1, &msg, 71, 67, 205, 0, pitch, roll, yaw, 0.0, 0.0, 0.0, 0.0);
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    to_PC.write(buf, len);
+    to_GIMBAL.write(buf, len);
     
   }
 
@@ -129,7 +131,7 @@
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_command_long_pack(255, 1, &msg, 71, 67, 204, 0, 1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    to_PC.write(buf, len);
+    to_GIMBAL.write(buf, len);
     
   }
 
@@ -155,7 +157,7 @@
     
     mavlink_msg_command_long_pack(255, 1, &msg, 71, 67, 1235, 0, data1.f, data2.f, 0.0, 0.0, 0.0, 0.0, 0.0);
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    to_PC.write(buf, len);  
+    to_GIMBAL.write(buf, len);  
   }
 
 
@@ -175,27 +177,43 @@
   HardwareSerial to_GIMBAL (PA12, PA11);
 
   void setup(){
-    to_PC.begin(115200);
-
+    to_PC.begin(9600);
+    to_GIMBAL.begin(115200);
     //to_GIMBAL.begin(230400); /*DURING FIRMWARE UPGRADE OF GIMBAL SWITCH TO THIS FREQ*/
     //to_GIMBAL.setTx(PA11);
     //to_GIMBAL.setRx(PA12);
     pinMode(LED_BUILTIN, OUTPUT);
    
-    to_GIMBAL.print("can you see me ?");
+    //to_GIMBAL.print("can you see me ?");
     
   }
 
   bool state = LOW;
-    
+  int test_angle = 0;
+  bool angle_status = INCREASING;
 
   void loop(){   
     digitalWrite(LED_BUILTIN, state);
-    to_GIMBAL.print("can you see me ? Serial 1 ");
-    to_PC.print("can you see me ? Serial ");
-    
+    //to_GIMBAL.print("can you see me ? Serial 1 ");
+    to_PC.println("can you see me ? Serial ");
+    if ((angle_status == INCREASING)  )
+    {
+      test_angle++;
+      if(test_angle > 25){
+       (angle_status = DECREASING);
+      }
+    }
+    else if (angle_status == DECREASING )
+    {
+      test_angle--;
+      if(test_angle < 0){
+       (angle_status = INCREASING);
+      }
+    }
+    setAngles(test_angle,test_angle,test_angle);
     state = !state;
-    delay(1000);
+    delay(50);
     
-    read_mavlink_storm32();
+    //read_mavlink_storm32();
+    
   }

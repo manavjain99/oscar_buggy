@@ -64,3 +64,7 @@ Had to dig deep into platformio core to see the definitions now trying to test t
 Finally. 
 Managed to fix the 2 uart ISSUE, NOW can communicate via two UARTS. 
 Also the GIMBAL code compiled using platformIO.
+
+11.58PM
+Managed to control gimbal (hanging) from STM32 using MAVLINK codes.
+Will move to inverting and FINE tuning after I get a hold of GOPRO camera.
