@@ -38,6 +38,7 @@ void setup(){
 void loop(){   
 
   read_mavlink_storm32();
+  setAngles(20,0,0);
 }
 
 

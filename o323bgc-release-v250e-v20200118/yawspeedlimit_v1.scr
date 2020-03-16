@@ -1,6 +1,0 @@
-CASE#DEFAULT
-   SETP "Rc Yaw Speed Limit" 40.0
-   STOP
-CASE#1
-   SETP "Rc Yaw Speed Limit" 10.0
-   STOP

@@ -36,3 +36,21 @@ Currently soldering UART PINS on the Storm32.
  ie The gimbal used in this project *should* be inverted. For better vibration cancelling response.
  src https://www.rcgroups.com/forums/showthread.php?2818200-Gimbals-101
 
+14/03/20
+8.10 PM
+
+Gimbal Scripts STORM32
+For understanding the internal working one should realize, that the STorM32 controller code is essentially an endless loop, which is triggered and repeated every 1.5 ms.
+src http://www.olliw.eu/storm32bgc-wiki/STorM32_Scripts
+
+MAVLink_Communication
+The baudrate of the selected serial port is determined by the respective baudrate parameter in the [GUI:Expert] tab. Per default it is 115200 bps. It is recommended to use a baudrate of 230400 bps, if possible.
+src http://www.olliw.eu/storm32bgc-wiki/MAVLink_Communication
+
+Later I will need to do pass through mavlink tunneling ie 
+Accessing the gimbalGUI connection to GUI **through** a MCU/(or a autopilot etc..) coz GIMBAL is clamped DOWN to the SYSTEM (DRONE ETC.)
+
+16/03/20
+12.48PM 
+
+Tested motion control via GUI now moving to STM32 CODE simple UART MAVLINK SWEEP CODE.
