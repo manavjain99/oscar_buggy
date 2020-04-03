@@ -1,3 +1,4 @@
-"bin\ST\STLink\st-link_cli.exe" -P "o323BgcFirmwareFiles\o323bgc_v090_storm32bgc_v120_f103rc.hex" -V
-"bin\ST\STLink\st-link_cli.exe" -Rst
+"bin\ST\STMFlashLoader\STMFlashLoaderOlliW.exe" -c --pn 15 --br 115200 -ow -d --fn "o323BgcFirmwareFiles\o323bgc_v090_storm32bgc_v130_f103rc.hex" --ep --v -r --a 8000000
+
+@echo.
 @pause

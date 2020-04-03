@@ -68,3 +68,8 @@ Also the GIMBAL code compiled using platformIO.
 11.58PM
 Managed to control gimbal (hanging) from STM32 using MAVLINK codes.
 Will move to inverting and FINE tuning after I get a hold of GOPRO camera.
+
+3/04/20
+3.23PM
+
+Managed to invert the gimbal successfully , couldn't upgrade the FIRMWARE, still the firmware is V.90.
