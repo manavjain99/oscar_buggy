@@ -77,3 +77,10 @@ Managed to invert the gimbal successfully , couldn't upgrade the FIRMWARE, still
 14/04/20 
 4.11 PM
 Completed the Visual perception course much needed for this project, now moving to get the director module path, extracting from perl gimbal Scripts.
+4.27 PM
+S1 ) The test director profile 
+The simplest director profile called test_case_around_the_world. The buggy wil complete one rotation around the football with radius such that area of the bounding box is constant.
+
+S2 ) Getting the bounding boxes.
+I will be tinkering with tensorflow today, once satisfied with familiarity move to getting bboxes.
+ 
