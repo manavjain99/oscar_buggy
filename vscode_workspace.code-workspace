@@ -4,10 +4,6 @@
 			"path": "."
 		},
 		{
-			"name": "gimbal control",
-			"path": "code/gimbal control"
-		},
-		{
 			"name": "gimbal_control",
 			"path": "code/gimbal_control"
 		}
