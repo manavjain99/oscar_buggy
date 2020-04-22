@@ -84,3 +84,13 @@ The simplest director profile called test_case_around_the_world. The buggy wil c
 S2 ) Getting the bounding boxes.
 I will be tinkering with tensorflow today, once satisfied with familiarity move to getting bboxes.
  
+22/04/20
+7.01 PM 
+
+Finished running of tracking a green ball opencv. from  https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/
+Finished communication between, python and STM32.
+Tried to communicate via python and platformIO, couldn't communicate as platformIO also uses python at the backend.
+Tried to communicate via cuteCom hyperterminal, couldn't communicate both simulatenously, sent GARBAGE VALUE on the port /dev/ttyACM0 (ie stm32 port). (YES rechecked the baudrate)
+Used the port '/dev/ttyUSB0', interrupted the python terminal and could see the op on the hyperterminal.
+
+
