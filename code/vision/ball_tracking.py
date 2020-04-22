@@ -1,6 +1,7 @@
 '''
-green ball tracking via webcam then fused with Gimbal.
+green ball tracking via webcam then fused with Gimbal, will send center coords of the GREENBALL to the stm32 MCU.
 
+Pro tip : Google search for green ball in front of the cam instead of finding an actual one.
 Source : https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/
 
 Date 22 April 2020 4.20PM
