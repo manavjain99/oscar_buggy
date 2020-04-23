@@ -93,4 +93,7 @@ Tried to communicate via python and platformIO, couldn't communicate as platform
 Tried to communicate via cuteCom hyperterminal, couldn't communicate both simulatenously, sent GARBAGE VALUE on the port /dev/ttyACM0 (ie stm32 port). (YES rechecked the baudrate)
 Used the port '/dev/ttyUSB0', interrupted the python terminal and could see the op on the hyperterminal.
 
+23/04/20
+8.01 PM 
 
+Wrote bash scripts to create cpp and header file pairs.
