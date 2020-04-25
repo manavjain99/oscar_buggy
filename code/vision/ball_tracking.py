@@ -22,7 +22,7 @@ import time
 
 
 # Serial PORT INIT
-"""
+
 import serial
 
 serialPort = serial.Serial(port = '/dev/ttyUSB0', baudrate=115200,
@@ -48,7 +48,6 @@ while(1):
             break
 
 print("Successfully read the MCU")
-"""
 
 
 
@@ -101,14 +100,35 @@ time.sleep(2.0)
 frame = vs.read()
 f_height, f_width = frame.shape[:2]
 
+f_height = str(f_height) + '\r\n'
+f_width  = str(f_width)  + '\r\n'
+
 
 #send the frame height and width INFO
+
 while(1):
-	    serialPort.write(b"\r\n")
+	print("struck in send frame ht")
+	serialPort.write(f_height.encode())
+	if(serialPort.in_waiting > 0):
+		serialString = serialPort.readline()
+		if(serialString == b'ACK_FH\r\n'):
+			break
+
+while(1):
+	print("struck in send frame wd")
+	serialPort.write(f_width.encode())
+	if(serialPort.in_waiting > 0):
+		# Read data out of the buffer until a carraige return / new line is found
+		serialString = serialPort.readline()
+		if(serialString == b'ACK_FW\r\n'):
+			break
+
         	
 
 
 print(	"width and height of frame" + str(f_width) + str(f_height)	)
+
+
 
 # keep looping
 while True:

@@ -43,23 +43,24 @@ void setup(void){
 
 void loop(){
     /*SEND READY */
-    //send_until_ack("STM_READY", "ACK");
-    //digitalWrite(LED_BUILTIN, LOW);
-    
+    send_until_ack("STM_READY", "ACK");
+    //
     // Get frame size.
     String str_frame_ht = rec_and_ack("ACK_FH");
-    //char frame_hts[str_frame_ht.length()];
     float frame_ht = str_frame_ht.toFloat();
-    //String str_frame_wd = rec_and_ack("ACK_FW");
-    //float frame_wd = str_frame_wd.toFloat();
+    String str_frame_wd = rec_and_ack("ACK_FW");
+    float frame_wd = str_frame_wd.toFloat();
+    digitalWrite(LED_BUILTIN, LOW);
     
 
     //while(1){
-    //    // Get data of object center coords.
-    //
-    //    // Put PID LOOP for angles.
-//
-    //    // Done with gimbal control for obj detection.
+        // Get data of object center coords.
+        //digitalWrite(LED_BUILTIN, HIGH);
+        
+
+        // Put PID LOOP for angles.
+
+        // Done with gimbal control for obj detection.
     //}
 
 }

@@ -72,6 +72,7 @@ String rec_and_ack(String ack_message){
             if(is_backslash_r.equals("\r")){
                 rec_message = rec_message.substring(0, str_len - 1); 
             }
+            uart_obcomp.println(ack_message);
             return rec_message;
         }    
     }
