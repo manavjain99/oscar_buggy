@@ -110,3 +110,9 @@ Managed to get to and fro comms for string data types.
 Now moving to other types. https://python-forum.io/Thread-Writing-commands-to-serial
 See dead Eye's Comment in this link.
 
+10.11 PM 
+Wrote cleaner versions of the UART codes for STM testing again the clean versions.
+
+11.12 PM 
+Done with send_until_ack and rec_and_ack on the MCU side. NOW NEED TO DO THE SAME FOR OBCOMP side. 
+

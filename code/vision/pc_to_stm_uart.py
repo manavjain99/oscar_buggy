@@ -7,7 +7,7 @@ serialString = ""                           # Used to hold data coming over UART
 
 
 while(1):
-    test_var = 99
+    test_var = ' '
     # Wait until there is data waiting in the serial buffer
     output_var = str(test_var) + '\r\n'
     serialPort.write(output_var.encode())
@@ -22,8 +22,8 @@ while(1):
     #    # Print the contents of the serial data
     #    #print(str(serialString.decode('Ascii')))
     #    if(serialString == b'STM_READY\r\n'):
-    #        serialPort.write(test_var)
-    #        //serialPort.write(b"ACK\r\n")
+    #        #serialPort.write(test_var)
+    #        serialPort.write(b"ACK\r\n")
         # Stop reading if ACK is true.
         #break
         # Tell the device connected over the serial port that we recevied the data!
