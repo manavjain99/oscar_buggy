@@ -24,30 +24,35 @@ void setup(){
     //to_GIMBAL.setTx(PA11);
     //to_GIMBAL.setRx(PA12);
     pinMode(LED_BUILTIN, OUTPUT);
-   
+    digitalWrite(LED_BUILTIN, HIGH);
+    
     //to_GIMBAL.print("can you see me ?");
     
   }
 
-
+  String send_message = "STM_READY";
+  String ACK_STR = "ACK";
   void loop(){   
 
-    digitalWrite(LED_BUILTIN, HIGH);
-      // send data only when you receive data:
-    from_PYTHON.println("Hey python can you see me.");
-    delay(1000);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(1000);
+    from_PYTHON.println(send_message);
     if (from_PYTHON.available() > 0) {
     // Read python message.
-    python_message = from_PYTHON.readString();  
-//
-    // say what you got:
-    from_PYTHON.println("In the python console I should get");
-    from_PYTHON.println(python_message);
-    to_PC.print("I received from python: ");
-    to_PC.println(python_message);
-//
+      python_message = from_PYTHON.readStringUntil('\n');
+      //send_message = from_PYTHON.available();
+      send_message = python_message;
+      
+      if(python_message.equals("ACK\r")){
+      digitalWrite(LED_BUILTIN, LOW);
+      send_message = "LED SHOULD BE";
+      
+      }
+
+      // say what you got:
+      //from_PYTHON.println("In the python console I should get");
+      //from_PYTHON.println(python_message);
+      //to_PC.print("I received from python: ");
+      //to_PC.println(python_message);
+
   }
 }
 

@@ -19,7 +19,58 @@ import argparse
 import cv2
 import imutils
 import time
+
+
+# Serial PORT INIT
+"""
+import serial
+
+serialPort = serial.Serial(port = '/dev/ttyUSB0', baudrate=115200,
+                           bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+
+serialString = ""
+
+
+# Wait until MCU is not ready. ie read until STM_READY
+
+while(1):
+
+    # Wait until there is data waiting in the serial buffer
+    if(serialPort.in_waiting > 0):
+
+        # Read data out of the buffer until a carraige return / new line is found
+        serialString = serialPort.readline()
+        print(serialString)
+        # Print the contents of the serial data
+        #print(str(serialString.decode('Ascii')))
+        if(serialString == b'STM_READY\r\n'):
+            serialPort.write(b"ACK\r\n")
+            break
+
+print("Successfully read the MCU")
+"""
+
+
+
+#while (serialPort.in_waiting < 0):
+#def obj_tracker(CAMID = 0 ):
+#	"""
+#	(int = 0) -> (int, int),(float, float)
+#	
+#	#description: Takes input feed from video src, outputs obj_center and video frame_size.
+#
+#	>>> obj_tracker(CAMID = 0 )
+#	(objx,objy),(Imagew, ImageH)
+#	"""
+#		# grab the current frame
+#	frame = vs.read()
+#	# handle the frame from VideoCapture or VideoStream
+#	frame = frame[1] if args.get("video", False) else frame
+#	# if we are viewing a video and we did not grab a frame,
+#	# then we have reached the end of the video
+#
 # construct the argument parse and parse the arguments
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
 	help="path to the (optional) video file")
@@ -37,12 +88,27 @@ pts = deque(maxlen=args["buffer"])
 # to the webcam
 if not args.get("video", False):
 	vs = VideoStream(src=0).start()
+
 # otherwise, grab a reference to the video file
 else:
+	
 	vs = cv2.VideoCapture(args["video"])
 # allow the camera or video file to warm up
 time.sleep(2.0)
 
+#width  = vs.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)  # float
+#height = vs.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
+frame = vs.read()
+f_height, f_width = frame.shape[:2]
+
+
+#send the frame height and width INFO
+while(1):
+	    serialPort.write(b"\r\n")
+        	
+
+
+print(	"width and height of frame" + str(f_width) + str(f_height)	)
 
 # keep looping
 while True:
