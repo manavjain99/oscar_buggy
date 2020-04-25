@@ -12,6 +12,8 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
+
+
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
@@ -57,11 +59,23 @@ void send_until_ack(String send_message, String ack_message){
     }
 }
 
-void rec_and_ack(String ack_message){
+String rec_and_ack(String ack_message){
+    /*Receive and acknowledge. Dont fuck around, Please.*/
+    while (1){
+        /* code */
         if(uart_obcomp.available() > 0){
             String rec_message = uart_obcomp.readStringUntil('\n');
-
-        }
+            
+            // Removes last two chars ie '\r' 
+            int str_len = rec_message.length();
+            String is_backslash_r = rec_message.substring(str_len - 1);
+            if(is_backslash_r.equals("\r")){
+                rec_message = rec_message.substring(0, str_len - 1); 
+            }
+            return rec_message;
+        }    
+    }
+    
 }
 
   //String send_message = "STM_READY";
@@ -89,8 +103,6 @@ void rec_and_ack(String ack_message){
 
 //  }
 //}//
-
-
 
 
 

@@ -29,7 +29,7 @@
 void init_uart();
 void send_until_ack(String, String );
 /*send_message, ack_message*/
-void rec_and_ack(String);
+String rec_and_ack(String);
 
 
 #endif

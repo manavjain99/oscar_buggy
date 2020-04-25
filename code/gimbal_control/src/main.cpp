@@ -12,10 +12,17 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
+//#define DEBUG
+#ifdef DEBUG 
+
+
+
+#endif
+
+#ifndef DEBUG
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
-
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
@@ -29,14 +36,35 @@
 /* START YOUR CODE HERE */
 void setup(void){
     init_uart();
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, HIGH);
     
 }
 
 void loop(){
-    send_until_ack("STM_READY", "ACK");
-    rec_and_ack("REC");
+    /*SEND READY */
+    //send_until_ack("STM_READY", "ACK");
+    //digitalWrite(LED_BUILTIN, LOW);
+    
+    // Get frame size.
+    String str_frame_ht = rec_and_ack("ACK_FH");
+    //char frame_hts[str_frame_ht.length()];
+    float frame_ht = str_frame_ht.toFloat();
+    //String str_frame_wd = rec_and_ack("ACK_FW");
+    //float frame_wd = str_frame_wd.toFloat();
+    
+
+    //while(1){
+    //    // Get data of object center coords.
+    //
+    //    // Put PID LOOP for angles.
+//
+    //    // Done with gimbal control for obj detection.
+    //}
+
 }
 
+#endif
 
 /* END OF FILE */
 
