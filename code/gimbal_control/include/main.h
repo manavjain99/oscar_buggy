@@ -12,30 +12,25 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-#include "../include/main.h"
-#include "../include/commons.h"
-#include "../include/uart.hpp"
+#ifndef main_h
+#define main_h
 
 
-/*DEFINE YOUR GLOBAL VARS HERE*/
+#include <Arduino.h>
+#include <Arduino.h>
+
+/* EXTERN YOUR GLOBAL VARS HERE*/
+
+//extern 
+//extern 
 
 
-/*DEFINE YOUR PRIVATE VARS HERE*/
+/* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
 
+//void 
+//void 
 
-/*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
-
-
-/* START YOUR CODE HERE */
-void setup(void){
-    init_uart();
-    
-}
-
-void loop(){
-    send_until_ack("STM_READY", "ACK");
-    rec_and_ack("REC");
-}
+#endif
 
 
 /* END OF FILE */
