@@ -177,6 +177,16 @@ while True:
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 	# update the points queue
 	pts.appendleft(center);print(center)
+	center_message = " "
+	while(1):
+		#print("struck in send center frame info")
+		serialPort.write(center_message.encode())
+		center_message = str(center) + "\r\n"
+		if(serialPort.in_waiting > 0):
+			# Read data out of the buffer until a carraige return / new line is found
+			serialString = serialPort.readline()
+			if(serialString == b'ACK_FC\r\n'):
+				break
     #print(center)
     	# loop over the set of tracked points
 	for i in range(1, len(pts)):

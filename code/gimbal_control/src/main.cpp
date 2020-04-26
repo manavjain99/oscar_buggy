@@ -52,16 +52,17 @@ void loop(){
     float frame_wd = str_frame_wd.toFloat();
     digitalWrite(LED_BUILTIN, LOW);
     
-
-    //while(1){
+    String object_center = "HI";
+    while(1){
         // Get data of object center coords.
-        //digitalWrite(LED_BUILTIN, HIGH);
-        
-
+        digitalWrite(LED_BUILTIN, HIGH);
+        object_center = rec_and_ack("ACK_OC");
+        digitalWrite(LED_BUILTIN, LOW);
+        object_center = " ";
         // Put PID LOOP for angles.
 
         // Done with gimbal control for obj detection.
-    //}
+    }
 
 }
 
