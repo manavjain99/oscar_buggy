@@ -116,3 +116,25 @@ Wrote cleaner versions of the UART codes for STM testing again the clean version
 11.12 PM 
 Done with send_until_ack and rec_and_ack on the MCU side. NOW NEED TO DO THE SAME FOR OBCOMP side. 
 
+
+26/04/20
+9.06 PM
+Finished today with ONBOARD pc python clean codes.
+Fixed camera and gimbal hardware setup.
+
+Now moving to PID for object tracking via GIMBAL.
+
+27/04/20
+1.15 PM 
+
+Some fucked up shit ..., need to convert from String types to getiing float via csv vals from Strings ( Note S is capital). ( Arduino fucked up libs.)
+
+2.25 AM 
+Theres isnt as much shit in this world wrong as there is wrong with arduino motherfucking Strings.
+Still unresolved issue of unable to  convert it to plain strings and parse the motherfucking data.
+FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK ARDUINO. Sadly need to rely for the bloody mavlink APIS.
+
+2.51 AM 
+Did a bloody brute force and copied String to string char by char and then parsed that string.
+
+Now to the ugly PID for camera angles. but Finally getiing somewhere close ? 

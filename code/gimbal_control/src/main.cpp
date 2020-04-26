@@ -14,18 +14,31 @@
 */
 //#define DEBUG
 #ifdef DEBUG 
+#include "../include/main.h" 
 
+//String test = "bigest assole";
+void setup(){
 
+}
 
+void loop(){
+
+}
 #endif
 
 #ifndef DEBUG
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
+#include "../include/utils.h"
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
+float frame_ht = 0.0;
+float frame_wd = 0.0;
 
+float object_area = 0.0;
+float object_cx   = 0.0;
+float object_cy   = 0.0;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 
@@ -40,28 +53,33 @@ void setup(void){
     digitalWrite(LED_BUILTIN, HIGH);
     
 }
-
+String object_area_String = " ";
+        
 void loop(){
     /*SEND READY */
     send_until_ack("STM_READY", "ACK");
     //
     // Get frame size.
     String str_frame_ht = rec_and_ack("ACK_FH");
-    float frame_ht = str_frame_ht.toFloat();
-    String str_frame_wd = rec_and_ack("ACK_FW");
-    float frame_wd = str_frame_wd.toFloat();
-    digitalWrite(LED_BUILTIN, LOW);
+    frame_ht = str_frame_ht.toFloat();
     
+    String str_frame_wd = rec_and_ack("ACK_FW");
+    frame_wd = str_frame_wd.toFloat();
+    //
+    //
     String object_center = "HI";
     while(1){
         // Get data of object center coords.
-        digitalWrite(LED_BUILTIN, HIGH);
         object_center = rec_and_ack("ACK_OC");
-        digitalWrite(LED_BUILTIN, LOW);
-        object_center = " ";
-        // Put PID LOOP for angles.
-
-        // Done with gimbal control for obj detection.
+        get_object_params(object_center);
+        if(object_cy == float(2)){
+            digitalWrite(LED_BUILTIN, LOW);
+        }
+        //object_area_String = String(object_area, 7);
+        
+     // Put PID LOOP for angles.
+     // Done with gimbal control for obj detection.
+    
     }
 
 }

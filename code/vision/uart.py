@@ -51,10 +51,9 @@ def send_until_ack(send_message, ack_message, portname = uart_stm):
   """
   send_message = str(send_message) + '\r\n'
   ack_message  =  str(ack_message) + '\r\n'
+  ack_message = bytes(ack_message, encoding = 'utf-8')
   rec_message = ''
-  # 
-  rec_message.encode('utf-8')# = ''
-
+  
   while(1):
     # Keep sending the message.
     portname.write(send_message.encode())
@@ -62,14 +61,6 @@ def send_until_ack(send_message, ack_message, portname = uart_stm):
     # check if ack message received.
     if(portname.in_waiting > 0):
       rec_message = portname.readline()
-    
-    # I honestly don't know what iam doing here.
-    # See https://stackoverflow.com/questions/28583565/str-object-has-no-attribute-decode-python-3-error
-    try:
-      rec_message = rec_message.decode()
-    except AttributeError:
-      # if string then encode and decode.
-      pass
      
     # If received message == ack message, then exit.
     if(rec_message == ack_message):
@@ -119,18 +110,20 @@ if __name__ == '__main__':
       pass
 
   print("STM READY, Successfully read.")
+  
   # send frame ht
-  send_until_ack("99", 'ACK_FH')
+  send_until_ack("99", "ACK_FH")
   print(" Sent frame ht successfully.")
   
   # send frame wd
-  send_until_ack("99", "ACK_FW")
+  send_until_ack("909", "ACK_FW")
   print(" Sent frame wd successfully.")
   
   while (1):
     # send obj center
-    send_until_ack("99", "ACK_OC")
-    print(" Sent object center successfully.")
+    send_until_ack("100, 25, 2", "ACK_OC")
+    #print(rec_and_ack("ACK"))
+    #print(" Sent object params successfully.")
     
   #import doctest
   #doctest.testmod()

@@ -1,8 +1,8 @@
 /*
 * Author: Param Deshpande
-* Date created:  Sat 25 Apr 19:21:45 IST 2020
+* Date created:  Sun 26 Apr 23:26:36 IST 2020
 * Description: 
-* Main file for the stm32 MCU responsilble for controlling the gimbal and the buggy.
+* For helper functions needed for the code to run regarding strings , arrays , general optimizations, basically helper functions which couldnt be cgorized into any other file.
 * License :
 * ------------------------------------------------------------
 * "THE BEERWARE LICENSE" (Revision 42):
@@ -12,23 +12,19 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-#ifndef main_h
-#define main_h
+#ifndef utils_h
+#define utils_h
 
-
-#include <Arduino.h>
-#include <Arduino.h>
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
 
-extern float object_area;
-extern float object_cx  ; 
-extern float object_cy  ;
+//extern 
+//extern 
 
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
 
-//void 
+void get_object_params(String);
 //void 
 
 #endif

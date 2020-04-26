@@ -23,31 +23,31 @@ import time
 
 # Serial PORT INIT
 
-import serial
-
-serialPort = serial.Serial(port = '/dev/ttyUSB0', baudrate=115200,
-                           bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-
-serialString = ""
+#import serial
+#
+#serialPort = serial.Serial(port = '/dev/ttyUSB0', baudrate=115200,
+#                           bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+#
+#serialString = ""
 
 
 # Wait until MCU is not ready. ie read until STM_READY
 
-while(1):
-
-    # Wait until there is data waiting in the serial buffer
-    if(serialPort.in_waiting > 0):
-
-        # Read data out of the buffer until a carraige return / new line is found
-        serialString = serialPort.readline()
-        print(serialString)
-        # Print the contents of the serial data
-        #print(str(serialString.decode('Ascii')))
-        if(serialString == b'STM_READY\r\n'):
-            serialPort.write(b"ACK\r\n")
-            break
-
-print("Successfully read the MCU")
+#while(1):
+#
+#    # Wait until there is data waiting in the serial buffer
+#    if(serialPort.in_waiting > 0):
+#
+#        # Read data out of the buffer until a carraige return / new line is found
+#        serialString = serialPort.readline()
+#        print(serialString)
+#        # Print the contents of the serial data
+#        #print(str(serialString.decode('Ascii')))
+#        if(serialString == b'STM_READY\r\n'):
+#            serialPort.write(b"ACK\r\n")
+#            break
+#
+#print("Successfully read the MCU")
 
 
 
@@ -85,48 +85,51 @@ greenUpper = (64, 255, 255)
 pts = deque(maxlen=args["buffer"])
 # if a video path was not supplied, grab the reference
 # to the webcam
+
+#vs = cv2.VideoCapture(0)
 if not args.get("video", False):
-	vs = VideoStream(src=0).start()
+	vs = VideoStream(src=2).start()
 
 # otherwise, grab a reference to the video file
 else:
 	
-	vs = cv2.VideoCapture(args["video"])
+	#vs = cv2.VideoCapture(args["video"])
+	vs = cv2.VideoCapture(2)
 # allow the camera or video file to warm up
 time.sleep(2.0)
 
 #width  = vs.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)  # float
 #height = vs.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
 frame = vs.read()
-f_height, f_width = frame.shape[:2]
-
-f_height = str(f_height) + '\r\n'
-f_width  = str(f_width)  + '\r\n'
+#f_height, f_width = frame.shape[:2]
+#
+#f_height = str(f_height) + '\r\n'
+#f_width  = str(f_width)  + '\r\n'
 
 
 #send the frame height and width INFO
 
-while(1):
-	print("struck in send frame ht")
-	serialPort.write(f_height.encode())
-	if(serialPort.in_waiting > 0):
-		serialString = serialPort.readline()
-		if(serialString == b'ACK_FH\r\n'):
-			break
-
-while(1):
-	print("struck in send frame wd")
-	serialPort.write(f_width.encode())
-	if(serialPort.in_waiting > 0):
-		# Read data out of the buffer until a carraige return / new line is found
-		serialString = serialPort.readline()
-		if(serialString == b'ACK_FW\r\n'):
-			break
-
+#while(1):
+#	print("struck in send frame ht")
+#	serialPort.write(f_height.encode())
+#	if(serialPort.in_waiting > 0):
+#		serialString = serialPort.readline()
+#		if(serialString == b'ACK_FH\r\n'):
+#			break
+#
+#while(1):
+#	print("struck in send frame wd")
+#	serialPort.write(f_width.encode())
+#	if(serialPort.in_waiting > 0):
+#		# Read data out of the buffer until a carraige return / new line is found
+#		serialString = serialPort.readline()
+#		if(serialString == b'ACK_FW\r\n'):
+#			break
+#
         	
 
 
-print(	"width and height of frame" + str(f_width) + str(f_height)	)
+#print(	"width and height of frame" + str(f_width) + str(f_height)	)
 
 
 
@@ -178,15 +181,15 @@ while True:
 	# update the points queue
 	pts.appendleft(center);print(center)
 	center_message = " "
-	while(1):
-		#print("struck in send center frame info")
-		serialPort.write(center_message.encode())
-		center_message = str(center) + "\r\n"
-		if(serialPort.in_waiting > 0):
-			# Read data out of the buffer until a carraige return / new line is found
-			serialString = serialPort.readline()
-			if(serialString == b'ACK_FC\r\n'):
-				break
+	#while(1):
+	#	#print("struck in send center frame info")
+	#	serialPort.write(center_message.encode())
+	#	center_message = str(center) + "\r\n"
+	#	if(serialPort.in_waiting > 0):
+	#		# Read data out of the buffer until a carraige return / new line is found
+	#		serialString = serialPort.readline()
+	#		if(serialString == b'ACK_FC\r\n'):
+	#			break
     #print(center)
     	# loop over the set of tracked points
 	for i in range(1, len(pts)):
