@@ -23,7 +23,7 @@ WIP to do list
 
 ######################Global variable declaration(User Specific)#######################
 baud = 115200 #Having the wrong value here will cause serial communication issues. 
-com = 'COM13' #Change this value to your COM port
+com = '/dev/ttyUSB0' #Change this value to your COM port
 crc = '3334'  #Non-mavlink CRC dummy value. Should not need to change!
 sleeptime = [None, .25] #In seconds. [Movement CMD delay, Non-movement CMD delay]
   
@@ -347,11 +347,16 @@ if __name__=="__main__":
     main()	 
 else: 
     main()
-	
+
+yawG = 1
+while (yawG<60):
+     yawG += 1
+     setyaw(yawG) 
+
 #Test script here
 #setpitch(10)
 #setroll(10) 
-#setyaw(50) 
+
 #homeall() 
 
 

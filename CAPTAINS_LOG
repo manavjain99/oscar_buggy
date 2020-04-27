@@ -144,3 +144,9 @@ Moving to actual feedback and gimbal control.
 
 1.01PM 
 successfully sent area,cx, cy from ball_tracking to stm.
+
+5.27 PM 
+The python version to control gimbal was right under my nose, wonder why did I insist on sending from obcomp to mcu to gimbal.
+Im sending directly from obcomp to gimbal.  TOO EASY ... :) 
+
+For the moment I have kept the MCU aside, will be using it when I would be needing buggy controls part.

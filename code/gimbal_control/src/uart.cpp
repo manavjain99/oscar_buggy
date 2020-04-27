@@ -21,13 +21,8 @@
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
-#define uart_obcomp Serial1
-#define uart_dbugcon Serial2 
-
-
 /*DEFINE YOUR PRIVATE VARS HERE*/
-
-HardwareSerial uart_obcomp (PA12, PA11);
+HardwareSerial uart_gimbal (PA12, PA11);
 
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
@@ -39,15 +34,14 @@ String python_message = "";
 
 void init_uart(void){
     uart_obcomp.begin(115200);
-    uart_dbugcon.begin(9600);
-    
+//    uart_dbugcon.begin(9600);
+    uart_gimbal.begin(115200);   
 }
 
 void send_until_ack(String send_message, String ack_message){
     /*Sends a packet of data until acknowledge by the onborad comp ie obcomp*/
     while (1){
         uart_obcomp.println(send_message);
-        uart_dbugcon.println("Send until ack by STM32");
         /*If ack data sent by obcomp*/
         if(uart_obcomp.available() > 0){
             String rec_message = uart_obcomp.readStringUntil('\n');
@@ -99,9 +93,7 @@ String rec_and_ack(String ack_message){
       // say what you got:
       //uart_obcomp.println("In the python console I should get");
       //uart_obcomp.println(python_message);
-      //uart_dbugcon.print("I received from python: ");
-      //uart_dbugcon.println(python_message);
-
+      
 //  }
 //}//
 

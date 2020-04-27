@@ -19,6 +19,13 @@
 #include "Arduino.h"
 #include "string.h"
 /* EXTERN YOUR GLOBAL VARS HERE*/
+#define uart_gimbal Serial1
+#define uart_obcomp Serial2
+//#define uart_dbugcon Serial3 
+
+extern HardwareSerial uart_obcomp;
+//extern HardwareSerial uart_dbugcon;
+extern HardwareSerial uart_gimbal ;
 
 //extern 
 //extern 
