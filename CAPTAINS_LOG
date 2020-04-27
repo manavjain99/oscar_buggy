@@ -138,3 +138,9 @@ FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKK
 Did a bloody brute force and copied String to string char by char and then parsed that string.
 
 Now to the ugly PID for camera angles. but Finally getiing somewhere close ? 
+
+10.57 AM
+Moving to actual feedback and gimbal control.
+
+1.01PM 
+successfully sent area,cx, cy from ball_tracking to stm.

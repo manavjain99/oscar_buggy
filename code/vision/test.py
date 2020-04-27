@@ -24,7 +24,8 @@ if __name__ == '__main__':
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-#def ...:
+def test_funct():
+    pass
 #def ...:
 
 """ START YOUR CODE HERE """

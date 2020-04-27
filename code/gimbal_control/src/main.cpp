@@ -72,7 +72,7 @@ void loop(){
         // Get data of object center coords.
         object_center = rec_and_ack("ACK_OC");
         get_object_params(object_center);
-        if(object_cy == float(2)){
+        if(object_area == float(100)){
             digitalWrite(LED_BUILTIN, LOW);
         }
         //object_area_String = String(object_area, 7);
