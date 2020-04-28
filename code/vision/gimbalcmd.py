@@ -349,7 +349,7 @@ else:
     main()
 
 #Test script here
-setyaw(20) 
+#setyaw(20) 
 #setpitch(10)
 #setroll(10) 
 

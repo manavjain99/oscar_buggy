@@ -162,10 +162,17 @@ Unable to try on elementary, hoping to see if this works on windows !
 
 6.16 PM
 Came back on elementary.
-Turns out there were big loose connections on the UART pins soldered on STM. Soldered header / jumper pins to the uart pins of gimbal.
+Turns out there were big loose connections on the UART pins soldered on STM. Soldered header / jumper cables to the uart pins of gimbal.
 Now everything seems to work good.
 Both Python and MCU.
 
 Will now be testing cam and pixels per degree of the Gimbal, maybe /may not be useful for object tracking.
 
 Gimbal moved webcam opened, need to tweak the python code..
+
+9.19 PM
+Ran on a python script.
+Although takes too long to change gimbal angles not possible for real time.
+Will be moving to stm and see if it is good enough for real time. 
+Found that del_pixels/deg = 18 pix\deg (+-) 1.5pix/deg # CALC around (+-) 1 deg 
+Let me try to use around, +- 3 pixels in actual scenarios ? To be tested.
