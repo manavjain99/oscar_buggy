@@ -67,41 +67,41 @@ echo '""" WRITE YOUR FUNCTIONS HERE """' >>$file_name.py
 
 echo '' >>$file_name.py
 echo "#def ...:" >>$file_name.py
-echo '  """' >>$file_name.py
-echo '  () -> ()' >>$file_name.py
-echo '  Description: ' >>$file_name.py
-echo '  >>>' >>$file_name.py
-echo '  ' >>$file_name.py
-echo '  """' >>$file_name.py
+echo '#  """' >>$file_name.py
+echo '#  () -> ()' >>$file_name.py
+echo '#  Description: ' >>$file_name.py
+echo '#  >>>' >>$file_name.py
+echo '#  ' >>$file_name.py
+echo '#  """' >>$file_name.py
 echo '' >>$file_name.py
 
 
 echo '' >>$file_name.py
 echo "#def ...:" >>$file_name.py
-echo '  """' >>$file_name.py
-echo '  () -> ()' >>$file_name.py
-echo '  Description: ' >>$file_name.py
-echo '  >>>' >>$file_name.py
-echo '  ' >>$file_name.py
-echo '  """' >>$file_name.py
+echo '#  """' >>$file_name.py
+echo '#  () -> ()' >>$file_name.py
+echo '#  Description: ' >>$file_name.py
+echo '#  >>>' >>$file_name.py
+echo '#  ' >>$file_name.py
+echo '#  """' >>$file_name.py
 echo '' >>$file_name.py
 
 
 echo '' >>$file_name.py
 echo "#def ...:" >>$file_name.py
-echo '  """' >>$file_name.py
-echo '  () -> ()' >>$file_name.py
-echo '  Description: ' >>$file_name.py
-echo '  >>>' >>$file_name.py
-echo '  ' >>$file_name.py
-echo '  """' >>$file_name.py
+echo '#  """' >>$file_name.py
+echo '#  () -> ()' >>$file_name.py
+echo '#  Description: ' >>$file_name.py
+echo '#  >>>' >>$file_name.py
+echo '#  ' >>$file_name.py
+echo '#  """' >>$file_name.py
 echo '' >>$file_name.py
 
 
 echo '""" START YOUR CODE HERE """' >>$file_name.py
 echo '' >>$file_name.py
 echo "if __name__ == '__main__':" >>$file_name.py
-echo "  " >>$file_name.py
+echo "  pass" >>$file_name.py
 echo "  #import doctest" >>$file_name.py
 echo "  #doctest.testmod()" >>$file_name.py
 echo "  " >>$file_name.py

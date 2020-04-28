@@ -150,3 +150,13 @@ The python version to control gimbal was right under my nose, wonder why did I i
 Im sending directly from obcomp to gimbal.  TOO EASY ... :) 
 
 For the moment I have kept the MCU aside, will be using it when I would be needing buggy controls part.
+
+28/04/20
+
+2.23 PM 
+
+couldnt communicate with python and gimbal yesterday, UART errors, rechecked the wirings , changed the USB wires still no luck. 
+Will try the same thing today, If fails / also need to move to MCU cause python is way too SLOW ...... :(
+
+Unable to try on elementary, hoping to see if this works on windows !
+
