@@ -16,7 +16,6 @@
 #ifdef DEBUG 
 #include "../include/main.h" 
 
-//String test = "bigest assole";
 void setup(){
 
 }

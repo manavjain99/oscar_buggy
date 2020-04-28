@@ -12,6 +12,9 @@
 		},
 		{
 			"path": "code/vision"
+		},
+		{
+			"path": "../../../home/param/python_playground"
 		}
 	],
 	"settings": {

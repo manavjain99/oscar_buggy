@@ -26,9 +26,9 @@
 #define INCREASING HIGH
 #define DECREASING LOW
 
-float gimbal_roll = 0.0;
-float gimbal_pitch = 0.0;
-float gimbal_yaw = 0.0;
+int gimbal_roll = 0;
+int gimbal_pitch = 0;
+int gimbal_yaw = 0;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 static String gimbal_object_params_ = "";
@@ -216,15 +216,19 @@ static bool angle_status = INCREASING;
 
 void get_pix_per_deg(void){
     
-  read_mavlink_storm32();
-  setAngles(0,0,-90);
+  //read_mavlink_storm32();
+  uint16_t yaw_var = 45;
+  setRcYaw(yaw_var);
+  while(1);
+  //setAngles(-gimbal_roll, -gimbal_pitch, -gimbal_yaw);
+  //setAngles(0,0,-90);
     // Set to -45 deg.
   //while(gimbal_yaw != 90.0F){
   //  ++gimbal_yaw;
   //  setAngles(-gimbal_roll, -gimbal_pitch, -gimbal_yaw);
-  //  delay(50);
+  //  delay(75);
   //}
-  //  setAngles(-gimbal_roll, -gimbal_pitch, -90.0F);
+   // setAngles(-gimbal_roll, -gimbal_pitch, -90.0F);
   //  delay(50);
     /*
     gimbal_yaw = -45.0;

@@ -76,7 +76,7 @@ Managed to invert the gimbal successfully , couldn't upgrade the FIRMWARE, still
 
 14/04/20 
 4.11 PM
-Completed the Visual perception course much needed for this project, now moving to get the director module path, extracting from perl gimbal Scripts.
+now moving to get the director module path, extracting from perl gimbal Scripts.
 4.27 PM
 S1 ) The test director profile 
 The simplest director profile called test_case_around_the_world. The buggy wil complete one rotation around the football with radius such that area of the bounding box is constant.
@@ -132,7 +132,7 @@ Some fucked up shit ..., need to convert from String types to getiing float via 
 2.25 AM 
 Theres isnt as much shit in this world wrong as there is wrong with arduino motherfucking Strings.
 Still unresolved issue of unable to  convert it to plain strings and parse the motherfucking data.
-FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK ARDUINO. Sadly need to rely for the bloody mavlink APIS.
+shitty ARDUINO. Sadly need to rely for the bloody mavlink APIS.
 
 2.51 AM 
 Did a bloody brute force and copied String to string char by char and then parsed that string.
@@ -160,3 +160,12 @@ Will try the same thing today, If fails / also need to move to MCU cause python 
 
 Unable to try on elementary, hoping to see if this works on windows !
 
+6.16 PM
+Came back on elementary.
+Turns out there were big loose connections on the UART pins soldered on STM. Soldered header / jumper pins to the uart pins of gimbal.
+Now everything seems to work good.
+Both Python and MCU.
+
+Will now be testing cam and pixels per degree of the Gimbal, maybe /may not be useful for object tracking.
+
+Gimbal moved webcam opened, need to tweak the python code..

@@ -24,7 +24,7 @@ pts = deque(maxlen=64)
 
 # if a video path was not supplied, grab the reference
 # to the webcam
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=2).start()
 
 # allow the camera or video file to warm up
 time.sleep(3.0)
@@ -168,12 +168,12 @@ cv2.destroyAllWindows()
 
 if __name__ == '__main__':
 	gimbalcmd.setyaw(-45.0)
-	print("plug cam")
-	while (1):
-		key = cv2.waitKey(1) & 0xFF
-		# if the 'q' key is pressed, stop the loop
-		if key == ord("q"):
-			break
+	#print("plug cam")
+	#while (1):
+	#	key = cv2.waitKey(1) & 0xFF
+	#	# if the 'q' key is pressed, stop the loop
+	#	if key == ord("q"):
+	#		break
 	
 	for i in range(100):
 		obj_c = live_tracking()

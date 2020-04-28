@@ -22,12 +22,12 @@ WIP to do list
 '''
 
 ######################Global variable declaration(User Specific)#######################
-baud = 115200 #Having the wrong value here will cause serial communication issues. 
+baud =  115200 #Having the wrong value here will cause serial communication issues. 
 com = '/dev/ttyUSB0' #Change this value to your COM port
 crc = '3334'  #Non-mavlink CRC dummy value. Should not need to change!
 sleeptime = [None, .25] #In seconds. [Movement CMD delay, Non-movement CMD delay]
   
-  
+
 #   Pitch     Roll      Yaw     
 #[Min, Max, Min, Max, Min, Max] 
 axislimit = [None]*6
@@ -321,7 +321,7 @@ def cmdexecute(cmd,sleep):
     else:
          ser.write(cmd) 
          response = (ser.readline()) 
-         print ('Gimbal moveing wait', end="...")
+         print ('Gimbal moving wait', end="...")
          sys.stdout.flush()
          time.sleep(sleeptime[0])
          print ('Done', end="\n==========================\n") 
