@@ -23,9 +23,8 @@
 
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
-
-void get_pix_per_deg(void);
-//void 
+void init_gimbal(void);
+void orient_gimbal(void);
 
 #endif
 

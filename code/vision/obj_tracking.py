@@ -7,11 +7,25 @@ import cv2
 import imutils
 import time
 
-import gimbalcmd
+import uart
 
-gimbalcmd.homeall()
-gimbalcmd.setyaw(-5)
-gimbalcmd.setpitch(-8)
+# 0 for webcam, 2 or 1 for ext webcam depending on port.
+MY_CAM_ID = 2
+
+#import gimbalcmd
+#
+#gimbalcmd.homeall()
+#gimbalcmd.setyaw(-5)
+#gimbalcmd.setpitch(-8)
+
+
+## WAIT FOR STM TO BE READY.
+
+
+#while (uart.rec_and_ack("ACK") != b'STM_READY\r\n'):
+#      pass
+#print("STM READ SUCCESS.")
+
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -33,12 +47,26 @@ pts = deque(maxlen=args["buffer"])
 #if a video path was not supplied, grab the reference
 # to the webcam
 if not args.get("video", False):
-	vs = VideoStream(src=2).start()
+	vs = VideoStream(src=MY_CAM_ID).start()
 # otherwise, grab a reference to the video file
 else:
 	vs = cv2.VideoCapture(args["video"])
 # allow the camera or video file to warm up
-time.sleep(5.0)
+time.sleep(3.0)
+
+
+frame = vs.read()
+f_height, f_width = frame.shape[:2]
+#
+# Wait until stm is ready.
+
+#uart.send_until_ack(str(f_height),"ACK_FH")
+#uart.send_until_ack(str(f_width) ,"ACK_FW")
+#
+print("sent frame dims.")
+print(	"width and height of frame" + str(f_width) + str(f_height)	)
+
+
 
 
 # keep looping
@@ -89,7 +117,16 @@ while True:
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 	# update the points queue
 	pts.appendleft(center)
-	print(center)
+	#print(center)
+
+	if((center) == None):
+		center_message = "-1, -1, -1"
+	else:
+		center_message = "100, " + str(center[0]) + ', ' + str(center[1])
+	#print("Center messsage is " + str(center_message) )
+	#uart.send_until_ack( center_message, "ACK_OC")
+	#print("object data sent successfully.")
+	
     # loop over the set of tracked points
 	for i in range(1, len(pts)):
 		# if either of the tracked points are None, ignore

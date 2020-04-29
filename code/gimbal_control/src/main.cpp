@@ -48,6 +48,7 @@ float object_cy   = -1.0F;
 /* START YOUR CODE HERE */
 void setup(void){
     init_uart();
+    init_gimbal();
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, HIGH);
     
@@ -56,26 +57,30 @@ String object_area_String = " ";
         
 void loop(){
     /*SEND READY */
-    //send_until_ack("STM_READY", "ACK");
-    ////
-    //// Get frame size.
-    //String str_frame_ht = rec_and_ack("ACK_FH");
-    //frame_ht = str_frame_ht.toFloat();
+    send_until_ack("STM_READY", "ACK");
     //
-    //String str_frame_wd = rec_and_ack("ACK_FW");
-    //frame_wd = str_frame_wd.toFloat();
-    //
-    //
-    //String object_center = "HI";
+    // Get frame size.
+    String str_frame_ht = rec_and_ack("ACK_FH");
+    frame_ht = str_frame_ht.toFloat();
+    
+    String str_frame_wd = rec_and_ack("ACK_FW");
+    frame_wd = str_frame_wd.toFloat();
+    
+    
+    String object_center = "HI";
     while(1){
         // Get data of object center coords.
-        //object_center = rec_and_ack("ACK_OC");
-        //get_object_params(object_center);
-        //digitalWrite(LED_BUILTIN, LOW);
-        get_pix_per_deg();         
-        //if(object_area == float(100)){
-        //    digitalWrite(LED_BUILTIN, LOW);
-        //}
+        object_center = rec_and_ack("ACK_OC");
+        get_object_params(object_center);
+        //get_pix_per_deg();         
+        if(object_area == float(100)){
+            digitalWrite(LED_BUILTIN, LOW);
+            orient_gimbal();
+        }
+
+        else{
+            digitalWrite(LED_BUILTIN, HIGH);
+        }
         //object_area_String = String(object_area, 7);
         
      // Put PID LOOP for angles.

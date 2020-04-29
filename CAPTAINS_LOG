@@ -176,3 +176,28 @@ Although takes too long to change gimbal angles not possible for real time.
 Will be moving to stm and see if it is good enough for real time. 
 Found that del_pixels/deg = 18 pix\deg (+-) 1.5pix/deg # CALC around (+-) 1 deg 
 Let me try to use around, +- 3 pixels in actual scenarios ? To be tested.
+
+
+9.44 PM 
+Just calculating the timing reqs, takes around 1.4ms (calc) for complete UART betn obcomp and stm32.
+
+-----------------------
+NOTE 
+leave 5 pins from rightmost pins col the 6th pin is orange Wire ie connected to TX of gimbal or RX of mcu.
+Yellow wire 7pin below orange RX of Gimbals and TX of MCU 
+-----------------------
+
+29/04/20 
+
+3.53 PM 
+Re Soldered gimbal, uart still had loose connections not on the pins but rather on the base of the pins.
+Shaky output / improper tracking. Of the final run.
+Seems frame pixels are different than what opencv outputs for object center.
+Opencv cv outputs x,y for object center which means my 18pix/deg assumption needs to be redefined as 18 x,y coords per degree of the camera.
+I dont know as of now what is x,y and where did it come from or its relation but for the time being i can safely send x,y, which i was considering pixels.
+
+PS frame ht and frame wd is being sent in pixels, ie 480x640
+x,y vals for the current scenario is 600,800
+
+
+Now retesting the final run with frameht,framewd being sent as 600,800.

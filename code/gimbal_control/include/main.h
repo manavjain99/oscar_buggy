@@ -15,15 +15,17 @@
 #ifndef main_h
 #define main_h
 
-
 #include <Arduino.h>
-#include <Arduino.h>
+#include <cmath>
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
 
 extern float object_area;
 extern float object_cx  ; 
 extern float object_cy  ;
+
+extern float frame_ht ;
+extern float frame_wd ;
 
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/

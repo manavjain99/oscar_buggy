@@ -12,11 +12,11 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
+
 #include "main.h"
 #include "commons.h"
 #include "gimbal_stuff.h"
 #include "uart.hpp"
-#include "utils.h"
 #include "../mavlink/include/mavlink_types.h"
 #include "../mavlink/include/mavlink.h"
 
@@ -31,21 +31,22 @@ int gimbal_pitch = 0;
 int gimbal_yaw = 0;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
-static String gimbal_object_params_ = "";
 
-static float obj_pos1x_ = 0.0;
-static float obj_pos1y_ = 0.0;
-
-static float obj_pos2x_ = 0.0;
-static float obj_pos2y_ = 0.0;
-
-static float xpix_per_deg_ = 0.0;
-static float ypix_per_deg_ = 0.0;
+//by observations.
+#define PIX_PER_DEG 18.0F // Float cause dont want ints rounding offs.
+#define PIX_PER_DEG_VAR 1.3F // Variance for pixel change in per degree.
 
 
-static bool state = LOW;
-static int test_angle = 0;
-static bool angle_status = INCREASING;
+#define MAX_YAW_DEG 20
+#define MAX_PITCH_DEG 20
+#define MAX_ROLL_DEG 5 
+
+#define DEG_CH(cur_x, last_x) ((cur_x - last_x)/(PIX_PER_DEG+PIX_PER_DEG_VAR))
+
+
+
+static float last_xpix_gimb_update_ = 0.0;
+static float last_ypix_gimb_update_ = 0.0;
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
 
@@ -211,15 +212,50 @@ static bool angle_status = INCREASING;
     
   }
 
+void init_gimbal(void){
+  setAngles(3, -30, 20);
+  delay(1000);
+  setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
 
+}
+
+void orient_gimbal(void){
+
+  /*
+   * assumes params are updated, moves gimbal if del_pix > 2 degs.
+   * Heart of gimbal control. run as fast as you can.  
+  */
+  // Now i have the area , ocx , and ocy.
+  // If change more than 2 degs
+
+
+  int delx_ang = round(DEG_CH(object_cx, frame_wd/2.0F));
+  int dely_ang = round(DEG_CH(object_cy, frame_ht/2.0F));
+  
+  // Gimbal limits is +- deg.
+  if( abs(delx_ang) >= 1){
+      gimbal_yaw -= delx_ang;
+    if (abs(gimbal_yaw) > MAX_YAW_DEG ){
+      gimbal_yaw = (gimbal_yaw > 0) ? (MAX_YAW_DEG) : (-MAX_YAW_DEG); // Limiting the op
+      }
+    }
+  
+  if( abs(dely_ang) >= 1){
+      gimbal_pitch -= dely_ang;
+      if(abs(gimbal_pitch) > MAX_PITCH_DEG){
+        gimbal_pitch = (gimbal_pitch > 0) ? (MAX_PITCH_DEG) : (-MAX_PITCH_DEG); // Limiting the op
+      }
+    }
+  
+  setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
+
+  //delay(100);
+}
 
 
 void get_pix_per_deg(void){
     
   //read_mavlink_storm32();
-  uint16_t yaw_var = 45;
-  setRcYaw(yaw_var);
-  while(1);
   //setAngles(-gimbal_roll, -gimbal_pitch, -gimbal_yaw);
   //setAngles(0,0,-90);
     // Set to -45 deg.
