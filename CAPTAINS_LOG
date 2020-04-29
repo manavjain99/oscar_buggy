@@ -201,3 +201,17 @@ x,y vals for the current scenario is 600,800
 
 
 Now retesting the final run with frameht,framewd being sent as 600,800.
+
+8.17 PM 
+Trying different combinations, at t=0 delay goes too fast, ie unstable the angle.
+At t=50ms delay overshoots.
+
+At t= 250ms delay not real time video ,and hangs the video frame from opencv.
+Trying t=75ms delay.
+
+PS also hangs after some time usual cases mostly may be caused by use of stupid (S cap)Strings.
+
+Still the motion of the camera is too fuzzy, at delay=75ms in orient gimbal function. too, Also I have way too many false positives. And the script hangs after some time, I dont know most likely due to while loops inside UART.
+I will be needing to write a more reliabler system. This while 1 sysstem is too unreliable, also debugging not working with simultaneous UART running.
+
+I am keeping this aside for now, will be back after some consultaion and making of a better operating system TTH hopefully.

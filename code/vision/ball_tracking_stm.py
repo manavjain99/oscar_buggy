@@ -7,6 +7,8 @@ Source : https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/
 Date 22 April 2020 4.20PM
 Modified by : Param Deshpande
 
+
+DEPRECATED VERSION, DO NOT USE. INSTEAD USE OBJ TRACKING (asleast as of writing).
 '''
 
 
@@ -28,24 +30,7 @@ import uart
 while (uart.rec_and_ack("ACK") != b'STM_READY\r\n'):
       pass
 print("STM READ SUCCESS.")
-#while (serialPort.in_waiting < 0):
-#def obj_tracker(CAMID = 0 ):
-#	"""
-#	(int = 0) -> (int, int),(float, float)
-#	
-#	#description: Takes input feed from video src, outputs obj_center and video frame_size.
-#
-#	>>> obj_tracker(CAMID = 0 )
-#	(objx,objy),(Imagew, ImageH)
-#	"""
-#		# grab the current frame
-#	frame = vs.read()
-#	# handle the frame from VideoCapture or VideoStream
-#	frame = frame[1] if args.get("video", False) else frame
-#	# if we are viewing a video and we did not grab a frame,
-#	# then we have reached the end of the video
-#
-# construct the argument parse and parse the arguments
+
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
@@ -77,6 +62,8 @@ time.sleep(3.0)
 
 frame = vs.read()
 f_height, f_width = frame.shape[:2]
+f_height=799
+f_width=599
 #
 
 # Wait until stm is ready.

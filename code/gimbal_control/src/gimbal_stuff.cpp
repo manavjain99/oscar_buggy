@@ -37,7 +37,11 @@ int gimbal_yaw = 0;
 #define PIX_PER_DEG_VAR 1.3F // Variance for pixel change in per degree.
 
 
-#define MAX_YAW_DEG 20
+#define MIN_ANG_TO_MOVE_YAW 2
+#define MIN_ANG_TO_MOVE_PITCH 2
+
+
+#define MAX_YAW_DEG 90
 #define MAX_PITCH_DEG 20
 #define MAX_ROLL_DEG 5 
 
@@ -222,35 +226,39 @@ void init_gimbal(void){
 void orient_gimbal(void){
 
   /*
-   * assumes params are updated, moves gimbal if del_pix > 2 degs.
+   * assumes params are updated, moves gimbal if del_pix > x degs.
    * Heart of gimbal control. run as fast as you can.  
   */
   // Now i have the area , ocx , and ocy.
-  // If change more than 2 degs
 
 
-  int delx_ang = round(DEG_CH(object_cx, frame_wd/2.0F));
-  int dely_ang = round(DEG_CH(object_cy, frame_ht/2.0F));
+  //int delx_ang = round(DEG_CH(object_cx, frame_wd/2.0F));
+  int delx_ang = round(DEG_CH(object_cx,300));
   
+  //int dely_ang = round(DEG_CH(object_cy, frame_ht/2.0F));
+  int dely_ang = round(DEG_CH(object_cy, 400));
+  
+  // Update rate of the gimbal.
   // Gimbal limits is +- deg.
-  if( abs(delx_ang) >= 1){
+  if( abs(delx_ang) >= MIN_ANG_TO_MOVE_YAW){
       gimbal_yaw -= delx_ang;
     if (abs(gimbal_yaw) > MAX_YAW_DEG ){
+      digitalWrite(LED_BUILTIN, LOW);
       gimbal_yaw = (gimbal_yaw > 0) ? (MAX_YAW_DEG) : (-MAX_YAW_DEG); // Limiting the op
       }
     }
   
-  if( abs(dely_ang) >= 1){
+  if( abs(dely_ang) >= MIN_ANG_TO_MOVE_PITCH){
       gimbal_pitch -= dely_ang;
       if(abs(gimbal_pitch) > MAX_PITCH_DEG){
+        digitalWrite(LED_BUILTIN, LOW);
         gimbal_pitch = (gimbal_pitch > 0) ? (MAX_PITCH_DEG) : (-MAX_PITCH_DEG); // Limiting the op
       }
     }
   
   setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
-
-  //delay(100);
-}
+  delay(50);
+  }
 
 
 void get_pix_per_deg(void){

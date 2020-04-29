@@ -22,9 +22,9 @@ MY_CAM_ID = 2
 ## WAIT FOR STM TO BE READY.
 
 
-#while (uart.rec_and_ack("ACK") != b'STM_READY\r\n'):
-#      pass
-#print("STM READ SUCCESS.")
+while (uart.rec_and_ack("ACK") != b'STM_READY\r\n'):
+      pass
+print("STM READ SUCCESS.")
 
 
 # construct the argument parse and parse the arguments
@@ -57,6 +57,11 @@ time.sleep(3.0)
 
 frame = vs.read()
 f_height, f_width = frame.shape[:2]
+
+# Ht and width diff from x,y sent by center hence remodifying definitions,
+# aka these are not actual hts, and widths but relative.
+f_height = 799
+f_width = 599
 #
 # Wait until stm is ready.
 
@@ -123,8 +128,8 @@ while True:
 		center_message = "-1, -1, -1"
 	else:
 		center_message = "100, " + str(center[0]) + ', ' + str(center[1])
-	#print("Center messsage is " + str(center_message) )
-	#uart.send_until_ack( center_message, "ACK_OC")
+	print("Center messsage is " + str(center_message) )
+	uart.send_until_ack( center_message, "ACK_OC")
 	#print("object data sent successfully.")
 	
     # loop over the set of tracked points

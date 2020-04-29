@@ -74,7 +74,7 @@ void loop(){
         get_object_params(object_center);
         //get_pix_per_deg();         
         if(object_area == float(100)){
-            digitalWrite(LED_BUILTIN, LOW);
+            //digitalWrite(LED_BUILTIN, LOW);
             orient_gimbal();
         }
 
