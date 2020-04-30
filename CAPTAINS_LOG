@@ -215,3 +215,18 @@ Still the motion of the camera is too fuzzy, at delay=75ms in orient gimbal func
 I will be needing to write a more reliabler system. This while 1 sysstem is too unreliable, also debugging not working with simultaneous UART running.
 
 I am keeping this aside for now, will be back after some consultaion and making of a better operating system TTH hopefully.
+
+
+30/04/20
+
+10.00 PM
+I am Currently sending back free memory usage, through uart back to pc
+ie in while loop in python sending object coords and receiving freeMem from MCU. 
+
+Trying to debug why does it stop working now after 10secs, seems memory WAS NOT THE ISSUE AFTER ALL.
+The free memory seems to be constant, for whatever small number of iters my codde runs before it hangs out.
+Most likely it gets struck in the while loops created for sending and receiving, Acknowledging messages. 
+
+Solution: Dont us the while 1 loop architecture, start using TICK based TTH architecture. 
+Also I should switch to using STM CUBE IDE to use ITM for MCU debugging instead of ancient printf. OR find a way to get working ITM in PLATFORMIO.
+

@@ -15,10 +15,21 @@
 //#define DEBUG
 #ifdef DEBUG 
 #include "../include/main.h" 
+//#include <testlib.h>
+#include "MemoryFree.h"
+#include "pgmStrToRAM.h"
 
-void setup(){
-
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println(getPSTR("Old way to force String to Flash")); // forced to be compiled into and read 	
+  Serial.println(F("New way to force String to Flash")); // forced to be compiled into and read 	
+  Serial.println(F("Free RAM = ")); //F function does the same and is now a built in library, in IDE > 1.0.0
+  Serial.println(freeMemory(), DEC);  // print how much RAM is available.
+  // print how much RAM is available.
 }
+
+
 
 void loop(){
 
@@ -31,6 +42,7 @@ void loop(){
 #include "../include/uart.hpp"
 #include "../include/utils.h"
 #include "gimbal_stuff.h"
+
 /*DEFINE YOUR GLOBAL VARS HERE*/
 float frame_ht = -1.0F;
 float frame_wd = -1.0F;
@@ -40,7 +52,7 @@ float object_cx   = -1.0F;
 float object_cy   = -1.0F;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
-
+static int while_iters_ = 0;
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
 
@@ -52,10 +64,8 @@ void setup(void){
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, HIGH);
     
-}
-String object_area_String = " ";
+    String object_area_String = " ";
         
-void loop(){
     /*SEND READY */
     send_until_ack("STM_READY", "ACK");
     //
@@ -72,6 +82,8 @@ void loop(){
         // Get data of object center coords.
         object_center = rec_and_ack("ACK_OC");
         get_object_params(object_center);
+        send_until_ack(String(freeMemory()), "ACK");
+    
         //get_pix_per_deg();         
         if(object_area == float(100)){
             //digitalWrite(LED_BUILTIN, LOW);
@@ -89,6 +101,8 @@ void loop(){
     }
 
 }
+
+void loop(){}
 
 #endif
 

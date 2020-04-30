@@ -17,6 +17,7 @@
 
 #include <Arduino.h>
 #include <cmath>
+#include <string> // for string and to_string() 
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
 

@@ -10,7 +10,7 @@ import time
 import uart
 
 # 0 for webcam, 2 or 1 for ext webcam depending on port.
-MY_CAM_ID = 2
+MY_CAM_ID = 0
 
 #import gimbalcmd
 #
@@ -130,6 +130,7 @@ while True:
 		center_message = "100, " + str(center[0]) + ', ' + str(center[1])
 	print("Center messsage is " + str(center_message) )
 	uart.send_until_ack( center_message, "ACK_OC")
+	print(uart.rec_and_ack("ACK"))
 	#print("object data sent successfully.")
 	
     # loop over the set of tracked points
