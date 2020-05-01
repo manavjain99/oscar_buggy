@@ -1,0 +1,73 @@
+
+
+char python_host_buf[100]
+char last_comand[100]
+
+
+setup(){
+
+    serial1.initialize //python host comms serial
+    serial2.initialize //mavlink serial
+
+    serial1.readinterrupt(python_rcv)
+    //OPTIONAL
+    serial2.readinterrupt(mavlink_rcv_handler)
+    
+}
+
+
+loop() {
+
+    if(python_command_flag)
+    {
+        if(strcmp(last_command, "EXPECTED_1") > 0)
+        {   
+            gimbal_math1()
+            mavlink_send1()
+            serial1.write("ACK_1")
+
+        }
+        else if (strcmp(last_command, "EXPECTED_2") > 0)
+        {
+
+            gimbal_math2()
+            mavlink_send2()
+            serial1.write("ACK_2")
+        }
+    
+        python_command_flag = false
+    }
+
+
+
+}
+
+
+python_rcv(){
+    
+    while(serial1.available){
+
+        if(rcvd_char != STOP_CHAR)
+            python_host_buf[ptr] = rcvd_char
+            ptr = ptr + 1
+        else
+            last command = python_host_buf  (from 0 to ptr - 1 )
+            last_command[ptr] = '\0'
+            //empty python_host_buf
+            ptr = 0
+            python_command_flag = true
+    }
+
+}
+
+
+strcmp (char*,char*){
+    while(str1[i] != '\0'  OR str2[i] != '\0'){
+
+        if(str1[i] != str2[i])
+            return -1;
+
+    }
+
+    return 1
+}
