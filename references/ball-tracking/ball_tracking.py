@@ -42,7 +42,7 @@ time.sleep(2.0)
 while True:
 	# grab the current frame
 	frame = vs.read()
-
+	old_time = time.time()
 	# handle the frame from VideoCapture or VideoStream
 	frame = frame[1] if args.get("video", False) else frame
 
@@ -112,6 +112,8 @@ while True:
 	if key == ord("q"):
 		break
 
+	newtime = time.time()
+	print("process_time is " + str(newtime - old_time))
 # if we are not using a video file, stop the camera video stream
 if not args.get("video", False):
 	vs.stop()
