@@ -30,6 +30,9 @@ int gimbal_roll = 0;
 int gimbal_pitch = 0;
 int gimbal_yaw = 0;
 
+double gimbalYaw = 0;
+double gimbalPitch = 0;
+
 /*DEFINE YOUR PRIVATE VARS HERE*/
 
 //by observations.
@@ -196,8 +199,8 @@ static float last_ypix_gimb_update_ = 0.0;
           case MAVLINK_MSG_ID_ATTITUDE:
             {
               //get pitch and yaw angle from storm (requestAttitude() must be executed first)
-              double gimbalYaw = ToDeg(mavlink_msg_attitude_get_yaw(&msg));
-              double gimbalPitch = ToDeg(mavlink_msg_attitude_get_pitch(&msg));
+              gimbalYaw = ToDeg(mavlink_msg_attitude_get_yaw(&msg));
+              gimbalPitch = ToDeg(mavlink_msg_attitude_get_pitch(&msg));
             }
             break;
             
@@ -218,9 +221,11 @@ static float last_ypix_gimb_update_ = 0.0;
 
 void init_gimbal(void){
   setAngles(3, -30, 20);
+  
   delay(1000);
   setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
-
+  delay(100);
+  read_mavlink_storm32();
 }
 
 void orient_gimbal(void){
@@ -257,7 +262,7 @@ void orient_gimbal(void){
     }
   
   setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
-  delay(50);
+  //delay(50);
   }
 
 

@@ -18,14 +18,15 @@
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
 
-//extern 
-//extern 
+extern double gimbalYaw ;
+extern double gimbalPitch ;
 
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
 void init_gimbal(void);
 void orient_gimbal(void);
-
+void setAngles(float , float , float );
+void read_mavlink_storm32();
 #endif
 
 
