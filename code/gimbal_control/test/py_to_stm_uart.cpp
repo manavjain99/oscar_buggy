@@ -193,27 +193,23 @@
   bool angle_status = INCREASING;
 
   void loop(){   
-    digitalWrite(LED_BUILTIN, state);
-    //to_GIMBAL.print("can you see me ? Serial 1 ");
-    to_PC.println("can you see me ? Serial ");
-    if ((angle_status == INCREASING)  )
-    {
-      test_angle++;
-      if(test_angle > 25){
-       (angle_status = DECREASING);
-      }
-    }
-    else if (angle_status == DECREASING )
-    {
-      test_angle--;
-      if(test_angle < 0){
-       (angle_status = INCREASING);
-      }
-    }
-    setAngles(test_angle,test_angle,test_angle);
-    state = !state;
-    delay(50);
-    
+    if(run_once_ == true){
+    read_mavlink_storm32();
+
+    old_time = millis();
     //read_mavlink_storm32();
-    
+    setAngles(0,0,-45);
+    //delay();
+    setAngles(0,2,45); 
+    read_mavlink_storm32();
+    new_time = millis();
+    run_once_ = false;
+
+  }
+  del_time_ = new_time - old_time;
+  uart_obcomp.print(del_time_);
+  uart_obcomp.print(" ");
+  uart_obcomp.println(gimbalYaw);
+
+    //
   }
