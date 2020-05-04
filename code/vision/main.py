@@ -14,11 +14,14 @@
  date modified:  Mon 27 Apr 18:11:03 IST 2020
 """
 
-import ball_tracking
-import cv2
 #import gimbalcmd
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
+  import serial
+  import time
+  #import ball_tracking
+  import cv2
+  import ComArduino2
   #import 
   #import 
 
@@ -54,8 +57,33 @@ import cv2
 
 if __name__ == '__main__':
   pass
-  while (1):
-        ball_tracking.live_tracking()
+
+  print
+  print
+
+  # waits until I receive a message Arduino ready from arduino setup part.
+  # Obcomp should be ready first follwed by the duino.
+  print("waiting for arduino response.")
+  ComArduino2.waitForArduino()
+
+  print("stm read successfully. LED should be blinking.")
+  
+  # creating an empty buffer list.
+  gimbal_coords_buffer = []
+
+
+  gimbal_coords_buffer.append("<100,200,0.2>")
+  #gimbal_coords_buffer.append("<101,200,0.2>")
+  #gimbal_coords_buffer.append("<102,200,0.2>")
+  #gimbal_coords_buffer.append("<103,200,0.2>")
+  #gimbal_coords_buffer.append("<104,200,0.2>")
+
+
+  ComArduino2.runTest(gimbal_coords_buffer)
+  
+
+  #while (1):
+  #      ball_tracking.live_tracking()
         #key = cv2.waitKey(1) & 0xFF
         #if key == ord("q"):
         #      break
