@@ -29,36 +29,5 @@
 
 
 
-
-
-void get_object_params(String message){
-    char receivedChars[] = "motherfucking S capital Strings" ;
-    int n = 0;
-    while (message.charAt(n) != NULL){
-        receivedChars[n] = message.charAt(n);
-        ++n;
-    }
-    //  Assuming that now my string is equal to len of rec message.
-    receivedChars[n] = '\0';
-    for(int i =0; i<message.length(); i++){
-        receivedChars[i] = message.charAt(i);
-    }
-    char * token; // this is used by strtok() as an index
-
-    token = strtok(receivedChars,",");      // get the first part - the string
-    object_area = atof(token);
-    
-    token = strtok(NULL, ",");
-    object_cx = atof(token);
-    
-    token = strtok(NULL, ",");
-    object_cy = atof(token);
-    
-
-}
-
-
-
-
 /* END OF FILE */
 
