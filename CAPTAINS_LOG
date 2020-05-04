@@ -230,3 +230,14 @@ Most likely it gets struck in the while loops created for sending and receiving,
 Solution: Dont us the while 1 loop architecture, start using TICK based TTH architecture. 
 Also I should switch to using STM CUBE IDE to use ITM for MCU debugging instead of ancient printf. OR find a way to get working ITM in PLATFORMIO.
 
+2/05/2020
+1.01 PM
+
+Working on the interrupt based uart.
+
+4/05/2020
+
+4.17 PM
+Working on the new architecture, uart resolved,now calculating gimbal timings.
+Also it takes around 10 MS to run the process part of OpenCV so WE can do 60fps grab, which is aroud 17MS time.
+So currently my process is 10MS and grab is 17MS thus feasible and stable., in python module.
