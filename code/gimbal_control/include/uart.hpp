@@ -15,17 +15,23 @@
 #ifndef uart_hpp
 #define uart_hpp
 
-#include "main.h"
-#include "Arduino.h"
-#include "string.h"
 /* EXTERN YOUR GLOBAL VARS HERE*/
 #define uart_gimbal Serial1
 #define uart_obcomp Serial2
 //#define uart_dbugcon Serial3 
 
+
+#define ACK_REC_PARAMS "<1>"
+#define ACK_STM "<STM_ACK>"
+#define STM_READY "<STM_READY>"
+
 extern HardwareSerial uart_obcomp;
-//extern HardwareSerial uart_dbugcon;
+extern HardwareSerial uart_dbugcon;
 extern HardwareSerial uart_gimbal ;
+
+extern char last_command[100];
+extern bool python_command_flag;
+extern boolean newDataFromPC;
 
 //extern 
 //extern 
@@ -34,9 +40,14 @@ extern HardwareSerial uart_gimbal ;
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
 
 void init_uart();
-void send_until_ack(String, String );
+//void rcv_parse_obcomp(void);
+void ack_obcomp(void);
+//void getDataFromPC();
+void rcv_obcomp(void);
+void parse_data(void);
+//void send_until_ack(String, String );
 /*send_message, ack_message*/
-String rec_and_ack(String);
+void rcv_ack_params(void);
 
 
 #endif
