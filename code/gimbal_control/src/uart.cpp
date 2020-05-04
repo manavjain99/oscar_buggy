@@ -18,92 +18,115 @@
 #include "../include/commons.h"
 #include "../include/uart.hpp"
 
-
 /*DEFINE YOUR GLOBAL VARS HERE*/
+
+char last_command[100] = "";
+bool python_command_flag = false;
+boolean newDataFromPC = false;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 HardwareSerial uart_gimbal (PA12, PA11);
 
+static const byte buffSize = 40;
+static char inputBuffer[buffSize];
+static const char startMarker = '<';
+static const char endMarker = '>';
+static byte bytesRecvd = 0;
+static boolean readInProgress = false;
+
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
+static void parseData();
 
 
 /* START YOUR CODE HERE */
 
-String python_message = "";
 
 void init_uart(void){
-    uart_obcomp.begin(115200);
-//    uart_dbugcon.begin(9600);
+    uart_obcomp.begin(9600);
+    //uart_dbugcon.begin(9600);
     uart_gimbal.begin(115200);   
 }
 
-void send_until_ack(String send_message, String ack_message){
-    /*Sends a packet of data until acknowledge by the onborad comp ie obcomp*/
-    while (1){
-        uart_obcomp.println(send_message);
-        /*If ack data sent by obcomp*/
-        if(uart_obcomp.available() > 0){
-            String rec_message = uart_obcomp.readStringUntil('\n');
-            
-            if(rec_message.equals(ack_message+"\r")){
-                break;
-            }
-        }
-    }
-}
 
-String rec_and_ack(String ack_message){
-    /*Receive and acknowledge. Dont fuck around, Please.*/
-    while (1){
-        /* code */
-        if(uart_obcomp.available() > 0){
-            String rec_message = uart_obcomp.readStringUntil('\n');
-            
-            // Removes last two chars ie '\r' 
-            int str_len = rec_message.length();
-            String is_backslash_r = rec_message.substring(str_len - 1);
-            if(is_backslash_r.equals("\r")){
-                rec_message = rec_message.substring(0, str_len - 1); 
-            }
-            uart_obcomp.println(ack_message);
-            return rec_message;
-        }    
-    }
+
+void parse_data() {
+
+    // split the data into its parts
     
+  char * strtokIndx; // this is used by strtok() as an index
+  
+  strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
+  object_area = atoi(strtokIndx);
+    
+  strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
+  object_cx = atoi(strtokIndx);     // convert this part to an integer
+  
+  strtokIndx = strtok(NULL, ","); 
+  object_cy = atoi(strtokIndx);     // convert this part to a float
+
 }
 
-  //String send_message = "STM_READY";
-  //String ACK_STR = "ACK";
-  //void loop(){   
-//
-  //  uart_obcomp.println(send_message);
-  //  if (uart_obcomp.available() > 0) {
-  //  // Read python message.
-  //    python_message = uart_obcomp.readStringUntil('\n');
-  //    //send_message = uart_obcomp.available();
-  //    send_message = python_message;
-  //    
-  //    if(python_message.equals("ACK\r")){
-  //    digitalWrite(LED_BUILTIN, LOW);
-  //    send_message = "LED SHOULD BE";
-  //    
-  //    }
-//
-      // say what you got:
-      //uart_obcomp.println("In the python console I should get");
-      //uart_obcomp.println(python_message);
+
+// See references for this code. ArduinoPC2.ino
+void rcv_obcomp(void){
+
+    // receive data from PC and save it into inputBuffer
+    
+  while(uart_obcomp.available()) {
+
+    char x = uart_obcomp.read();
+
+      // the order of these IF clauses is significant
       
-//  }
-//}//
+    if (x == endMarker) {
+      readInProgress = false;
+      newDataFromPC = true;
+      for (int i = 0; i < bytesRecvd -1 ; i++){
+      last_command[i] = inputBuffer[i];
+      }
+      //Completing the string.
+      last_command[bytesRecvd] = '\0';
+      inputBuffer[bytesRecvd] = 0;
+      parseData();
+     }
+    
+    if(readInProgress) {
+      inputBuffer[bytesRecvd] = x;
+      bytesRecvd ++;
+      if (bytesRecvd == buffSize) {
+        bytesRecvd = buffSize - 1;
+      }
+    }
+
+    if (x == startMarker) { 
+      bytesRecvd = 0; 
+      readInProgress = true;
+    }
+  }
+}
 
 
+void ack_obcomp(void){
+ 
+  if (newDataFromPC) {
+    newDataFromPC = false;
+    uart_obcomp.print(ACK_REC_PARAMS);
+  }   
+}
+
+void send_until_ack(void){
+    while(1){
+        uart_obcomp.print(ACK_REC_PARAMS);
+
+    }
+}
 
 
-
-
-
-
+void rcv_ack_params(void){
+    rcv_obcomp();
+    ack_obcomp();
+}
 
 
 /* END OF FILE */
