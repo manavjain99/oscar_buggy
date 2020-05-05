@@ -72,6 +72,7 @@ print("sent frame dims.")
 print(	"width and height of frame" + str(f_width) + str(f_height)	)
 
 
+(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
 
 # keep looping

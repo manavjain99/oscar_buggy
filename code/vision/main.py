@@ -25,13 +25,14 @@ if __name__ == '__main__':
   #import 
   #import 
 
+
 """ WRITE YOUR FUNCTIONS HERE """
 
-#def ...:
+def grab_function():
 #  """
 #  () -> ()
-#  Description: 
-#  >>>
+#  Description:Thread Running at 60 fps. T = 17MS. 
+#  >>> 
 #  
 #  """
 

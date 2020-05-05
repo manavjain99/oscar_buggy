@@ -241,3 +241,18 @@ Working on the interrupt based uart.
 Working on the new architecture, uart resolved,now calculating gimbal timings.
 Also it takes around 10 MS to run the process part of OpenCV so WE can do 60fps grab, which is aroud 17MS time.
 So currently my process is 10MS and grab is 17MS thus feasible and stable., in python module.
+
+
+5/05/2020
+10.57 AM
+Resuming gimbal control and finding min time between each commnad sent and received(if possible).
+Also added magnets as a counter balance for gimbal for better stabilization.
+
+Seems yesterday the gimbal was behaving crazy headless chicken cause there was instability, now that magnets have been added its working pretty smooth.
+I found the following values. 
+Writing 1 angle to the gimbal takes around average 3.7ms, ie between 3ms and 4ms.
+Assuming wcase 4MS per writing angle, reading angle not working maybe need to tweak the firmware.
+Later..
+
+11.21 AM 
+Moving to python code and getting processing / threading / trajectory generation.

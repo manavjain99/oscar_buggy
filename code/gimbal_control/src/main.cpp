@@ -55,6 +55,14 @@ float object_area = -1.0F;
 float object_cx   = -1.0F;
 float object_cy   = -1.0F;
 
+
+
+static bool run_once_ = true;
+double old_time = 0;
+double new_time = 0;
+int del_time_ = 0;
+
+
 /*DEFINE YOUR PRIVATE VARS HERE*/
 
 static const byte times_flash_ = 3;
@@ -80,6 +88,8 @@ void Update_IT_callback(HardwareTimer*);
 
 void Update_IT_callback(HardwareTimer* TIM1ptr){
     
+
+    old_time = millis();
     // takes x msecs to run. Gives me new data.
     rcv_obcomp();
     
@@ -102,7 +112,9 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
     //led_debug_state = HIGH;
     //digitalWrite(LED_BUILTIN, led_debug_state_);
     //}
-    
+    new_time = millis();
+    del_time_ = new_time - old_time;
+  
     //orient_gimbal();    
 }
 
@@ -133,41 +145,45 @@ void setup(void){
     #endif
 
   // Instantiate HardwareTimer object. Thanks to 'new' instanciation, HardwareTimer is not destructed when setup() function is finished.
-  //HardwareTimer *MyTim = new HardwareTimer(Instance);
+  HardwareTimer *MyTim = new HardwareTimer(Instance);
 
   // configure pin in output mode
   pinMode(pin, OUTPUT);
 
-  //MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
-  //MyTim->attachInterrupt(Update_IT_callback);
-  //MyTim->resume();
+  MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
+  MyTim->attachInterrupt(Update_IT_callback);
+  MyTim->resume();
 
   Serial.println(STM32_READY);
 
 }
 
-
-static bool run_once_ = true;
-double old_time = 0;
-double new_time = 0;
-int del_time_ = 0;
 void loop(){
 
   if(run_once_ == true){
     old_time = millis();
-    read_mavlink_storm32();
+    //read_mavlink_storm32();
     //setAngles(0,0,-45);
     //delay();
-    setAngles(0,2,45); 
-    read_mavlink_storm32();
+    setAngles(0,2,45);//1
+    setAngles(0,5,47);
+    //setAngles(0,7,50);//3
+    //setAngles(0,10,53);
+    //setAngles(0,2,55);//5
+    //setAngles(0,2,58);
+    //setAngles(0,2,61);//7
+    //setAngles(0,2,64); 
+    //setAngles(0,2,67);//9
+    //setAngles(0,2,70);
+    //read_mavlink_storm32();
     new_time = millis();
     run_once_ = false;
 
   }
-  del_time_ = new_time - old_time;
-  uart_obcomp.print(del_time_);
-  uart_obcomp.print(" ");
-  uart_obcomp.println(gimbalYaw);
+  //del_time_ = new_time - old_time;
+  uart_obcomp.println(del_time_);
+  //uart_obcomp.print(" ");
+  //uart_obcomp.println(gimbalYaw);
 
 }
 

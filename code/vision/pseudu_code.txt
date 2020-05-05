@@ -1,12 +1,13 @@
 
 
-imageQ
-commQ
+imageQ = queue.Queue(maxsize=5)
+commQ = queue.Queue(maxsize=10)
 
 
+# let 60 fps. T = 17MS 
+#(f = 5Hz, T = 40ms)
 
-(f = 5Hz, T = 40ms)
-
+def 
 Grab() {
 
     while(1){
