@@ -21,7 +21,14 @@
 if __name__ == '__main__':
     pass
     import logging
-    #import 
+    import greenBallTracker as GBT
+    from collections import deque
+    from imutils.video import VideoStream
+    import numpy as np
+    import argparse
+    import cv2
+    import imutils
+    import time
 
 """ WRITE YOUR FUNCTIONS HERE """
 
@@ -32,11 +39,25 @@ def test_funct():
 """ START YOUR CODE HERE """
 
 if __name__== '__main__':
-    format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.INFO,
-                        datefmt="%H:%M:%S")
-    logging.info("hi")
+    
     pass    
+    vs = VideoStream(src=0).start()
+    # allow the camera or video file to warm up
+    time.sleep(3.0)
+    objA = 10
+    objCX = 0
+    objCY = 0
+    
+    
+    frame = vs.read()
+    while(1):
+        frame = vs.read()
+        objA, objCX, objCY = GBT.trackGreenBall(frame)
+        print(str(objA) + " " +str(objCX) + " " +str(objCY))
+        if(objA == -1):
+            vs.stop()
+            vs.release()
+
 #import doctest
 #doctest.testmod()
 
