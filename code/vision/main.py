@@ -30,23 +30,37 @@ if __name__ == '__main__':
   import greenBallTracker as GBT 
   #import 
 
-  imageQ = queue.Queue(maxsize=10)
-  commQ = queue.Queue(maxsize=10)
 
 
+""" WRITE YOUR VARIABLES HERE """
+FPS_GRAB = 0.0
+FPS_PROC = 0.0
+FPS_COMM = 1.0
 
+PIX_PER_DEG = 18.0
+PIX_PER_DEG_VAR = 1.3
 
+imageQ = queue.Queue(maxsize=10)
+commQ = queue.Queue(maxsize=30)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-def grab_function():
-#  """
-#  () -> ()
-#  Description:Thread Running at 60 fps. T = 17MS. 
-#  >>> 
-#  
-#  """
-  pass
+def trajectoryGen(prevXY, newXY, numpts = 6):
+  """
+  (tup size2, tup size2, int) -> (list of 3 ints list)
+  Description:generates trajectory for delta gimbal <s, 
+  """
+  trajList = list()
+  delYaw = (newXY[0] - prevXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  delPitch = (newXY[1] - prevXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  
+  # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
+  for i in range(numpts):
+    trajList.append([0, i*delPitch/numpts, i*delYaw/numpts])
+
+  return trajList
+
+  
 
 #def ...:
 #  """
@@ -74,8 +88,10 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
         lock.acquire()
         imgQ.put(frame)
         lock.release()
+        #logging.info("frame grab runtime" + str(time.time() - start_time))
         logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-    
+        
+
     cap.stop()
     cap.release()
 
@@ -91,6 +107,10 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
   objA = 0
   objCX = 0
   objCY = 0
+  old_objA = 0
+  old_objCX = 0
+  old_objCY = 0
+  lock = threading.Lock()
 
   while not event.is_set() or not queue.empty():
     start_time_proc = time.time()
@@ -100,18 +120,26 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
     if (source is not 0):
       frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
     
+    old_objA, old_objCX, old_objCY = objA, objCX, objCY
     objA, objCX, objCY = GBT.trackGreenBall(frame)
     logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
+
+    lock.acquire()
+    trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
+    lock.release()
 
     cv2.imshow("Process Frame", frame)
     if cv2.waitKey(10) == ord("q"):
       event.set()
       cv2.destroyAllWindows()
       break
-    logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+    #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+    #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
   
     #cv2.destroyAllWindows()
     #"""
+
+
 #def ...:
 #  """
 #  () -> ()

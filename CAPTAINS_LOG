@@ -268,4 +268,13 @@ Resuming multithreading for python.
 Found this statement if cv2.waitKey(10) == ord("q"):
       break
     is necessary for showing the image.
-I cant use time.time() in process thread for benchmarking fps, things seem to break.
+Dummy thread along with grabber thread managed to get working together, 
+now moving to get the actual process thread running.
+
+10.32 PM 
+Done with the actual green ball threading.
+Now moving to trajectory generation.
+
+11.55 PM 
+Done with linear trajectory generation.
+Testing of comms and big picture, remaining.
