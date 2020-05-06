@@ -19,8 +19,9 @@
 #import 
 
 if __name__ == '__main__':
-#import 
-#import 
+    pass
+    import logging
+    #import 
 
 """ WRITE YOUR FUNCTIONS HERE """
 
@@ -30,8 +31,12 @@ def test_funct():
 
 """ START YOUR CODE HERE """
 
-if __name == '__main__':
-  
+if __name__== '__main__':
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO,
+                        datefmt="%H:%M:%S")
+    logging.info("hi")
+    pass    
 #import doctest
 #doctest.testmod()
 
