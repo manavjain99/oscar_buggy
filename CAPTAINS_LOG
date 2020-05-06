@@ -256,3 +256,16 @@ Later..
 
 11.21 AM 
 Moving to python code and getting processing / threading / trajectory generation.
+
+
+6/05/2020
+
+10.13 AM
+
+Resuming multithreading for python.
+
+8.55 PM 
+Found this statement if cv2.waitKey(10) == ord("q"):
+      break
+    is necessary for showing the image.
+I cant use time.time() in process thread for benchmarking fps, things seem to break.

@@ -7,6 +7,29 @@ commQ = queue.Queue(maxsize=10)
 # let 60 fps. T = 17MS 
 #(f = 5Hz, T = 40ms)
 
+
+def grab_frame(queue, event):
+    """Pretend we're getting a number from the network."""
+    while not event.is_set():
+        logging.info("Producer got message: %s", message)
+        queue.put(message)
+
+    logging.info("Producer received event. Exiting")
+
+
+
+
+def process_frame(queue, event):
+    """Pretend we're saving a number in the database."""
+    while not event.is_set() or not queue.empty():
+        message = queue.get()
+        logging.info(
+            "Consumer storing message: %s (size=%d)", message, queue.qsize()
+        )
+
+    logging.info("Consumer received event. Exiting")
+
+
 def 
 Grab() {
 
