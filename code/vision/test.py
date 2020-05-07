@@ -29,11 +29,14 @@ if __name__ == '__main__':
     import cv2
     import imutils
     import time
-
+    import queue
 """ WRITE YOUR FUNCTIONS HERE """
 
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
+
+commQ = queue.Queue(maxsize=3000)
+
 
 def trajectoryGen(prevXY, newXY, numpts = 6):
   """
@@ -51,34 +54,53 @@ def trajectoryGen(prevXY, newXY, numpts = 6):
   return trajList
 
 
+
+def comms_thread(trajQ = commQ):
+  """
+  (list) -> (NoneType)
+  Description: Sends gimbal traj to mcu and waits for ack.
+  >>>
+  
+  """
+
+  # if there is a new list of trajectory in the Queue. 
+  gimbal_coords_buffer = []
+  if not trajQ.empty():
+    start_time_comms = time.time()
+    logging.info("TrajQ size" + str(trajQ.qsize())) # FPS = 1 / time to process loop
+
+    ptTrajList = trajQ.get()
+    # start sending vals one by one and wait for ack by mcu.
+    for i in range(len(ptTrajList) -1 ):
+      gimbal_coords_buffer = []
+      gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
+      #stcom.runTest(gimbal_coords_buffer)
+    #logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
+
+  return gimbal_coords_buffer
+
 """ START YOUR CODE HERE """
 
 if __name__== '__main__':
+
+  format = "%(asctime)s: %(message)s"
+  logging.basicConfig(format=format, level=logging.INFO,
+                      datefmt="%H:%M:%S")
+
+  time.sleep(3.0)
+  objA = 10
+  objCX = 0
+  objCY = 0
+  trajList = trajectoryGen((0,0), (180,180))
+  print(trajList)
+  while(1):
+
+    # assuming i get old and new XY coords 
     
-    pass    
-    #vs = VideoStream(src=0).start()
-    # allow the camera or video file to warm up
-    time.sleep(3.0)
-    objA = 10
-    objCX = 0
-    objCY = 0
-    trajList = trajectoryGen((0,0), (180,180))
-    print(trajList)
-    
-    #frame = vs.read()
-    #while(1):
-    #    frame = vs.read()
-    #    objA, objCX, objCY = GBT.trackGreenBall(frame)
-    #    print(str(objA) + " " +str(objCX) + " " +str(objCY))
-    #    if(objA == -1):
-    #        vs.stop()
-    #        vs.release()
+    # I put traj in commsQ
+    commQ.put(trajList)
 
-#import doctest
-#doctest.testmod()
-
-
-
-
-""" END OF FILE """
-
+    # I call comms_thread
+    print(comms_thread())
+    break
+    # print its o/p

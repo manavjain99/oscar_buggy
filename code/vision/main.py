@@ -40,8 +40,8 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
-imageQ = queue.Queue(maxsize=100)
-commQ = queue.Queue(maxsize=30)
+imageQ = queue.Queue(maxsize=10000)
+commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
@@ -50,7 +50,7 @@ def trajectoryGen(prevXY, newXY, numpts = 6):
   (tup size2, tup size2, int) -> (list of 3 ints list)
   Description:generates trajectory for delta gimbal <s, 
   """
-  trajList = list()
+  trajList = []
   delYaw = (newXY[0] - prevXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   delPitch = (newXY[1] - prevXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   
@@ -80,6 +80,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
     grabberLock = threading.Lock()
         
     while not event.is_set():
+        
         start_time = time.time() # start time of the loop
         logging.info(" no of frames"  + str(imgQ.qsize()))
         
@@ -88,6 +89,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
         with grabberLock:
           pass
           imgQ.put(frame)
+        
         #logging.info("frame grab runtime" + str(time.time() - start_time))
         logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
         
@@ -111,7 +113,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
   old_objCX = 0
   old_objCY = 0
   processLock = threading.Lock()
-
+  trajList = []
   while(1):
     if not imgQ.empty():
       start_time_proc = time.time()
@@ -128,8 +130,9 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
       with processLock:
         pass
         trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
-        #trajQ.put()
+        #trajQ.put(trajList)
 
+      logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
       if cv2.waitKey(1) == ord("q"):
         event.set()
@@ -149,19 +152,20 @@ def comms_thread(event,trajQ = commQ):
   >>>
   
   """
+  ptTrajList = []
   while not event.is_set() :
 
     # if there is a new list of trajectory in the Queue. 
-    if not trajQ.empty():
-      
-      start_time_comms - time.time()
+    if trajQ.qsize() > 10:
+      start_time_comms = time.time()
       #ptTrajList = trajQ.get()
-
-      # start sending vals one by one and wait for ack by mcu.
-      for i in range(len(ptTrajList)):
-        gimbal_coords_buffer = []
-        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
-        #stcom.runTest(gimbal_coords_buffer)
+      logging.info("size after read"+str(trajQ.qsize()))
+      
+      ## start sending vals one by one and wait for ack by mcu.
+      #for i in range(len(ptTrajList)):
+      #  gimbal_coords_buffer = []
+      #  gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
+      #  #stcom.runTest(gimbal_coords_buffer)
       logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
 
@@ -185,12 +189,16 @@ if __name__ == '__main__':
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
-  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(grabber_thread, event)
+
+  # Takes care of joining, threads, ie main wont after this until all threads are finished.
+  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
     executor.submit(process_thread, event)
-  #  executor.submit(comms_thread, event)
-    
-   
+    executor.submit(grabber_thread, event)
+    executor.submit(comms_thread, event)
+  
+  # useless cause of threadpoolExec  
+  time.sleep(7)
+  event.set()
   #  executor.submit(f2)
   
   #time.sleep(5.0)
