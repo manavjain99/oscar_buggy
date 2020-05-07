@@ -88,7 +88,7 @@ void rcv_obcomp(void){
       //Completing the string.
       last_command[bytesRecvd] = '\0';
       inputBuffer[bytesRecvd] = 0;
-      parseData();
+      parse_data();
      }
     
     if(readInProgress) {
