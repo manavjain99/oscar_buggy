@@ -22,7 +22,7 @@
 
 char last_command[100] = "";
 bool python_command_flag = false;
-boolean newDataFromPC = false;
+bool newDataFromPC = false;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 HardwareSerial uart_gimbal (PA12, PA11);
@@ -43,7 +43,7 @@ static void parseData();
 
 
 void init_uart(void){
-    uart_obcomp.begin(9600);
+    uart_obcomp.begin(115200);
     //uart_dbugcon.begin(9600);
     uart_gimbal.begin(115200);   
 }

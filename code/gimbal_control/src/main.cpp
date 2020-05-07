@@ -12,7 +12,7 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG 
 #include "../include/main.h"
 #include "../include/commons.h"
@@ -148,21 +148,6 @@ void setup(void){
     init_uart();
     init_gimbal();
 
-
-
-    uart_obcomp.println("<Arduino is ready>");
-
-    // flash LEDs so we know we are alive
-    for (byte n = 0; n < times_flash_; n++) {
-       digitalWrite(LED_BUILTIN, HIGH);
-       delay(200);
-       digitalWrite(LED_BUILTIN, LOW);
-       delay(200);
-       
-    }
-
-
-
     // Setting up the tick based ISR.
      #if defined(TIM1)
       TIM_TypeDef *Instance = TIM1;
@@ -179,6 +164,25 @@ void setup(void){
   MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->resume();
+
+    // flash LEDs so we know we are alive
+    for (byte n = 0; n < times_flash_; n++) {
+       digitalWrite(LED_BUILTIN, HIGH);
+       delay(200);
+       digitalWrite(LED_BUILTIN, LOW);
+       delay(200);
+       
+    }
+    
+    
+    init_uart();
+    init_gimbal();
+
+
+
+    uart_obcomp.println("<Arduino is ready>");
+
+
 
 }
 

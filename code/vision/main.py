@@ -26,7 +26,7 @@ if __name__ == '__main__':
   import time
   #import ball_tracking
   import cv2
-  import ComArduino2 as stcom
+  #import ComArduino2 as stcom
   import greenBallTracker as GBT 
   #import 
 
@@ -40,7 +40,7 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
-imageQ = queue.Queue(maxsize=10)
+imageQ = queue.Queue(maxsize=100)
 commQ = queue.Queue(maxsize=30)
 
 """ WRITE YOUR FUNCTIONS HERE """
@@ -126,7 +126,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
       logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
       lock.acquire()
-      trajQ.put(trajectoryGen((old_objCX, old_objCY), (objCX, objCY)))
+      #trajQ.put(trajectoryGen((old_objCX, old_objCY), (objCX, objCY)))
       lock.release()
 
       cv2.imshow("Process Frame", frame)
@@ -160,7 +160,7 @@ def comms_thread(event,trajQ = commQ):
       for i in range(len(ptTrajList)):
         gimbal_coords_buffer = []
         gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+str(ptTrajList[i][1])+str(ptTrajList[i][2])+">")
-        stcom.runTest(gimbal_coords_buffer)
+        #stcom.runTest(gimbal_coords_buffer)
       logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
 
@@ -177,9 +177,9 @@ if __name__ == '__main__':
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
-  logging.info("Waiting for arduino.")
-  stcom.waitForArduino()
-  logging.info("Arduino ready.")
+  #logging.info("Waiting for arduino.")
+  #stcom.waitForArduino()
+  #logging.info("Arduino ready.")
   #grab_th = threading.Thread(target = grabber_thread())
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
