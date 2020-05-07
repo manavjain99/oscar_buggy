@@ -15,15 +15,26 @@
 #define DEBUG
 #ifdef DEBUG 
 #include "../include/main.h"
-/*
-  Timebase callback
-  This example shows how to configure HardwareTimer to execute a callback at regular interval.
-  Callback toggles pin.
-  Once configured, there is only CPU load for callbacks executions.
-*/
+#include "../include/commons.h"
+#include "../include/uart.hpp"
+#include "gimbal_stuff.h"
+
+/*DEFINE YOUR GLOBAL VARS HERE*/
+
+// If you change this make sure to change in .py in waitingforArduino function.
+#define STM32_READY "<Arduino is ready>"
+#define MS_TO_HZ(x) (1e3/x)
+#define TICK_DURATION_MS (7.0)
+
+static const byte times_flash_ = 3;
 
 void setup()
 {
+
+    Serial.begin(115200);
+  
+    // tell the PC we are ready
+   Serial.println("<Arduino is ready>");
 }
 
 
@@ -83,7 +94,7 @@ static int debug_area_ = 99;
 #define pin  D2
 #endif
 
-void Update_IT_callback(HardwareTimer*);
+//void Update_IT_callback(HardwareTimer*);
 
 
 void Update_IT_callback(HardwareTimer* TIM1ptr){
@@ -133,9 +144,24 @@ void setup(void){
        
     }
     
-
+    
     init_uart();
     init_gimbal();
+
+
+
+    uart_obcomp.println("<Arduino is ready>");
+
+    // flash LEDs so we know we are alive
+    for (byte n = 0; n < times_flash_; n++) {
+       digitalWrite(LED_BUILTIN, HIGH);
+       delay(200);
+       digitalWrite(LED_BUILTIN, LOW);
+       delay(200);
+       
+    }
+
+
 
     // Setting up the tick based ISR.
      #if defined(TIM1)
@@ -153,17 +179,6 @@ void setup(void){
   MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->resume();
-
-  uart_obcomp.println(STM32_READY);
-
-    // flash LEDs so we know we are alive
-    for (byte n = 0; n < times_flash_; n++) {
-       digitalWrite(LED_BUILTIN, HIGH);
-       delay(200);
-       digitalWrite(LED_BUILTIN, LOW);
-       delay(200);
-       
-    }
 
 }
 
