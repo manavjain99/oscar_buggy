@@ -141,7 +141,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
     #"""
 
 
-def comms_thread(trajQ = commQ):
+def comms_thread(event,trajQ = commQ):
   """
   (list) -> (NoneType)
   Description: Sends gimbal traj to mcu and waits for ack.
@@ -177,15 +177,18 @@ if __name__ == '__main__':
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
-
-
+  logging.info("Waiting for arduino.")
+  stcom.waitForArduino()
+  logging.info("Arduino ready.")
   #grab_th = threading.Thread(target = grabber_thread())
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
-  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
     executor.submit(grabber_thread, event)
     executor.submit(process_thread, event)
+    executor.submit(comms_thread, event)
+    
    
   #  executor.submit(f2)
   
