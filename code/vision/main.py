@@ -184,10 +184,10 @@ if __name__ == '__main__':
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
-  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(grabber_thread, event)
     executor.submit(process_thread, event)
-    executor.submit(comms_thread, event)
+  #  executor.submit(comms_thread, event)
     
    
   #  executor.submit(f2)
