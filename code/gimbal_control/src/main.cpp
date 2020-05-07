@@ -12,7 +12,7 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG 
 #include "../include/main.h"
 /*
@@ -46,7 +46,7 @@ void loop()
 // If you change this make sure to change in .py in waitingforArduino function.
 #define STM32_READY "<Arduino is ready>"
 #define MS_TO_HZ(x) (1e3/x)
-#define TICK_DURATION_MS (1000.0)
+#define TICK_DURATION_MS (7.0)
 
 float frame_ht = -1.0F;
 float frame_wd = -1.0F;
@@ -154,7 +154,16 @@ void setup(void){
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->resume();
 
-  Serial.println(STM32_READY);
+  uart_obcomp.println(STM32_READY);
+
+    // flash LEDs so we know we are alive
+    for (byte n = 0; n < times_flash_; n++) {
+       digitalWrite(LED_BUILTIN, HIGH);
+       delay(200);
+       digitalWrite(LED_BUILTIN, LOW);
+       delay(200);
+       
+    }
 
 }
 
@@ -165,8 +174,8 @@ void loop(){
     //read_mavlink_storm32();
     //setAngles(0,0,-45);
     //delay();
-    setAngles(0,2,45);//1
-    setAngles(0,5,47);
+    // setAngles(0,2,45);//1
+    // setAngles(0,5,47);
     //setAngles(0,7,50);//3
     //setAngles(0,10,53);
     //setAngles(0,2,55);//5
@@ -181,7 +190,7 @@ void loop(){
 
   }
   //del_time_ = new_time - old_time;
-  uart_obcomp.println(del_time_);
+  //uart_obcomp.println(del_time_);
   //uart_obcomp.print(" ");
   //uart_obcomp.println(gimbalYaw);
 

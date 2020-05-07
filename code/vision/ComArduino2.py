@@ -158,9 +158,8 @@ endMarker = 62
 
 
 if __name__ == '__main__':
+  print("waiting for arduino.")
   waitForArduino()
-
-
   testData = []
   testData.append("<LED1,200,0.2>")
   testData.append("<LED1,800,0.7>")
