@@ -30,7 +30,8 @@ if __name__ == '__main__':
   import greenBallTracker as GBT 
   #import 
 
-
+  stopEvent = threading.Event()
+  
 
 """ WRITE YOUR VARIABLES HERE """
 FPS_GRAB = 0.0
@@ -70,7 +71,7 @@ def trajectoryGen(prevXY, newXY, numpts = 6):
 #  
 #  """
 
-def grabber_thread(event, source = 0, imgQ = imageQ):
+def grabber_thread(event = stopEvent, source = 0, imgQ = imageQ):
     """
     (int, queue) -> NoneType
     Description : Grabs the image and puts it into the imageQ buffer.
@@ -100,7 +101,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
 #  while not event.is_set():
 
 
-def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
+def process_thread(event = stopEvent, source = 0, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
@@ -112,7 +113,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
   old_objCY = 0
   lock = threading.Lock()
 
-  while(1):
+  while not event.is_set():
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
@@ -141,7 +142,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
     #"""
 
 
-def comms_thread(event,trajQ = commQ):
+def comms_thread(event = stopEvent,trajQ = commQ):
   """
   (list) -> (NoneType)
   Description: Sends gimbal traj to mcu and waits for ack.
@@ -149,17 +150,16 @@ def comms_thread(event,trajQ = commQ):
   
   """
   while not event.is_set() :
-
+    pass
     # if there is a new list of trajectory in the Queue. 
     if not trajQ.empty():
-      
-      start_time_comms - time.time()
-      ptTrajList = trajQ.get()
-
+      start_time_comms = time.time()
+      logging.info("TrajQ size" + str(trajQ.qsize())) 
+      #ptTrajList = trajQ.get()
       # start sending vals one by one and wait for ack by mcu.
       for i in range(len(ptTrajList)):
         gimbal_coords_buffer = []
-        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+str(ptTrajList[i][1])+str(ptTrajList[i][2])+">")
+        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
         #stcom.runTest(gimbal_coords_buffer)
       logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
@@ -171,7 +171,6 @@ if __name__ == '__main__':
 
   print
   print
-  event = threading.Event()
     
   format = "%(asctime)s: %(message)s"
   logging.basicConfig(format=format, level=logging.INFO,
@@ -184,12 +183,10 @@ if __name__ == '__main__':
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
-  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(grabber_thread, event)
-    executor.submit(process_thread, event)
-  #  executor.submit(comms_thread, event)
-    
-   
+  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    executor.submit(grabber_thread)
+    executor.submit(process_thread)
+    executor.submit(comms_thread)
   #  executor.submit(f2)
   
   #time.sleep(5.0)
