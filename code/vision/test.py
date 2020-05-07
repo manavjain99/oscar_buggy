@@ -86,7 +86,7 @@ if __name__== '__main__':
   format = "%(asctime)s: %(message)s"
   logging.basicConfig(format=format, level=logging.INFO,
                       datefmt="%H:%M:%S")
-
+ 
   time.sleep(3.0)
   objA = 10
   objCX = 0
