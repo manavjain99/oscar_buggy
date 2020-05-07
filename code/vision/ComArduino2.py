@@ -116,7 +116,7 @@ def runTest(td):
 
     if waitingForReply == False:
       sendToArduino(teststr.encode('utf-8'))
-      print("Sent from PC -- LOOP NUM " + str(n) + " TEST STR " + teststr)
+      logging.info("Sent from PC -- LOOP NUM " + str(n) + " TEST STR " + teststr)
       waitingForReply = True
 
     if waitingForReply == True:
@@ -125,13 +125,13 @@ def runTest(td):
         pass
         
       dataRecvd = recvFromArduino()
-      print("Reply Received  " + dataRecvd)
+      logging.info("Reply Received  " + dataRecvd)
       n += 1
       waitingForReply = False
 
-      print("===========")
+      logging.info("===========")
 
-    time.sleep(5)
+    #time.sleep(5)
 
 
 #======================================

@@ -26,7 +26,7 @@ if __name__ == '__main__':
   import time
   #import ball_tracking
   import cv2
-  #import ComArduino2
+  import ComArduino2 as stcom
   import greenBallTracker as GBT 
   #import 
 
@@ -56,7 +56,7 @@ def trajectoryGen(prevXY, newXY, numpts = 6):
   
   # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
   for i in range(numpts):
-    trajList.append([0, i*delPitch/numpts, i*delYaw/numpts])
+    trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
 
   return trajList
 
@@ -79,7 +79,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
     time.sleep(3.0)
     lock = threading.Lock()
         
-    while not event.is_set() or not imgQ.full():
+    while not event.is_set():
         start_time = time.time() # start time of the loop
         logging.info(" no of frames"  + str(imgQ.qsize()))
         
@@ -102,7 +102,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
 
 def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
   """
-  @brief : pops imgQ process img and calc gimb trajectory.
+  @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
   objA = 0
   objCX = 0
@@ -112,41 +112,57 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
   old_objCY = 0
   lock = threading.Lock()
 
-  while not event.is_set() or not queue.empty():
-    start_time_proc = time.time()
-    frame = imgQ.get()
-    #logging.info(" no of process frames"  + str(imgQ.qsize()))
-    
-    if (source is not 0):
-      frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
-    
-    old_objA, old_objCX, old_objCY = objA, objCX, objCY
-    objA, objCX, objCY = GBT.trackGreenBall(frame)
-    logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
+  while(1):
+    if not imgQ.empty():
+      start_time_proc = time.time()
+      frame = imgQ.get()
+      #logging.info(" no of process frames"  + str(imgQ.qsize()))
+      
+      if (source is not 0):
+        frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+      
+      old_objA, old_objCX, old_objCY = objA, objCX, objCY
+      objA, objCX, objCY = GBT.trackGreenBall(frame)
+      logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
-    lock.acquire()
-    trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
-    lock.release()
+      lock.acquire()
+      trajQ.put(trajectoryGen((old_objCX, old_objCY), (objCX, objCY)))
+      lock.release()
 
-    cv2.imshow("Process Frame", frame)
-    if cv2.waitKey(10) == ord("q"):
-      event.set()
-      cv2.destroyAllWindows()
-      break
-    #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-    #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-  
+      cv2.imshow("Process Frame", frame)
+      if cv2.waitKey(1) == ord("q"):
+        event.set()
+        cv2.destroyAllWindows()
+        break
+      #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+      logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+    
     #cv2.destroyAllWindows()
     #"""
 
 
-#def ...:
-#  """
-#  () -> ()
-#  Description: 
-#  >>>
-#  
-#  """
+def comms_thread(trajQ = commQ):
+  """
+  (list) -> (NoneType)
+  Description: Sends gimbal traj to mcu and waits for ack.
+  >>>
+  
+  """
+  while not event.is_set() :
+
+    # if there is a new list of trajectory in the Queue. 
+    if not trajQ.empty():
+      
+      start_time_comms - time.time()
+      ptTrajList = trajQ.get()
+
+      # start sending vals one by one and wait for ack by mcu.
+      for i in range(len(ptTrajList)):
+        gimbal_coords_buffer = []
+        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+str(ptTrajList[i][1])+str(ptTrajList[i][2])+">")
+        stcom.runTest(gimbal_coords_buffer)
+      logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
+
 
 """ START YOUR CODE HERE """
 
