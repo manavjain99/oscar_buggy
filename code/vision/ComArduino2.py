@@ -49,7 +49,8 @@
 #               ser = serial.Serial(serPort, baudRate)
 #
 
-
+import logging
+  
 #=====================================
 
 #  Function Definitions
