@@ -127,9 +127,8 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
 
       with processLock:
         pass
-      #lock.acquire()
-      ##trajQ.put(trajectoryGen((old_objCX, old_objCY), (objCX, objCY)))
-      #lock.release()
+        trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
+        #trajQ.put()
 
       cv2.imshow("Process Frame", frame)
       if cv2.waitKey(1) == ord("q"):
@@ -156,7 +155,7 @@ def comms_thread(event,trajQ = commQ):
     if not trajQ.empty():
       
       start_time_comms - time.time()
-      ptTrajList = trajQ.get()
+      #ptTrajList = trajQ.get()
 
       # start sending vals one by one and wait for ack by mcu.
       for i in range(len(ptTrajList)):
