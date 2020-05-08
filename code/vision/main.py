@@ -36,19 +36,25 @@ if __name__ == '__main__':
 
 NO_OF_PTS = 3
 
+CHANGE_YAW_THOLD = 2
+CHANGE_PITCH_THOLD = 2
+THRES_PERCENT_CHANGE =0.10
 VID_SRC = 2
 
-OBJECT_CX = 460/2
-OBJECT_CY = 639/2
-
-FPS_GRAB = 0.0
-FPS_PROC = 0.0
-FPS_COMM = 1.0
+FRAME_CX = 460/2
+FRAME_CY = 639/2
 
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
+MAX_NO_FRAMES = 10
+
 ACK_MCU_MSG = '1'
+
+# need not change these vars.
+MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+
 # should be equal to t_grab / t_tick_mcu
 
 imageQ = queue.Queue(maxsize=10000)
@@ -69,9 +75,25 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   delYaw   = -(newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   delPitch = -(newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   
-  # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
-  for i in range(numpts):
-    trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
+  # if less than min of (th% of max <s change or default).
+# if less than min of (th% of max <s change or default).
+  if(abs(delYaw) < min(CHANGE_YAW_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_YAW)):
+    delYaw = 0
+
+  if(abs(delPitch) < min(CHANGE_PITCH_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_PITCH)):
+    delPitch = 0
+    # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
+  
+  if((newXY[0] is not -1) and (newXY[1] is not -1)):
+    #if delYaw , delPitch greater than angle threshold.
+    for i in range(numpts):
+      trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
+
+  # if no obj detected.
+  else:
+    for i in range(numpts):
+      trajList.append([0, 0, 0])
+
 
   return trajList
 
@@ -93,17 +115,21 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     cap = cv2.VideoCapture(source)
     time.sleep(3.0)
     grabberLock = threading.Lock()
-        
+    imgQ_size = imgQ.qsize()
     while not event.is_set():
         
         start_time = time.time() # start time of the loop
-        logging.info(" no of frames"  + str(imgQ.qsize()))
+        
+        imgQ_size = imgQ.qsize()
+        logging.info(" no of frames"  + str(imgQ_size))
         
         grabbed, frame = cap.read()
         
-        with grabberLock:
-          pass
-          imgQ.put(frame)
+        # to make sure the buffer does not lag as real time as possible.
+        if(imgQ_size < MAX_NO_FRAMES):
+          with grabberLock:
+            pass
+            imgQ.put(frame)
         
         #logging.info("frame grab runtime" + str(time.time() - start_time))
         logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
@@ -144,7 +170,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
       with processLock:
         pass
-        trajList = trajectoryGen((OBJECT_CX, OBJECT_CY), (objCX, objCY))
+        trajList = trajectoryGen((FRAME_CX, FRAME_CY), (objCX, objCY))
         trajQ.put(trajList)
 
       #logging.info("size of commsQ" + str(trajQ.qsize()))
@@ -189,7 +215,7 @@ def comms_thread(event,trajQ = commQ):
           dataRecvd = stcom.recvFromArduino()
         #stcom.runTest(gimbal_coords_buffer)
       
-      time.sleep(0.01) #10ms for receive from stm.
+      time.sleep(0.02) #10ms for receive from stm.
       #time.sleep(0.05) #5ms for receive from stm.
        
       #logging.info("comms runtime " + str(time.time() - start_time_comms) )
