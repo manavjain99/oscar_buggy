@@ -166,7 +166,9 @@ def comms_thread(event,trajQ = commQ):
       #  gimbal_coords_buffer = []
       #  gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
       #  #stcom.runTest(gimbal_coords_buffer)
-      time.sleep(0.01)
+      time.sleep(0.01) #10ms for receive from stm.
+      #time.sleep(0.05) #5ms for receive from stm.
+       
       #logging.info("comms runtime " + str(time.time() - start_time_comms) )
       logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
