@@ -33,6 +33,14 @@ if __name__ == '__main__':
 
 
 """ WRITE YOUR VARIABLES HERE """
+
+NO_OF_PTS = 3
+
+VID_SRC = 2
+
+OBJECT_CX = 460/2
+OBJECT_CY = 639/2
+
 FPS_GRAB = 0.0
 FPS_PROC = 0.0
 FPS_COMM = 1.0
@@ -40,12 +48,8 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
-OBJECT_CX = 300
-OBJECT_CY = 400
-
 ACK_MCU_MSG = '1'
 # should be equal to t_grab / t_tick_mcu
-NO_OF_PTS = 3
 
 imageQ = queue.Queue(maxsize=10000)
 commQ = queue.Queue(maxsize=30000)
@@ -57,9 +61,13 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   (tup size2, tup size2, int) -> (list of 3 ints list)
   Description:generates trajectory for delta gimbal <s, 
   """
+
   trajList = []
-  delYaw   = (newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-  delPitch = (newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  
+  # make sure to negate the vals as axis / coords are inverted wtro gimbal.
+
+  delYaw   = -(newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  delPitch = -(newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   
   # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
   for i in range(numpts):
@@ -77,7 +85,7 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
 #  
 #  """
 
-def grabber_thread(event, source = 0, imgQ = imageQ):
+def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     """
     (int, queue) -> NoneType
     Description : Grabs the image and puts it into the imageQ buffer.
@@ -109,7 +117,7 @@ def grabber_thread(event, source = 0, imgQ = imageQ):
 #  while not event.is_set():
 
 
-def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
+def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
