@@ -40,6 +40,9 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
+OBJECT_CX = 300
+OBJECT_CY = 400
+
 ACK_MCU_MSG = '1'
 # should be equal to t_grab / t_tick_mcu
 NO_OF_PTS = 3
@@ -49,14 +52,14 @@ commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-def trajectoryGen(prevXY, newXY, numpts = NO_OF_PTS):
+def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
   Description:generates trajectory for delta gimbal <s, 
   """
   trajList = []
-  delYaw = (newXY[0] - prevXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-  delPitch = (newXY[1] - prevXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  delYaw   = (newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  delPitch = (newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
   
   # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
   for i in range(numpts):
@@ -133,7 +136,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
 
       with processLock:
         pass
-        trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
+        trajList = trajectoryGen((OBJECT_CX, OBJECT_CY), (objCX, objCY))
         trajQ.put(trajList)
 
       #logging.info("size of commsQ" + str(trajQ.qsize()))
