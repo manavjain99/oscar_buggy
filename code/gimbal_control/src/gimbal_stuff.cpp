@@ -23,9 +23,9 @@
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
 // these vars are parsed from uart.
-extern int del_gimbal_roll  = 0;
-extern int del_gimbal_pitch = 0;
-extern int del_gimbal_yaw   = 0;
+int del_gimbal_roll  = 0;
+int del_gimbal_pitch = 0;
+int del_gimbal_yaw   = 0;
 
 
 /* MAKE SURE THIS MATCHES WITH MAIN.PY file*/
@@ -254,9 +254,9 @@ void orient_gimbal(void){
 
   ++pt_num_;
 
-  inst_gimbal_roll_  = total_gimbal_roll_  - del_gimbal_roll;
-  inst_gimbal_pitch_ = total_gimbal_pitch_ - del_gimbal_pitch;
-  inst_gimbal_yaw_   = total_gimbal_yaw_   - del_gimbal_yaw;
+  inst_gimbal_roll_  = total_gimbal_roll_  + del_gimbal_roll;
+  inst_gimbal_pitch_ = total_gimbal_pitch_ + del_gimbal_pitch;
+  inst_gimbal_yaw_   = total_gimbal_yaw_   + del_gimbal_yaw;
 
   inst_gimbal_roll_  = CHECK_MAX(inst_gimbal_roll_, MAX_GIMBAL_ROLL);
   inst_gimbal_pitch_ = CHECK_MAX(inst_gimbal_pitch_, MAX_GIMBAL_PITCH);
@@ -267,9 +267,9 @@ void orient_gimbal(void){
   
   if(pt_num_ == NO_OF_TRAJ_PTS){
 
-    total_gimbal_roll_  -= del_gimbal_roll ;     
-    total_gimbal_pitch_ -= del_gimbal_pitch  ;
-    total_gimbal_yaw_   -= del_gimbal_yaw  ;    
+    total_gimbal_roll_  += del_gimbal_roll ;     
+    total_gimbal_pitch_ += del_gimbal_pitch  ;
+    total_gimbal_yaw_   += del_gimbal_yaw  ;    
 
     pt_num_ = 0;
   }
