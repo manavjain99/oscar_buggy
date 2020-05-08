@@ -22,6 +22,12 @@
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
+// these vars are parsed from uart.
+extern int del_gimbal_roll  = 0;
+extern int del_gimbal_pitch = 0;
+extern int del_gimbal_yaw   = 0;
+
+
 /* MAKE SURE THIS MATCHES WITH MAIN.PY file*/
 #define NO_OF_TRAJ_PTS 3
 
@@ -35,34 +41,25 @@
 #define INCREASING HIGH
 #define DECREASING LOW
 
-int gimbal_roll = 0;
-int gimbal_pitch = 0;
-int gimbal_yaw = 0;
-
 double gimbalYaw = 0;
 double gimbalPitch = 0;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 
-//by observations.
-#define PIX_PER_DEG 18.0F // Float cause dont want ints rounding offs.
-#define PIX_PER_DEG_VAR 1.3F // Variance for pixel change in per degree.
+#define CHECK_MAX(x,y) ((abs(x)>y) ? ((x>0)?(y):(-y)) : (x)  )
+
+static int inst_gimbal_roll_ = 0;
+static int inst_gimbal_pitch_ = 0;
+static int inst_gimbal_yaw_ = 0;
+
+static int total_gimbal_roll_ = 0;
+static int total_gimbal_pitch_ = 0;
+static int total_gimbal_yaw_ = 0;
 
 
-#define MIN_ANG_TO_MOVE_YAW 2
-#define MIN_ANG_TO_MOVE_PITCH 2
+static int pt_num_ = 0;
 
 
-#define MAX_YAW_DEG 90
-#define MAX_PITCH_DEG 20
-#define MAX_ROLL_DEG 5 
-
-#define DEG_CH(cur_x, last_x) ((cur_x - last_x)/(PIX_PER_DEG+PIX_PER_DEG_VAR))
-
-
-
-static float last_xpix_gimb_update_ = 0.0;
-static float last_ypix_gimb_update_ = 0.0;
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
 
@@ -232,7 +229,7 @@ void init_gimbal(void){
   setAngles(3, -30, 20);
   
   delay(1000);
-  setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
+  setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
   delay(100);
   read_mavlink_storm32();
 }
@@ -249,36 +246,35 @@ void orient_gimbal(void){
   /*
    * assumes params are updated, moves gimbal if del_pix > x degs.
    * Heart of gimbal control. run as fast as you can.  
+  
+   * inst_gim<s is <s past angs + < delta traj<s, once all traj<s are sent
+   *  total<s += last <
   */
   // I have gimbal delta roll,pitch,yaw. 
 
-  //int delx_ang = round(DEG_CH(object_cx, frame_wd/2.0F));
-  int delx_ang = round(DEG_CH(object_cx,300));
+  ++pt_num_;
+
+  inst_gimbal_roll_  = total_gimbal_roll_  - del_gimbal_roll;
+  inst_gimbal_pitch_ = total_gimbal_pitch_ - del_gimbal_pitch;
+  inst_gimbal_yaw_   = total_gimbal_yaw_   - del_gimbal_yaw;
+
+  inst_gimbal_roll_  = CHECK_MAX(inst_gimbal_roll_, MAX_GIMBAL_ROLL);
+  inst_gimbal_pitch_ = CHECK_MAX(inst_gimbal_pitch_, MAX_GIMBAL_PITCH);
+  inst_gimbal_yaw_   = CHECK_MAX(inst_gimbal_yaw_, MAX_GIMBAL_YAW);
   
-  //int dely_ang = round(DEG_CH(object_cy, frame_ht/2.0F));
-  int dely_ang = round(DEG_CH(object_cy, 400));
+
+  setAngles(inst_gimbal_roll_, inst_gimbal_pitch_, inst_gimbal_yaw_);
   
-  // Update rate of the gimbal.
-  // Gimbal limits is +- deg.
-  if( abs(delx_ang) >= MIN_ANG_TO_MOVE_YAW){
-      gimbal_yaw -= delx_ang;
-    if (abs(gimbal_yaw) > MAX_YAW_DEG ){
-      digitalWrite(LED_BUILTIN, LOW);
-      gimbal_yaw = (gimbal_yaw > 0) ? (MAX_YAW_DEG) : (-MAX_YAW_DEG); // Limiting the op
-      }
-    }
-  
-  if( abs(dely_ang) >= MIN_ANG_TO_MOVE_PITCH){
-      gimbal_pitch -= dely_ang;
-      if(abs(gimbal_pitch) > MAX_PITCH_DEG){
-        digitalWrite(LED_BUILTIN, LOW);
-        gimbal_pitch = (gimbal_pitch > 0) ? (MAX_PITCH_DEG) : (-MAX_PITCH_DEG); // Limiting the op
-      }
-    }
-  
-  setAngles(gimbal_roll, gimbal_pitch, gimbal_yaw);
-  //delay(50);
+  if(pt_num_ == NO_OF_TRAJ_PTS){
+
+    total_gimbal_roll_  -= del_gimbal_roll ;     
+    total_gimbal_pitch_ -= del_gimbal_pitch  ;
+    total_gimbal_yaw_   -= del_gimbal_yaw  ;    
+
+    pt_num_ = 0;
   }
+
+}
 
 
 void get_pix_per_deg(void){
