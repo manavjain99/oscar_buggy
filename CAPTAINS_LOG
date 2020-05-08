@@ -296,3 +296,8 @@ else  fps proces >> fps grab.
 
 12.19PM 
 Managed to get threads balanced with successfully sending data to stm32, now writing the gimbal maths part.
+
+3.51 PM 
+Managed to get everything working.
+Now need to tweak the obj detection part. To a football.
+Coarse tuning needed.
