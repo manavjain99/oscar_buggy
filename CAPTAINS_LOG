@@ -286,3 +286,8 @@ Set the wait key to 5, FPS bounced back to 30.
 
 10.22 AM
 Done with comms writing code.
+
+8.51 PM
+Cant get all three threads working at expected speeds.
+If comms thread is used, fps proces < fps grab.
+else  fps proces >> fps grab.

@@ -130,9 +130,9 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
       with processLock:
         pass
         trajList = trajectoryGen((old_objCX, old_objCY), (objCX, objCY))
-        #trajQ.put(trajList)
+        trajQ.put(trajList)
 
-      logging.info("size of commsQ" + str(trajQ.qsize()))
+      #logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
       if cv2.waitKey(1) == ord("q"):
         event.set()
@@ -156,16 +156,18 @@ def comms_thread(event,trajQ = commQ):
   while not event.is_set() :
 
     # if there is a new list of trajectory in the Queue. 
-    if trajQ.qsize() > 10:
+    if trajQ.qsize() > 0.0:
       start_time_comms = time.time()
-      #ptTrajList = trajQ.get()
-      logging.info("size after read"+str(trajQ.qsize()))
+      ptTrajList = trajQ.get()
+      logging.info("size after read "+str(trajQ.qsize()))
       
       ## start sending vals one by one and wait for ack by mcu.
       #for i in range(len(ptTrajList)):
       #  gimbal_coords_buffer = []
       #  gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
       #  #stcom.runTest(gimbal_coords_buffer)
+      time.sleep(0.01)
+      #logging.info("comms runtime " + str(time.time() - start_time_comms) )
       logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
 
