@@ -26,7 +26,7 @@ if __name__ == '__main__':
   import time
   #import ball_tracking
   import cv2
-  #import ComArduino2 as stcom
+  import ComArduino2 as stcom
   import greenBallTracker as GBT 
   #import 
 
@@ -40,12 +40,16 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
+
+# should be equal to t_grab / t_tick_mcu
+NO_OF_PTS = 3
+
 imageQ = queue.Queue(maxsize=10000)
 commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-def trajectoryGen(prevXY, newXY, numpts = 6):
+def trajectoryGen(prevXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
   Description:generates trajectory for delta gimbal <s, 
@@ -159,13 +163,16 @@ def comms_thread(event,trajQ = commQ):
     if trajQ.qsize() > 0.0:
       start_time_comms = time.time()
       ptTrajList = trajQ.get()
-      logging.info("size after read "+str(trajQ.qsize()))
+      logging.info("trajQ size after "+str(trajQ.qsize()))
       
       ## start sending vals one by one and wait for ack by mcu.
       for i in range(len(ptTrajList)):
         gimbal_coords_buffer = []
         gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
+        teststr = gimbal_coords_buffer[0]
+        stcom.sendToArduino(teststr.encode('utf-8'))
         #stcom.runTest(gimbal_coords_buffer)
+      
       time.sleep(0.01) #10ms for receive from stm.
       #time.sleep(0.05) #5ms for receive from stm.
        
@@ -186,9 +193,9 @@ if __name__ == '__main__':
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
-  #logging.info("Waiting for arduino.")
-  #stcom.waitForArduino()
-  #logging.info("Arduino ready.")
+  logging.info("Waiting for arduino.")
+  stcom.waitForArduino()
+  logging.info("Arduino ready.")
   #grab_th = threading.Thread(target = grabber_thread())
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
