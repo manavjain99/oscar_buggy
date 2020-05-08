@@ -35,24 +35,56 @@ if __name__ == '__main__':
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
+CHANGE_YAW_THOLD = 2
+CHANGE_PITCH_THOLD = 2
+THRES_PERCENT_CHANGE =0.10
+VID_SRC = 2
+
+FRAME_CX = 460/2
+FRAME_CY = 639/2
+
+
 commQ = queue.Queue(maxsize=3000)
 
 
-def trajectoryGen(prevXY, newXY, numpts = 6):
+# need not change these vars.
+MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+
+
+def trajectoryGen(centerXY, newXY, numpts = 3):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
   Description:generates trajectory for delta gimbal <s, 
   """
-  trajList = list()
-  delYaw = (newXY[0] - prevXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-  delPitch = (newXY[1] - prevXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+
+  trajList = []
   
+  # make sure to negate the vals as axis / coords are inverted wtro gimbal.
+
+  delYaw   = -(newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  delPitch = -(newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+  
+  # if less than min of (th% of max <s change or default).
+  if(abs(delYaw) < min(CHANGE_YAW_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_YAW)):
+    delYaw = 0
+
+  if(abs(delPitch) < min(CHANGE_PITCH_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_PITCH)):
+    delPitch = 0
   # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
-  for i in range(numpts):
-    trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
+  
+  if((newXY[0] is not -1) and (newXY[1] is not -1)):
+    #if delYaw , delPitch greater than angle threshold.
+    for i in range(numpts):
+      trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
+
+  # if no obj detected.
+  else:
+    for i in range(numpts):
+      trajList.append([0, 0, 0])
+
 
   return trajList
-
 
 
 def comms_thread(trajQ = commQ):
@@ -98,9 +130,9 @@ if __name__== '__main__':
     # assuming i get old and new XY coords 
     
     # I put traj in commsQ
-    commQ.put(trajList)
+    #commQ.put(trajList)
 
     # I call comms_thread
-    print(comms_thread())
+    #print(comms_thread())
     break
     # print its o/p

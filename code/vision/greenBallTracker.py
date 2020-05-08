@@ -55,8 +55,13 @@ def trackGreenBall(frame):
   objCenterY =-1
   objArea   = -1
 
-  greenLower = (29, 86, 6)
-  greenUpper = (64, 255, 255)
+  #blue color
+  greenLower = (51,51,0)
+  greenUpper = (255,255,204)
+
+  # green color.
+  #greenLower = (29, 86, 6)
+  #greenUpper = (64, 255, 255)
 
   frame = imutils.resize(frame, width=600)
   blurred = cv2.GaussianBlur(frame, (11, 11), 0)
