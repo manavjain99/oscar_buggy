@@ -162,10 +162,10 @@ def comms_thread(event,trajQ = commQ):
       logging.info("size after read "+str(trajQ.qsize()))
       
       ## start sending vals one by one and wait for ack by mcu.
-      #for i in range(len(ptTrajList)):
-      #  gimbal_coords_buffer = []
-      #  gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
-      #  #stcom.runTest(gimbal_coords_buffer)
+      for i in range(len(ptTrajList)):
+        gimbal_coords_buffer = []
+        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
+        #stcom.runTest(gimbal_coords_buffer)
       time.sleep(0.01) #10ms for receive from stm.
       #time.sleep(0.05) #5ms for receive from stm.
        
