@@ -117,7 +117,7 @@ def runTest(td):
 
     if waitingForReply == False:
       sendToArduino(teststr.encode('utf-8'))
-      logging.info("Sent from PC -- LOOP NUM " + str(n) + " TEST STR " + teststr)
+      #logging.info("Sent from PC -- LOOP NUM " + str(n) + " TEST STR " + teststr)
       waitingForReply = True
 
     if waitingForReply == True:
@@ -126,11 +126,11 @@ def runTest(td):
         pass
         
       dataRecvd = recvFromArduino()
-      logging.info("Reply Received  " + dataRecvd)
+      #logging.info("Reply Received  " + dataRecvd)
       n += 1
       waitingForReply = False
 
-      logging.info("===========")
+      #logging.info("===========")
 
     #time.sleep(5)
 
@@ -148,7 +148,7 @@ print
 print
 
 # NOTE the user must ensure that the serial port and baudrate are correct
-serPort = "/dev/ttyUSB1"
+serPort = "/dev/ttyUSB0"
 baudRate = 115200
 ser = serial.Serial(serPort, baudRate)
 print("Serial port " + serPort + " opened  Baudrate " + str(baudRate))
