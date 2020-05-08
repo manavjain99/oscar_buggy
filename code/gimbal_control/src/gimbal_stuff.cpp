@@ -22,6 +22,15 @@
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
+/* MAKE SURE THIS MATCHES WITH MAIN.PY file*/
+#define NO_OF_TRAJ_PTS 3
+
+#define MAX_GIMBAL_YAW 40
+#define MAX_GIMBAL_PITCH 10
+#define MAX_GIMBAL_ROLL 10
+
+
+
 #define ToDeg(x) (x*57.2957795131)  // *180/pi
 #define INCREASING HIGH
 #define DECREASING LOW
@@ -228,14 +237,20 @@ void init_gimbal(void){
   read_mavlink_storm32();
 }
 
+// I have gimbal delta roll,pitch,yaw. 
+
+void gimbal_math(void){
+
+}
+
+
 void orient_gimbal(void){
 
   /*
    * assumes params are updated, moves gimbal if del_pix > x degs.
    * Heart of gimbal control. run as fast as you can.  
   */
-  // Now i have the area , ocx , and ocy.
-
+  // I have gimbal delta roll,pitch,yaw. 
 
   //int delx_ang = round(DEG_CH(object_cx, frame_wd/2.0F));
   int delx_ang = round(DEG_CH(object_cx,300));

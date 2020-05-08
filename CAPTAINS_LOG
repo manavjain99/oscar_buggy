@@ -291,3 +291,8 @@ Done with comms writing code.
 Cant get all three threads working at expected speeds.
 If comms thread is used, fps proces < fps grab.
 else  fps proces >> fps grab.
+
+8/05/2020
+
+12.19PM 
+Managed to get threads balanced with successfully sending data to stm32, now writing the gimbal maths part.

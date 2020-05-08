@@ -49,6 +49,8 @@ void init_uart(void){
 }
 
 
+// I am so far getting only gimbal delta roll,pitch,yaw.
+
 
 void parse_data() {
 

@@ -40,7 +40,7 @@ FPS_COMM = 1.0
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
-
+ACK_MCU_MSG = '1'
 # should be equal to t_grab / t_tick_mcu
 NO_OF_PTS = 3
 
@@ -149,6 +149,7 @@ def process_thread(event, source = 0, trajQ = commQ, imgQ = imageQ):
     #"""
 
 
+# We are sending roll. pitch, yaw to the MCU.
 def comms_thread(event,trajQ = commQ):
   """
   (list) -> (NoneType)
@@ -157,6 +158,7 @@ def comms_thread(event,trajQ = commQ):
   
   """
   ptTrajList = []
+  dataRecvd = ''
   while not event.is_set() :
 
     # if there is a new list of trajectory in the Queue. 
@@ -170,7 +172,10 @@ def comms_thread(event,trajQ = commQ):
         gimbal_coords_buffer = []
         gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
         teststr = gimbal_coords_buffer[0]
+        logging.info(teststr)
         stcom.sendToArduino(teststr.encode('utf-8'))
+        while(dataRecvd != ACK_MCU_MSG):
+          dataRecvd = stcom.recvFromArduino()
         #stcom.runTest(gimbal_coords_buffer)
       
       time.sleep(0.01) #10ms for receive from stm.

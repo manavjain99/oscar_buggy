@@ -111,7 +111,7 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
 
       //led_debug_state_ = !led_debug_state_;
       
-      if(object_area == -1){
+      if(object_area == 0){
           digitalWrite(LED_BUILTIN, HIGH);
       }
       ack_obcomp();
