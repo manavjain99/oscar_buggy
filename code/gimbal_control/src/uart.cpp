@@ -17,6 +17,7 @@
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
+#include "gimbal_stuff.h"
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
@@ -59,13 +60,13 @@ void parse_data() {
   char * strtokIndx; // this is used by strtok() as an index
   
   strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
-  object_area = atoi(strtokIndx);
+  del_gimbal_roll = atoi(strtokIndx);
     
   strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
-  object_cx = atoi(strtokIndx);     // convert this part to an integer
+  del_gimbal_pitch = atoi(strtokIndx);     // convert this part to an integer
   
   strtokIndx = strtok(NULL, ","); 
-  object_cy = atoi(strtokIndx);     // convert this part to a float
+  del_gimbal_yaw = atoi(strtokIndx);     // convert this part to a float
 
 }
 
