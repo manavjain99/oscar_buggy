@@ -57,7 +57,7 @@ void loop()
 // If you change this make sure to change in .py in waitingforArduino function.
 #define STM32_READY "<Arduino is ready>"
 #define MS_TO_HZ(x) (1e3/x)
-#define TICK_DURATION_MS (7.0)
+#define TICK_DURATION_MS (10.0)
 
 float frame_ht = -1.0F;
 float frame_wd = -1.0F;
@@ -109,8 +109,11 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
       // Ack that you moved the gimbal.
 
 
-      led_debug_state_ = !led_debug_state_;
-      digitalWrite(LED_BUILTIN, led_debug_state_);
+      //led_debug_state_ = !led_debug_state_;
+      
+      if(object_area == -1){
+          digitalWrite(LED_BUILTIN, HIGH);
+      }
       ack_obcomp();
 
 
