@@ -306,3 +306,21 @@ Coarse tuning needed.
 
 12.26 AM 
 Discussed the new architecture, will continue tommorw. 
+
+13/05/2020
+
+7.03 PM
+
+Looked into the spline codes, decided to generate splines in cpp instead of python and sending the coeffs,
+coz python doesnt just give coeff it gives coeff for a set of vals. and params , 
+so the spline can only be recreatd with python functions with python coeffs.
+
+So i will be sending obj params data pts every 300ms or some specific pts.
+
+In short. 
+Frame extraction and processing on the obcomp.
+Traj generation on the mcu aka sticking to the first architecture with few mods.
+
+1.Need to test Bspline on playground.
+2.Also need to test Bspline function and read up on how to use it from http://ncar.github.io/bspline/classBSplineBase.html
+
