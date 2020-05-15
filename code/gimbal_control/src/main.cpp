@@ -12,7 +12,7 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG 
 #include "../include/main.h"
 #include "../include/commons.h"
@@ -28,6 +28,13 @@
 
 static const byte times_flash_ = 3;
 
+#include <iostream>
+#include <random>
+//#include <boost/math/interpolators/cubic_b_spline.hpp>
+//#include <boost/random/mersenne_twister.hpp>
+//#include <boost/random/uniform_real_distribution.hpp>
+
+
 void setup()
 {
 
@@ -41,6 +48,51 @@ void setup()
 void loop()
 {
   /* Nothing to do all is done by hardware. Even no interrupt required. */
+
+      // We begin with an array of samples:
+    std::vector<double> v(6);
+    // And decide on a stepsize:
+    double step = 1;
+
+    v[0] = 5;
+    v[1] = 2.3;
+    v[2] = 3;
+    v[3] = 4.3;
+    v[4] = 2.9;
+    v[5] = 3.1;
+    
+    // make spline of size 6.
+    boost::math::cubic_b_spline<double> spline(v.data(), v.size(), 0 /* start time */, step);
+
+    // start from len/2 to len.
+    
+    long double ctr =0;
+    while(ctr < 6){
+        std::cout << spline(ctr) << "," << std::endl;
+        ctr = ctr + 0.05;
+    }
+
+    // Remove first 3 and add 3 new vals.
+    v[0] = v[3];
+    v[1] = v[4];
+    v[2] = v[5];
+    v[3] = 5.3;
+    v[4] = 2.0;
+    v[5] = 1.6;
+
+
+    std::cout << "done with old spline" << std::endl << std::endl ;
+    // make a spline of size 6. ...
+
+    boost::math::cubic_b_spline<double> spline2(v.data(), v.size(), 0 /* start time */, step);
+
+    // start from len/2 to len.
+    
+    ctr =0;
+    while(ctr < 6){
+        std::cout << spline2(ctr) << "," << std::endl;
+        ctr = ctr + 0.05;
+    }
 }
 
 

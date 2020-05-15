@@ -324,3 +324,20 @@ Traj generation on the mcu aka sticking to the first architecture with few mods.
 1.Need to test Bspline on playground.
 2.Also need to test Bspline function and read up on how to use it from http://ncar.github.io/bspline/classBSplineBase.html
 
+14/05/2020
+
+9.03 PM 
+
+Failed efforts at trying to get the lib running, switching to diff library.
+copied the 1st. custom defined lib from https://stackoverflow.com/questions/1204553/are-there-any-good-libraries-for-solving-cubic-splines-in-c
+
+15/05/2020
+
+8.16 AM
+The custom lib gives erroneous/discontinous graphs results https://stackoverflow.com/questions/1204553/are-there-any-good-libraries-for-solving-cubic-splines-in-c
+Moving back to figuring out using http://ncar.github.io/bspline/classBSplineBase.html
+
+1.06 PM 
+Tested splines creation for the pipeline .. tested 6 vals 3 being updated each time and spline exec starting from 50% coz last 50% was already exec in the last run ..
+Trying to move to 9 vals spline for better smooth curves. and 3 vals dropped each time ?
+Nahh sticking to 6pts 3pts io each time ... TESTING THE CODE ON PLATFORM IO.

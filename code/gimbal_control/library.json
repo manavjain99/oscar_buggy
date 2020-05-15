@@ -1,0 +1,17 @@
+{
+    "dependencies":{
+        "mylib": "boostmath",
+        "lib-from-repo": "https://github.com/boostorg/math.git"
+        },
+    
+    
+    "build": {
+        "srcFilter": [
+            "+<boost/math/interpolators/cubic_b_spline.hpp>",
+            "+<boost/random/mersenne_twister.hpp>",
+            "+<boost/random/uniform_real_distribution.hpp>"
+        ]
+    }
+    
+    
+}
