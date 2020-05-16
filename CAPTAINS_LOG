@@ -344,3 +344,20 @@ Nahh sticking to 6pts 3pts io each time ... TESTING THE CODE ON PLATFORM IO.
 
 2.52 PM 
 Trying to add boost to platformIO. Taking way too time added via github.
+
+16/05/2020
+
+12.56 PM
+
+Trying to install Boost on platform IO doesnt work at all. Wrote a issue on the forum 
+https://community.platformio.org/t/boost-cpp-lib-installation-cannot-open-boost-config-hpp-works-on-g/13723
+hopefully someone helps ,
+The program is taking way too much time to complile about 466 Seconds .... So i am creating a dummy project to see if i can simply get boost libs included .. 
+lib.json extraced from .. 
+https://github.com/cr1st1p/platformio-boost
+
+Added one more qs on stackOverflow
+https://stackoverflow.com/questions/61834439/issues-installing-boost-on-platformio.
+
+9.21 PM 
+For now completing the remaining part ie getting params from obcomp to arduino, 300ms at a time. 

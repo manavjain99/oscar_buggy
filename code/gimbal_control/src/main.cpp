@@ -13,13 +13,23 @@
 * ------------------------------------------------------------
 */
 #define DEBUG
+
 #ifdef DEBUG 
+
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
 #include "gimbal_stuff.h"
+#include "boost/math/interpolators/cubic_b_spline.hpp"
 
-/*DEFINE YOUR GLOBAL VARS HERE*/
+void setup(){
+
+}
+void loop(){
+  
+}
+/*
+//*DEFINE YOUR GLOBAL VARS HERE*
 
 // If you change this make sure to change in .py in waitingforArduino function.
 
@@ -48,7 +58,7 @@ void setup()
 
 void loop()
 {
-  /* Nothing to do all is done by hardware. Even no interrupt required. */
+  //* Nothing to do all is done by hardware. Even no interrupt required. *
 
       // We begin with an array of samples:
     std::vector<double> v(6);
@@ -63,7 +73,7 @@ void loop()
     v[5] = 3.1;
     
     // make spline of size 6.
-    boost::math::cubic_b_spline<double> spline(v.data(), v.size(), 0 /* start time */, step);
+    boost::math::cubic_b_spline<double> spline(v.data(), v.size(), 0 /* start time *, step);
 
     // start from len/2 to len.
     
@@ -85,7 +95,7 @@ void loop()
     std::cout << "done with old spline" << std::endl << std::endl ;
     // make a spline of size 6. ...
 
-    boost::math::cubic_b_spline<double> spline2(v.data(), v.size(), 0 /* start time */, step);
+    boost::math::cubic_b_spline<double> spline2(v.data(), v.size(), 0 /* start time *, step);
 
     // start from len/2 to len.
     
@@ -95,7 +105,7 @@ void loop()
         ctr = ctr + 0.05;
     }
 }
-
+*/
 
 #endif
 
