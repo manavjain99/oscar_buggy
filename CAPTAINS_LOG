@@ -361,3 +361,14 @@ https://stackoverflow.com/questions/61834439/issues-installing-boost-on-platform
 
 9.21 PM 
 For now completing the remaining part ie getting params from obcomp to arduino, 300ms at a time. 
+
+Reading up on semaphores and mutexes from https://www.justsoftwaresolutions.co.uk/threading/locks-mutexes-semaphores.html
+Also will be writing notes here so may ignore a few paras.. 
+
+Read up on this /\
+                |
+
+Also added UNTRACKED_NOTES files .. the reason why there isnt a long notes para here ... 
+
+10.20 PM
+As decided in the lastest design I dont need to have 3 threads , I will be sending vals in the process thread which is called every 300 ms or 10frames in the imgQ bufffer, and sending the coords simply from the processor aka IMG coords area, ObjcenterX, ObjcenterY.

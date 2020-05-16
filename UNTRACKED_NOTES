@@ -1,0 +1,49 @@
+
+
+
+
+Has exactly what the file says
+
+
+
+************************NOTES************************************
+
+
+
+
+
+
+
+A semaphore has a max size, current size. 
+You wait ie you consume a semaphore on a semaphore ie the thread waiting on it will decrease it by 1 every iter.
+If count == 0 it cant be decremented, so wait call will block current thread until count !> 0, done by another thread.
+You signal a semaphore, you increase the current count, if count == 0 you wake up only one thread though many might depend on it , if size is full simply ignore / sometimes report error.
+
+Note ****
+http://effbot.org/zone/thread-synchronization.htm
+ At any time, a lock can be held by a single thread, or by no thread at all. If a thread attempts to hold a lock that’s already held by some other thread, *execution of the first thread is halted until the lock is released*.
+Serious issue threding issue, may have been causing the bugs.
+
+The RLock class is a version of simple locking that only blocks if the lock is held by another thread, so I can access blocked codes of same thread with RLOCKS.
+
+Depending on how the semaphore is initialized, this allows multiple threads to access the same code section simultaneously.
+
+semaphore = threading.BoundedSemaphore()
+semaphore.acquire() # decrements the counter
+... access the shared resource
+semaphore.release() # increments the counter
+
+This means if acquiring thread semaphore == 0 the thread will be blocked aka stopped / paused , it wont run ... in the processor until semaphore val is !>0.
+eg .. 
+max_connections = 10
+semaphore = threading.BoundedSemaphore(max_connections)
+Can be used for limiting no of threads running in processor instead of adding sleep 
+
+For proper operation, it’s important to release the lock even if something goes wrong when accessing the resource. You can use try-finally for this purpose:
+
+lock.acquire()
+try:
+    ... access shared resource
+finally:
+    lock.release() # release lock, no matter what
+    
