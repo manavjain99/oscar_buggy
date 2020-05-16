@@ -22,18 +22,19 @@
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
 // If you change this make sure to change in .py in waitingforArduino function.
+
+#include <iostream>
+#include <random>
+#include </usr/include/boost/math/interpolators/cubic_b_spline.hpp>
+#include </usr/include/boost/random/mersenne_twister.hpp>
+#include </usr/include/boost/random/uniform_real_distribution.hpp>
+
+
 #define STM32_READY "<Arduino is ready>"
 #define MS_TO_HZ(x) (1e3/x)
 #define TICK_DURATION_MS (7.0)
 
 static const byte times_flash_ = 3;
-
-#include <iostream>
-#include <random>
-//#include <boost/math/interpolators/cubic_b_spline.hpp>
-//#include <boost/random/mersenne_twister.hpp>
-//#include <boost/random/uniform_real_distribution.hpp>
-
 
 void setup()
 {

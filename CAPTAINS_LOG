@@ -341,3 +341,6 @@ Moving back to figuring out using http://ncar.github.io/bspline/classBSplineBase
 Tested splines creation for the pipeline .. tested 6 vals 3 being updated each time and spline exec starting from 50% coz last 50% was already exec in the last run ..
 Trying to move to 9 vals spline for better smooth curves. and 3 vals dropped each time ?
 Nahh sticking to 6pts 3pts io each time ... TESTING THE CODE ON PLATFORM IO.
+
+2.52 PM 
+Trying to add boost to platformIO. Taking way too time added via github.
