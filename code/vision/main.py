@@ -15,7 +15,8 @@
 """
 
 #import gimbalcmd
- 
+INCLUDE_STM = False
+
 if __name__ == '__main__':
   import concurrent.futures
   import logging
@@ -26,11 +27,10 @@ if __name__ == '__main__':
   import time
   #import ball_tracking
   import cv2
-  import ComArduino2 as stcom
+  if INCLUDE_STM == True:
+    import ComArduino2 as stcom
   import greenBallTracker as GBT 
   #import 
-
-
 
 """ WRITE YOUR VARIABLES HERE """
 
@@ -39,7 +39,8 @@ NO_OF_PTS = 3
 CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
-VID_SRC = 2
+# 2, 1 for ext webcam 0 for webcam
+VID_SRC = 0
 
 FRAME_CX = 460/2
 FRAME_CY = 639/2
@@ -169,10 +170,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
       with processLock:
-        pass
-        trajList = trajectoryGen((FRAME_CX, FRAME_CY), (objCX, objCY))
-        trajQ.put(trajList)
-
+        if INCLUDE_STM == True:
+          sendParams(objA, objCX, objCY)
       #logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
       if cv2.waitKey(1) == ord("q"):
@@ -185,41 +184,15 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
     #cv2.destroyAllWindows()
     #"""
 
-
-# We are sending roll. pitch, yaw to the MCU.
-def comms_thread(event,trajQ = commQ):
+def sendParams(objArea, objCX, objCY):
   """
-  (list) -> (NoneType)
-  Description: Sends gimbal traj to mcu and waits for ack.
-  >>>
+  (double, int, int) ->NoneType
+  @brief : Sends area , obj cx , and obj cy to stm32 MCU.
+  >>> sendParams(100, 123, 441)
+  """ 
+  params = ("<"+str(objArea)+', '+str(objCX)+', '+str(objCY)+">")
+  stcom.sendToArduino(params.encode('utf-8'))
   
-  """
-  ptTrajList = []
-  dataRecvd = ''
-  while not event.is_set() :
-
-    # if there is a new list of trajectory in the Queue. 
-    if trajQ.qsize() > 0.0:
-      start_time_comms = time.time()
-      ptTrajList = trajQ.get()
-      logging.info("trajQ size after "+str(trajQ.qsize()))
-      
-      ## start sending vals one by one and wait for ack by mcu.
-      for i in range(len(ptTrajList)):
-        gimbal_coords_buffer = []
-        gimbal_coords_buffer.append("<"+str(ptTrajList[i][0])+', '+str(ptTrajList[i][1])+', '+str(ptTrajList[i][2])+">")
-        teststr = gimbal_coords_buffer[0]
-        logging.info(teststr)
-        stcom.sendToArduino(teststr.encode('utf-8'))
-        while(dataRecvd != ACK_MCU_MSG):
-          dataRecvd = stcom.recvFromArduino()
-        #stcom.runTest(gimbal_coords_buffer)
-      
-      time.sleep(0.02) #10ms for receive from stm.
-      #time.sleep(0.05) #5ms for receive from stm.
-       
-      #logging.info("comms runtime " + str(time.time() - start_time_comms) )
-      logging.info("FPS comms : " + str(1.0 / (time.time() - start_time_comms))) # FPS = 1 / time to process loop
 
 
 """ START YOUR CODE HERE """
@@ -234,20 +207,19 @@ if __name__ == '__main__':
   format = "%(asctime)s: %(message)s"
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
-
-  logging.info("Waiting for arduino.")
-  stcom.waitForArduino()
-  logging.info("Arduino ready.")
+  if INCLUDE_STM == True:
+    logging.info("Waiting for arduino.")
+    stcom.waitForArduino()
+    logging.info("Arduino ready.")
   #grab_th = threading.Thread(target = grabber_thread())
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
 
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(process_thread, event)
     executor.submit(grabber_thread, event)
-    executor.submit(comms_thread, event)
   
   # useless cause of threadpoolExec  
   time.sleep(7)
