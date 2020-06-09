@@ -66,7 +66,7 @@ commQ = queue.Queue(maxsize=30000)
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
-  Description:generates trajectory for delta gimbal <s, 
+  Description:generates linear trajectory for delta gimbal <s, 
   """
 
   trajList = []

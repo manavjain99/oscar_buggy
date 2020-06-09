@@ -372,3 +372,55 @@ Also added UNTRACKED_NOTES files .. the reason why there isnt a long notes para 
 
 10.20 PM
 As decided in the lastest design I dont need to have 3 threads , I will be sending vals in the process thread which is called every 300 ms or 10frames in the imgQ bufffer, and sending the coords simply from the processor aka IMG coords area, ObjcenterX, ObjcenterY.
+
+20/05/2020
+
+10.06 PM
+No help from stackOverflow and PlatformIO forum , so for now I will be keeping the splines part aside wait for few more days else lookup a new library compatible for generating splines for embedded environments.
+I will now be continuing with the Old design with alrternate or every third frame processing.
+
+Also I need to lookup to write better CAPTAINS LOG FILES with proper keywords and all.
+
+For now I am listing and explaining MAJOR MILESTONES and FAILURE PTS as ITERBRIEFx. as per my memory.
+
+ITERBRIEF#1
+Managed to get headless chikened gimbal followed by oversampled gimbal using while(1) both obcomp and stm32.
+Sending object params to MCU, MCU does linear traj generation.
+
+ITERBRIEF#2
+SLOW/UNDERSAMPLED gimbal movement with threads running obcomp and tick 10ms continous frame processing.
+Trapeziod traj generation on OBCOMP sent every ? sec send to MCU and wait for ack by MCU every 10MS. ie all MCU does is control gimbal.
+
+ITERBRIEF#3 (current)
+
+Removing comms thread from ITERBRIEF#2 on OBCOMP, with the trapeziod trajectory gen on MCU by sending obj coords as done in ITERBRIEF#1
+
+Qs how do i sync with MCU ? W/o Acks ?
+
+What if i dont send acks ?
+If i dont send acks then OBCOMP may act as babbling Idiot and keep sending traj coords at an extremely high rate ? Or a rate depending upon (fps/3) ( ie a 3rd frame every 300ms)
+aka Wont be a issue put it in the pipeline.
+
+10.56 PM 
+Starting with removing comms thread from main.py.
+2. Processing and sending every third frame params.
+3. trap traj gen on MCU followed by splines generation.
+
+21/05/20
+
+12.19 AM 
+Done with removing from main.py and adding sendParams yet to be tested.
+Moving to trapeziod traj generation on cpp.
+
+1.00 AM 
+I found a beauuutiful book for trajectory generation.
+https://books.google.co.in/books?id=FiX1ceRT5zoC&pg=PR10&lpg=PR10&dq=trapezoidal+trajectory+cpp&source=bl&ots=KT877eTx4S&sig=ACfU3U35ceOVZ5l_Uv_xEPo_HqejJdg9zw&hl=en&sa=X&ved=2ahUKEwiPyK6gkcPpAhV67HMBHe78ATYQ6AEwB3oECAsQAQ#v=onepage&q=trapezoidal%20trajectory%20cpp&f=false
+see eqns on pg 19 and 20 for acc,vel,dist a,b ie from 0 to flex pt and to destn pt.
+
+1.35 AM 
+Stumbled on something beauty found cpp src codes of matlab for splines, also adding the above link ebook in references.
+Adding src codes first in playground then in the main project.
+
+9/06/2020
+9.13 PM
+Resetting the setup at new place, will be trying the above mentioned matlab spine codes. Later ... ish.

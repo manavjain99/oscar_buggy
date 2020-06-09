@@ -173,7 +173,7 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
 
 
       //led_debug_state_ = !led_debug_state_;
-      orient_gimbal();
+      orient_gimbal();  
       ack_obcomp();
 
 
