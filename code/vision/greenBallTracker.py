@@ -135,7 +135,6 @@ if __name__ == '__main__':
   vs = VideoStream(src=0).start()
   # allow the camera or video file to warm up
   time.sleep(3.0)
-  objA = 0
   objCX = 0
   objCY = 0
 

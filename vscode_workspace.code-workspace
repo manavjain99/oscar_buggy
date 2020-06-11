@@ -8,10 +8,10 @@
 			"path": "code/gimbal_control"
 		},
 		{
-			"path": "references"
+			"path": "code/vision"
 		},
 		{
-			"path": "code/vision"
+			"path": "references"
 		}
 	],
 	"settings": {
