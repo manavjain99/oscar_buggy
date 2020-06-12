@@ -19,7 +19,9 @@ The project is being built on the following hardware and software.
 
 **ONBOARD COMPUTER** -      
 CPU - Intel Core i5-8250U @ 8x 3.4GHz   
-GPU - Mesa Intel(R) UHD Graphics 620 (KBL GT2)     
+GPU - Mesa Intel(R) UHD Graphics 620 (KBL GT2)        
+KERNEL - x86_64 Linux 5.6.15-1-MANJARO
+
 ( Will be later implemented on [NVIDIA JETSON](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-nano/))
 
 **GIMBAL** - [ALEXMOS 3 AXIS GIMBAL](https://www.aliexpress.com/item/32845757144.html?spm=a2g0s.9042311.0.0.69d04c4dwliz99)
@@ -101,9 +103,32 @@ Explain how to run the automated tests for this system
 
 Explain what these tests test and why
 
+### Testing vision algos Obcomp
+___
+In the main.py file in /vision
+Make the following changes and run the program.
 ```
-Give an example
+INCLUDE_STM = False
+```     
+Doing this will run the default vision algo code on your default webcam. If fails to open Camera put 1,2,3 ... 
 ```
+VID_SRC = 0
+```
+### Testing Gimbal
+---
+Simply power it on it should be inverted and work something like this ( wait a few 15-30 secs for it to self calibrate. )
+
+### Testing MCU 
+---
+Make sure all periferals are Connected.      
+LEDS will blink thrice 2 times.     
+The first set indicates it has Started setup and second state is being used for debugging purpose.
+
+### Testing Comms betn Obcomp and MCU 
+---
+Nav to vision     
+Run ComArduino2.py (setup appropriate ports).        
+
 
 ### And coding style tests
 
@@ -116,6 +141,29 @@ Give an example
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
+
+### Testing OBCOMP and MCU
+---
+Make sure you do this and appropriately setup UART port of obcomp in ComArduino2.py
+```
+INCLUDE_STM = True
+```
+Run the main.py python file.
+After the setup ends of the MCU it will send an ACK command to the OBCOMP. 
+Till then it will wait for MCU setup to complete.
+
+### Testing Gimbal and MCU 
+---
+Once individual testing is done.    
+Gimbal should move or nod itself in all dirs.
+Hit reset again just to be sure. 
+
+### Testing Buggy and MCU 
+---
+yet to be implemented.
+
+
+
 
 ## Built With
 

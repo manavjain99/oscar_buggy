@@ -15,7 +15,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -27,9 +27,9 @@ if __name__ == '__main__':
   import time
   #import ball_tracking
   import cv2
+  import greenBallTracker as GBT 
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
-  import greenBallTracker as GBT 
   #import 
 
 """ WRITE YOUR VARIABLES HERE """
@@ -40,7 +40,7 @@ CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
 # 2, 1 for ext webcam 0 for webcam
-VID_SRC = 0
+VID_SRC = 2
 
 FRAME_CX = 460/2
 FRAME_CY = 639/2
@@ -85,7 +85,7 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
     delPitch = 0
     # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
   
-  if((newXY[0] is not -1) and (newXY[1] is not -1)):
+  if((newXY[0] != -1) and (newXY[1] != -1)):
     #if delYaw , delPitch greater than angle threshold.
     for i in range(numpts):
       trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
@@ -162,7 +162,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame = imgQ.get()
       #logging.info(" no of process frames"  + str(imgQ.qsize()))
       
-      if (source is not 0):
+      if (source != 0):
         frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
       
       old_objA, old_objCX, old_objCY = objA, objCX, objCY
@@ -199,7 +199,7 @@ def sendParams(objArea, objCX, objCY):
 
 if __name__ == '__main__':
   pass
-
+  
   print
   print
   event = threading.Event()

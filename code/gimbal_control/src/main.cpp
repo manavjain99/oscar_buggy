@@ -20,7 +20,7 @@
 #include "../include/commons.h"
 #include "../include/uart.hpp"
 #include "gimbal_stuff.h"
-#include "boost/math/interpolators/cubic_b_spline.hpp"
+//#include "boost/math/interpolators/cubic_b_spline.hpp"
 
 void setup(){
 
