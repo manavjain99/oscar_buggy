@@ -172,7 +172,7 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
       // Ack that you moved the gimbal.
 
 
-      //led_debug_state_ = !led_debug_state_;
+      led_debug_state_ = !led_debug_state_;
       orient_gimbal();  
       ack_obcomp();
 

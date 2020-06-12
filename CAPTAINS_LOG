@@ -381,19 +381,19 @@ I will now be continuing with the Old design with alrternate or every third fram
 
 Also I need to lookup to write better CAPTAINS LOG FILES with proper keywords and all.
 
-For now I am listing and explaining MAJOR MILESTONES and FAILURE PTS as ITERBRIEFx. as per my memory.
+For now I am listing and explaining MAJOR MILESTONES and FAILURE PTS as FAILURE_POINTx. as per my memory.
 
-ITERBRIEF#1
+FAILURE_POINT#1
 Managed to get headless chikened gimbal followed by oversampled gimbal using while(1) both obcomp and stm32.
 Sending object params to MCU, MCU does linear traj generation.
 
-ITERBRIEF#2
+FAILURE_POINT#2
 SLOW/UNDERSAMPLED gimbal movement with threads running obcomp and tick 10ms continous frame processing.
 Trapeziod traj generation on OBCOMP sent every ? sec send to MCU and wait for ack by MCU every 10MS. ie all MCU does is control gimbal.
 
-ITERBRIEF#3 (current)
+FAILURE_POINT#3 (current)
 
-Removing comms thread from ITERBRIEF#2 on OBCOMP, with the trapeziod trajectory gen on MCU by sending obj coords as done in ITERBRIEF#1
+Removing comms thread from FAILURE_POINT#2 on OBCOMP, with the trapeziod trajectory gen on MCU by sending obj coords as done in FAILURE_POINT#1
 
 Qs how do i sync with MCU ? W/o Acks ?
 
@@ -432,8 +432,42 @@ Writing a cleaner readme on what are my exact connections....
 2.32 AM 
 Wrote a nicer readme...whew. 
 
-12/06/2020
 12.58 PM
 continuing setup ... 
 3.05 PM
 Setup complete
+
+
+11.32 PM 
+The setup works tracking NOT maybe I have disabled tracking,
+Things I need to do. 
+
+1. Get done with proper spline and tracking.. 
+Using MATLAB.hpp files ? Let me see. 
+s1. Enable TRACKING code.. See if board flashes or not .. 
+s2. Observe 
+s3. Improvise
+s4. Repeat .... 
+ 
+
+Saw above FailPoint 3 will be continuing from there. 
+OpenOCD failure as expected 
+What all didnt work 
+https://stackoverflow.com/questions/41066653/openocd-error-libusb-open-failed-with-libusb-error-not-supported
+Renamed to 99 to 60 / rebooted each time copied directly 
+Also copied from lsusb
+Used sudo udevadm control --reload
+Made 
+
+Finally found a useful link 
+They say good artist copies great artist steals , had been blindly dumping This code from here and there wasted ~3 hrs doing and testing variations.
+https://andreasrohner.at/posts/Electronics/How-to-fix-device-permissions-for-the-USBasp-programmer/
+
+I somehow knew the issue was with sudo in Manjaro. but didnt exactly knew what to do chmod a+rwx whichfile .
+Now a bit more clearer. Also why Arch ): so difficult ?
+
+This simply clarified what was to be done ... ( I have only tested the quick and dirty version and also havent yet flashed MCU, but got rid of libusb error, now only hardware issue I think.)
+Nor have i made the rule file. 
+
+1.46 AM 
+Signing off until today . Wiedersehen 

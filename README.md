@@ -34,7 +34,12 @@ KERNEL - x86_64 Linux 5.6.15-1-MANJARO
 
 ### Software Setup
 ---
-PlatformIO setup VSCODE.     
+Install PlatformIO VSCODE
+You may get the error while uploading.
+```
+Error: libusb_open() failed with LIBUSB_ERROR_ACCESS
+```  
+[See here for the solution]()
 Python Libs - Non exhaustive list ( will be making a bash script to test avail libs make )    
 OpenCV 4.3.0 At least.     
 
