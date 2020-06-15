@@ -60,13 +60,13 @@ void parse_data() {
   char * strtokIndx; // this is used by strtok() as an index
   
   strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
-  del_gimbal_roll = atoi(strtokIndx);
+  object_area = atoi(strtokIndx);
     
   strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
-  del_gimbal_pitch = atoi(strtokIndx);     // convert this part to an integer
+  object_cx = atoi(strtokIndx);     // convert this part to an integer
   
   strtokIndx = strtok(NULL, ","); 
-  del_gimbal_yaw = atoi(strtokIndx);     // convert this part to a float
+  object_cy = atoi(strtokIndx);     // convert this part to a float
 
 }
 
