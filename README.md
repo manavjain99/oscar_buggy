@@ -30,21 +30,74 @@ KERNEL - x86_64 Linux 5.6.15-1-MANJARO
 ( Later to be implemented on GoPro Variant )
 
 **BUGGY** - Simple RC Car ( Prototype )     
-( Will be later implmented on [MEDIUM SCALE BUGGY](https://youtu.be/9xU-PAi53EI) )
+( Will be later implmented on [RC ROVER](https://youtu.be/9xU-PAi53EI) )
 
 ### Software Setup
 ---
-Install PlatformIO VSCODE
+Install PlatformIO VSCODE ( a workspace file is provided, you should see the extensions buttons and all ... if not navigate to /code/gimbal_control(ie the MCU code) there then try again )
+
 You may get the error while uploading.
 ```
 Error: libusb_open() failed with LIBUSB_ERROR_ACCESS
 ```  
-[See here for the solution]()
-Python Libs - Non exhaustive list ( will be making a bash script to test avail libs make )    
+
+try the following things 
+### For Windows
+---
+Install [this software](https://zadig.akeo.ie/).     
+
+### For linux
+---
+Quick and dirty fix.  
+Run       
+```
+lsusb
+```
+Output will be ( stm debugger needs to be connected, of course)
+```
+Bus 001 Device 013: ID 0483:374b STMicroelectronics ST-LINK/V2.1
+```
+Then run this command ( Properly enter bus ID and device ID whatever pops up above) 
+```
+sudo chmod 666 /dev/bus/usb/001/013
+```
+
+Permanent Fix
+Firmware file needs to be edited ... 
+Run these commands 
+```
+cd /etc/udev/rules.d
+sudo nano 99-openocd.rules
+```
+Type this content ( pleas verify idVendor and idProduct from ```lsusb``` )
+Should mostly work without verification.
+
+**For Debian Derivatives**
+```
+# STLink v2
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE="664", GROUP="plugdev"
+```
+
+**For Arch Derivatives**
+```
+# STLink v2
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", GROUP="uucp"
+```
+If using Arch you also need to add the group ```uucp``` to your user by :
+
+```
+sudo gpasswd -a youruser uucp
+```
+
+And RESTART YOUR DEVICE IN ALL CASES.               
+
+### Other Software Requirements 
+---
+Python Libs - Non exhaustive list ( will be making a bash script to test avail libs make )        
 OpenCV 4.3.0 At least.     
 
 
-## Installing
+## Installation
 ---
 A step by step series of examples that tell you how to get a development env running
 
@@ -185,8 +238,6 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
-
-* **Billie Thompson** - *Initial work* - 
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
