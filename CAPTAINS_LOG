@@ -508,3 +508,7 @@ Second issue way less ugly to solve as compared to the first 1 , so proceeding w
 
 1.44 PM 
 Found a way to calc splines and get the coeffs for the piecewise curves. 
+Also Miracle happened the spline code in main.py ran and compiled the first time .
+
+9.12 PM 
+Moving to integrating spline codes for MCU.

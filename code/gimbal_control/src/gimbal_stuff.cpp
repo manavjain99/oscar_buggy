@@ -267,7 +267,8 @@ void init_gimbal(void){
 
 // I have gimbal delta roll,pitch,yaw. 
 /**
- * 
+ * The splines give me the tajectory of the object ... .
+ *  Now from the trajectory I need to MAKE the delta <s 
 */
 void gimbal_math(void){
 
