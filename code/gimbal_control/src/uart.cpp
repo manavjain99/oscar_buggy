@@ -33,7 +33,7 @@ static char inputBuffer[buffSize];
 static const char startMarker = '<';
 static const char endMarker = '>';
 static byte bytesRecvd = 0;
-static boolean readInProgress = false;
+static bool readInProgress = false;
 
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
@@ -49,10 +49,6 @@ void init_uart(void){
     uart_gimbal.begin(115200);   
 }
 
-
-// I am so far getting only gimbal delta roll,pitch,yaw.
-
-
 void parse_data() {
 
     // split the data into its parts
@@ -60,13 +56,13 @@ void parse_data() {
   char * strtokIndx; // this is used by strtok() as an index
   
   strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
-  object_area = atoi(strtokIndx);
+  //object_area = atoi(strtokIndx);
     
   strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
-  object_cx = atoi(strtokIndx);     // convert this part to an integer
+  //object_cx = atoi(strtokIndx);     // convert this part to an integer
   
   strtokIndx = strtok(NULL, ","); 
-  object_cy = atoi(strtokIndx);     // convert this part to a float
+  //object_cy = atoi(strtokIndx);     // convert this part to a float
 
 }
 
