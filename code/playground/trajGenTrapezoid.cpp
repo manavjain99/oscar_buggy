@@ -6,6 +6,7 @@ see eqns on pg 19 and 20 for acc,vel,dist a,b ie from 0 to flex pt and to destn 
 */
 #include <iostream>
 #include <string.h>
+#include <stdlib.h>
 /*
 @brief: add these vals delta gimbal angles.
 @inputs: object center coords.
@@ -25,7 +26,7 @@ static bool readInProgress = false;
 
 int object_area = 0;
 int object_cx = 0;
-int object_cy = 0;
+float object_cy = 0;
 
 void parse_data_params() {
 
@@ -40,13 +41,13 @@ void parse_data_params() {
   object_cx = atoi(strtokIndx);     // convert this part to an integer
   
   strtokIndx = strtok(NULL, ","); 
-  object_cy = atoi(strtokIndx);     // convert this part to a float
+  object_cy = atof(strtokIndx);     // convert this part to a float
 
 }
 
 int main(){
     
-    std::string recStr = "40,3,2";
+    std::string recStr = "40,3,2.98";
     int i=0;
     for(char ch :recStr){
         inputBuffer[i++] = ch;
