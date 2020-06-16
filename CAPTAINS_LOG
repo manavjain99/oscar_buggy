@@ -471,3 +471,40 @@ Nor have i made the rule file.
 
 1.46 AM 
 Signing off until today . Wiedersehen 
+
+
+15/06/2020
+9.55 PM 
+Testing 
+
+10.30 PM 
+Finally was able to flash on Manjaro automatically ( with that script ) writing in README
+
+11.40 PM 
+Finally full setup complete. 
+
+Now moving to gimbal tracking via spline curves with object params being sent to gimbal.
+I dont have the old os playground hence dont havre that matlab spline file SED. 
+Next time limit everything to same folder ... 
+
+16/06/2020
+10.13 AM 
+
+Splines testing cont ... 
+Cant use matab src codes coz they need the Seconds and third derivatives of the curve which I DONT KNOW. 
+Summary 
+Failed like shit implementing and trying to find spline codes for embedded hardware 
+following thigs I have tried : 
+1. Boost Codes. ( isnt compatible with platformIO) ( see https://stackoverflow.com/questions/61834439/issues-installing-boost-on-platformio )
+2. Individual Codes. ( Way inconsistent for a spline )
+3. Lots of libs mostly inconsistent. ( Lost track )
+
+Back to first approach 
+Send spline coeffs to mcu from python 
+issue 
+inconsistent no of pts for spline curves and unable to recreate spline with the coeffs.
+
+Second issue way less ugly to solve as compared to the first 1 , so proceeding with that. ie first approach.
+
+1.44 PM 
+Found a way to calc splines and get the coeffs for the piecewise curves. 
