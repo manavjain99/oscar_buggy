@@ -170,7 +170,7 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
         
         grabbed, frame = cap.read()
         
-        # sending every nth frame. 
+        # sending every nth frame to process.
         if(frame_counter == PROC_FRAME_FREQ):
         # to make sure the buffer does not lag as real time as possible.
           if(imgQ_size < MAX_NO_FRAMES):

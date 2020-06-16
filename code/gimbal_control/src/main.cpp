@@ -12,7 +12,7 @@
 * buy me a beer in return.
 * ------------------------------------------------------------
 */
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG 
 
