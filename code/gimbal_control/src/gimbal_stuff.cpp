@@ -27,15 +27,46 @@ int del_gimbal_roll  = 0;
 int del_gimbal_pitch = 0;
 int del_gimbal_yaw   = 0;
 
+float a2x = 0 ;
+float b2x = 0 ;
+float c2x = 0 ;
+float d2x = 0 ;   
+
+float a2y = 0 ;
+float b2y = 0 ;
+float c2y = 0 ;
+float d2y = 0 ;
+
+
+float a3x = 0 ;
+float b3x = 0 ;
+float c3x = 0 ;
+float d3x = 0 ;
+
+float a3y = 0 ;
+float b3y = 0 ;
+float c3y = 0 ;
+float d3y = 0 ;
+
+
+float a4x = 0 ;
+float b4x = 0 ;
+float c4x = 0 ;
+float d4x = 0 ;
+
+float a4y = 0 ;
+float b4y = 0 ;
+float c4y = 0 ;
+float d4y = 0 ;
+
 
 /* MAKE SURE THIS MATCHES WITH MAIN.PY file*/
 #define NO_OF_TRAJ_PTS 3
 
-#define MAX_GIMBAL_YAW 40
-#define MAX_GIMBAL_PITCH 10
-#define MAX_GIMBAL_ROLL 10
-
-
+/* Multiples of 3 */
+#define MAX_GIMBAL_YAW 42
+#define MAX_GIMBAL_PITCH 12
+#define MAX_GIMBAL_ROLL 9
 
 #define ToDeg(x) (x*57.2957795131)  // *180/pi
 #define INCREASING HIGH
@@ -235,7 +266,9 @@ void init_gimbal(void){
 }
 
 // I have gimbal delta roll,pitch,yaw. 
-
+/**
+ * 
+*/
 void gimbal_math(void){
 
 }
