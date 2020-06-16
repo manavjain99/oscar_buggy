@@ -3,6 +3,8 @@
  Date created:  Mon 27 Apr 18:11:03 IST 2020
  Description: 
  Main jetson/pc python file for controlling gimbal via the tracked object.
+ This file sends 3 peicewise spine curves coeff to the MCU @ 3fps.
+ 
  License :
  ------------------------------------------------------------
  "THE BEERWARE LICENSE" (Revision 42):
@@ -15,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = True
+INCLUDE_STM = False
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -25,7 +27,6 @@ if __name__ == '__main__':
   import threading
   import serial
   import time
-  #import ball_tracking
   import cv2
   import greenBallTracker as GBT 
   if INCLUDE_STM == True:
@@ -39,8 +40,11 @@ NO_OF_PTS = 3
 CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
-# 2, 1 for ext webcam 0 for webcam
+# 3, 2, 1 for ext webcam 0 for webcam
 VID_SRC = 2
+
+# ie processing every nth frame.
+PROC_FRAME_FREQ = 3
 
 FRAME_CX = 460/2
 FRAME_CY = 639/2
@@ -117,6 +121,7 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     time.sleep(3.0)
     grabberLock = threading.Lock()
     imgQ_size = imgQ.qsize()
+    frame_counter = 1
     while not event.is_set():
         
         start_time = time.time() # start time of the loop
@@ -126,16 +131,20 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
         
         grabbed, frame = cap.read()
         
+        # sending every nth frame. 
+        if(frame_counter == PROC_FRAME_FREQ):
         # to make sure the buffer does not lag as real time as possible.
-        if(imgQ_size < MAX_NO_FRAMES):
-          with grabberLock:
-            pass
-            imgQ.put(frame)
+          if(imgQ_size < MAX_NO_FRAMES):
+            with grabberLock:
+              pass
+              imgQ.put(frame)
+          frame_counter = 1
+          logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+          
+        else: 
+          frame_counter = frame_counter + 1
+        #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
         
-        #logging.info("frame grab runtime" + str(time.time() - start_time))
-        logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-        
-
     cap.stop()
     cap.release()
 
@@ -162,7 +171,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame = imgQ.get()
       #logging.info(" no of process frames"  + str(imgQ.qsize()))
       
-      if (source != 0):
+      ## May edit to zero if default cam is set to 0
+      if (source != -1):
         frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
       
       old_objA, old_objCX, old_objCY = objA, objCX, objCY
