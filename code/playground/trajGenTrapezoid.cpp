@@ -5,6 +5,7 @@ see eqns on pg 19 and 20 for acc,vel,dist a,b ie from 0 to flex pt and to destn 
 
 */
 #include <iostream>
+#include <string.h>
 /*
 @brief: add these vals delta gimbal angles.
 @inputs: object center coords.
@@ -14,6 +15,43 @@ trajGenTrapezoid( 239, 123 )
 gimbalAng += 
 */
 
-void trajGenTrapezoid(int ){
 
+static const uint8_t buffSize = 200;
+static char inputBuffer[buffSize];
+static const char startMarker = '<';
+static const char endMarker = '>';
+static int8_t bytesRecvd = 0;
+static bool readInProgress = false;
+
+int object_area = 0;
+int object_cx = 0;
+int object_cy = 0;
+
+void parse_data_params() {
+
+    // split the data into its parts
+    
+  char * strtokIndx; // this is used by strtok() as an index
+  
+  strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
+  object_area = atoi(strtokIndx);
+    
+  strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
+  object_cx = atoi(strtokIndx);     // convert this part to an integer
+  
+  strtokIndx = strtok(NULL, ","); 
+  object_cy = atoi(strtokIndx);     // convert this part to a float
+
+}
+
+int main(){
+    
+    std::string recStr = "40,3,2";
+    int i=0;
+    for(char ch :recStr){
+        inputBuffer[i++] = ch;
+    }
+    parse_data_params();
+    std::cout << "object_area is " << object_area << " cx is " << object_cx << " cx is " << object_cy << std::endl;
+    return 0;
 }
