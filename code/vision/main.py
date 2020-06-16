@@ -48,8 +48,8 @@ VID_SRC = 2
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
-FRAME_CX = 460/2
-FRAME_CY = 639/2
+FRAME_CX = 460.0/2.0
+FRAME_CY = 639.0/2.0
 
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
@@ -222,11 +222,11 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       objA, objCX, objCY = GBT.trackGreenBall(frame)
       logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
-      # Shifting and Updating 1 element at a time.
+      # Shifting and Updating 1 element at a time. values according to gimbal <S. 
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
-      frame_cx_buffer[5] = objCX
+      frame_cx_buffer[5] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
-      frame_cy_buffer[5] = objCY
+      frame_cy_buffer[5] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
       if( counter_comms_update == 3 ):
         with processLock:
