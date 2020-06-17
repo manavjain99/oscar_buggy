@@ -161,6 +161,7 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     grabberLock = threading.Lock()
     imgQ_size = imgQ.qsize()
     frame_counter = 1
+    
     while not event.is_set():
         
         start_time = time.time() # start time of the loop
@@ -191,6 +192,32 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
 #def show_frame(frame, event):
 #  while not event.is_set():
 
+def sendParams(objArea, objCX, objCY):
+  """
+  (double, int, int) ->NoneType
+  @brief : Sends area , obj cx , and obj cy to stm32 MCU.
+  >>> sendParams(100, 123, 441)
+  """ 
+  params = ("<"+str(objArea)+', '+str(objCX)+', '+str(objCY)+">")
+  stcom.sendToArduino(params.encode('utf-8'))
+  
+
+def sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4):
+  """
+  (list[], list[], list[], list[], list[], list[] size = 4each) -> NoneType
+  description : Sends spline coeffcients to the MCU 
+  """
+  Coeffs = ("<"\
+  +cx2[1]+','+cx2[2]+','+cx2[3]+','+cx2[4]+','\
+  +cx3[1]+','+cx3[2]+','+cx3[3]+','+cx3[4]+','\
+  +cx4[1]+','+cx4[2]+','+cx4[3]+','+cx4[4]+','\
+
+  +cy2[1]+','+cy2[2]+','+cy2[3]+','+cy2[4]+','\
+  +cy3[1]+','+cy3[2]+','+cy3[3]+','+cy3[4]+','\
+  +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
+  +">")
+  stcom.sendToArduino(Coeffs.encode('utf-8'))
+
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
@@ -204,7 +231,14 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   old_objCY = 0
   frame_cx_buffer = np.array([0,0,0,0,0,0])
   frame_cy_buffer = np.array([0,0,0,0,0,0])
-  
+  cx2 = [0,0,0,0]
+  cx3 = [0,0,0,0]
+  cx4 = [0,0,0,0]
+
+  cy2 = [0,0,0,0]
+  cy3 = [0,0,0,0]
+  cy4 = [0,0,0,0]
+    
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
@@ -232,7 +266,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           if INCLUDE_STM == True:
             cx2,cx3,cx4 = spline6pt(frame_cx_buffer)
             cy2,cy3,cy4 = spline6pt(frame_cy_buffer)
-            sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4)
+            ## BUG HERE
+            #sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4)
             counter_comms_update = 1
       else:
         counter_comms_update = counter_comms_update + 1
@@ -251,31 +286,6 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
     #"""
 
 
-def sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4):
-  """
-  (list[], list[], list[], list[], list[], list[] size = 4each) -> NoneType
-  description : Sends spline coeffcients to the MCU 
-  """
-  Coeffs = ("<"\
-  +cx2[1]+','+cx2[2]+','+cx2[3]+','+cx2[4]+','\
-  +cx3[1]+','+cx3[2]+','+cx3[3]+','+cx3[4]+','\
-  +cx4[1]+','+cx4[2]+','+cx4[3]+','+cx4[4]+','\
-  +cy2[1]+','+cy2[2]+','+cy2[3]+','+cy2[4]+','\
-  +cy3[1]+','+cy3[2]+','+cy3[3]+','+cy3[4]+','\
-  +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
-  +">")
-  stcom.sendToArduino(Coeffs.encode('utf-8'))
-
-
-def sendParams(objArea, objCX, objCY):
-  """
-  (double, int, int) ->NoneType
-  @brief : Sends area , obj cx , and obj cy to stm32 MCU.
-  >>> sendParams(100, 123, 441)
-  """ 
-  params = ("<"+str(objArea)+', '+str(objCX)+', '+str(objCY)+">")
-  stcom.sendToArduino(params.encode('utf-8'))
-  
 
 
 """ START YOUR CODE HERE """
