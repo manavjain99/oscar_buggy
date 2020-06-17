@@ -166,14 +166,16 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
     old_time = millis();
     // takes x msecs to run. Gives me new data.
     rcv_obcomp();
-    
+    led_debug_state_  = HIGH;
+    orient_gimbal();  
+     
+
     if(newDataFromPC == true){
       //Set gimbal angles.
       // Ack that you moved the gimbal.
 
 
-      led_debug_state_ = !led_debug_state_;
-      orient_gimbal();  
+      //led_debug_state_ = !led_debug_state_;
       ack_obcomp();
 
 
