@@ -43,7 +43,7 @@ static void parseData();
 
 
 void init_uart(void){
-    uart_obcomp.begin(115200);
+    uart_obcomp.begin(921600);
     //uart_dbugcon.begin(9600);
     uart_gimbal.begin(115200);   
 }
