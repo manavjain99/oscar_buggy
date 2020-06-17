@@ -108,11 +108,11 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
 
 def spline6pt(y):
   """
-  (np.array[] (size = 6) ) -> (list[4], list[4], list[4])
+  (np.array[] (size = 6) ) -> (list[4])
   Description: Generates peicewise spline curves for the 6 y pts, with x pts equally spaced as x[0:5].
-  Outputs the coeffs last 3 piecewise curves ie coeff2,coeff3,coeff4. ie ( coeffx = ax, bx, cx, dx)
+  Outputs the coeffs last piecewise curves ie coeffnew. ie ( coeffx = ax, bx, cx, dx)
 
-  regenrate the spline for coeff2 for x betn 2,3 as 
+  regenrate the splines example ( for ref of abcd ignore rest) 
   y = a2 + b2*(x-2) + c2*(x-2)**2 + d2*(x-2)**3
   
   Similarly for coeff 3 for x betn 3,4 as 
@@ -124,23 +124,7 @@ def spline6pt(y):
     x = np.array([0, 1, 2, 3, 4, 5])
     cs = CubicSpline(x,y,bc_type='natural')
 
-    # Polynomial coefficients for 2 < x <= 3
-    a2 = cs.c.item(3,2)
-    b2 = cs.c.item(2,2)
-    c2 = cs.c.item(1,2)
-    d2 = cs.c.item(0,2)
-
-    coeff2 = [ a2, b2, c2, d2 ]
-
-    # Polynomial coefficients for 3 < x <= 4
-    a3 = cs.c.item(3,3)
-    b3 = cs.c.item(2,3)
-    c3 = cs.c.item(1,3)
-    d3 = cs.c.item(0,3)
-
-    coeff3 = [ a3, b3, c3, d3 ]
-    
-    # Polynomial coefficients for 4 < x <= 5
+    # Polynomial coefficients for 4 < x <= 5 ie the last curve among 6 pts.
     a4 = cs.c.item(3,4)
     b4 = cs.c.item(2,4)
     c4 = cs.c.item(1,4)
@@ -148,7 +132,7 @@ def spline6pt(y):
 
     coeff4 = [a4, b4 , c4, d4 ]
 
-    return coeff2,coeff3,coeff4
+    return coeff4
 
 
 def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
@@ -202,10 +186,12 @@ def sendParams(objArea, objCX, objCY):
   stcom.sendToArduino(params.encode('utf-8'))
   
 
-def sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4):
+def sendCoeffs(coeffx, coeffy):
   """
   (list[], list[], list[], list[], list[], list[] size = 4each) -> NoneType
   description : Sends spline coeffcients to the MCU 
+  """
+  
   """
   Coeffs = ("<"\
   +cx2[1]+','+cx2[2]+','+cx2[3]+','+cx2[4]+','\
@@ -216,6 +202,8 @@ def sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4):
   +cy3[1]+','+cy3[2]+','+cy3[3]+','+cy3[4]+','\
   +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
   +">")
+  #"""
+  Coeffs = str("<"+str)
   stcom.sendToArduino(Coeffs.encode('utf-8'))
 
 
@@ -231,13 +219,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   old_objCY = 0
   frame_cx_buffer = np.array([0,0,0,0,0,0])
   frame_cy_buffer = np.array([0,0,0,0,0,0])
-  cx2 = [0,0,0,0]
-  cx3 = [0,0,0,0]
-  cx4 = [0,0,0,0]
-
-  cy2 = [0,0,0,0]
-  cy3 = [0,0,0,0]
-  cy4 = [0,0,0,0]
+  coeffx_new = [0,0,0,0]
+  coeffy_new = [0,0,0,0]
     
   counter_comms_update = 1
   processLock = threading.Lock()
@@ -261,16 +244,12 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
       frame_cy_buffer[5] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
-      if( counter_comms_update == 3 ):
-        with processLock:
-          if INCLUDE_STM == True:
-            cx2,cx3,cx4 = spline6pt(frame_cx_buffer)
-            cy2,cy3,cy4 = spline6pt(frame_cy_buffer)
-            ## BUG HERE
-            #sendCoeffs(cx2,cx3,cx4,cy2,cy3,cy4)
-            counter_comms_update = 1
-      else:
-        counter_comms_update = counter_comms_update + 1
+      with processLock:
+        if INCLUDE_STM == True:
+          coeffx_new = spline6pt(frame_cx_buffer)
+          coeffy_new = spline6pt(frame_cy_buffer)
+          sendCoeffs(coeffx_new,coeffy_new)
+          counter_comms_update = 1
       logging.info("size of " + str(trajQ.qsize()))
 
       #logging.info("size of commsQ" + str(trajQ.qsize()))
