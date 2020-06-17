@@ -72,12 +72,18 @@ float d4y = 0 ;
 #define INCREASING HIGH
 #define DECREASING LOW
 
+static float timeStep_ = 0;
+
 double gimbalYaw = 0;
 double gimbalPitch = 0;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
-
+// Returns bounding angle if current ang(x) crosses bounding ang(y) else returns current ang(x)
 #define CHECK_MAX(x,y) ((abs(x)>y) ? ((x>0)?(y):(-y)) : (x)  )
+
+// If you change this you need to change the entire Gimbal Math as well.
+#define SIGNAL_UPDATE_MS 330.0F
+
 
 static int inst_gimbal_roll_ = 0;
 static int inst_gimbal_pitch_ = 0;
@@ -258,35 +264,59 @@ static int pt_num_ = 0;
 
 void init_gimbal(void){
   setAngles(3, -30, 20);
-  
   delay(1000);
   setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
-  delay(100);
+  delay(1000);
+  setAngles(-3, 30, -20);
+  delay(1000);
+  setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
+  
   read_mavlink_storm32();
+
 }
 
 // I have gimbal delta roll,pitch,yaw. 
 /**
- * The splines give me the tajectory of the object ... .
- *  Now from the trajectory I need to MAKE the delta <s 
+ * @input : 4 x3 coeffs of the splines.
+ * @breif : Creates / tells what delta Angs need to be followed for each yaw/pitch.
+ * @output : Modifies del_gimbal_angs  
 */
 void gimbal_math(void){
 
+  if(timeStep_ < 110){
+    del_gimbal_yaw   = a2x + b2x*(timeStep_/SIGNAL_UPDATE_MS) + c2x*pow((timeStep_/SIGNAL_UPDATE_MS),2) + d2x*pow((timeStep_/SIGNAL_UPDATE_MS),3);  
+    del_gimbal_pitch = a2y + b2y*(timeStep_/SIGNAL_UPDATE_MS) + c2y*pow((timeStep_/SIGNAL_UPDATE_MS),2) + d2y*pow((timeStep_/SIGNAL_UPDATE_MS),3);  
+  }
+  else if( timeStep_ > 110 and timeStep_ < 220){
+    del_gimbal_yaw   = a3x + b3x*((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS) + c3x*pow(((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS),2) + d3x*pow(((timeStep_- 110.0F)/SIGNAL_UPDATE_MS),3);  
+    del_gimbal_pitch = a3y + b3y*((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS) + c3y*pow(((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS),2) + d3y*pow(((timeStep_- 110.0F)/SIGNAL_UPDATE_MS),3);  
+  }
+  else {
+    del_gimbal_yaw   = a2x + b2x*((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS) + c2x*pow(((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS),2) + d4x*pow(((timeStep_- 220.0F)/SIGNAL_UPDATE_MS),3);  
+    del_gimbal_pitch = a2y + b2y*((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS) + c2y*pow(((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS),2) + d4y*pow(((timeStep_- 220.0F)/SIGNAL_UPDATE_MS),3);  
+  }
+  timeStep_ += 10.0F; // Tick Time 10ms 
+
+  setAngles(inst_gimbal_roll_, inst_gimbal_pitch_, inst_gimbal_yaw_);
+
+  if(newDataFromPC == true){
+  timeStep_ = 0.0F; // IE A new spline info is provided. Ideally should be synced with SIGNAL UPDATE MS 
+  }
 }
 
 
 void orient_gimbal(void){
 
   /*
-   * assumes params are updated, moves gimbal if del_pix > x degs.
-   * Heart of gimbal control. run as fast as you can.  
-  
-   * inst_gim<s is <s past angs + < delta traj<s, once all traj<s are sent
-   *  total<s += last <
-  */
-  // I have gimbal delta roll,pitch,yaw. 
+   * @input : Reads delta gimbal angs.
+   * @brief : Moves gimbal according to the delta gimbal angs and bounds it. 
+   * @output : Actuates the GIMBAL.
+   */ 
+  //++pt_num_;
+//
 
-  ++pt_num_;
+  // Takes care of updating delta angles. 
+  gimbal_math();
 
   inst_gimbal_roll_  = total_gimbal_roll_  + del_gimbal_roll;
   inst_gimbal_pitch_ = total_gimbal_pitch_ + del_gimbal_pitch;
@@ -299,7 +329,11 @@ void orient_gimbal(void){
 
   setAngles(inst_gimbal_roll_, inst_gimbal_pitch_, inst_gimbal_yaw_);
   
-  if(pt_num_ == NO_OF_TRAJ_PTS){
+  
+  // Now my refernce axis may have been changed. Just Balancing that 
+  // IE delta angles were with respect to old axis 330Ms ago or my prev input. 
+  // Assuming gimbal tracked that part now new ref will be where the axis is in the new msg.
+  if(newDataFromPC == true){
 
     total_gimbal_roll_  += del_gimbal_roll ;     
     total_gimbal_pitch_ += del_gimbal_pitch  ;
