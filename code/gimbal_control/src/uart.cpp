@@ -21,8 +21,7 @@
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
-char last_command[100] = "";
-bool python_command_flag = false;
+char last_command[500] = "";
 bool newDataFromPC = false;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/

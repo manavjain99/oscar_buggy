@@ -29,8 +29,6 @@ extern HardwareSerial uart_obcomp;
 extern HardwareSerial uart_dbugcon;
 extern HardwareSerial uart_gimbal ;
 
-extern char last_command[100];
-extern bool python_command_flag;
 extern bool newDataFromPC;
 
 //extern 

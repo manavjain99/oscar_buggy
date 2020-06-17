@@ -512,3 +512,11 @@ Also Miracle happened the spline code in main.py ran and compiled the first time
 
 9.12 PM 
 Moving to integrating spline codes for MCU.
+
+17/06/2020
+1.31 PM 
+Miracle again cpp codecompiled in the first time, done getting / parsing coeffs now testing gimbal math. 
+
+2.54 PM 
+testing started Frames MAXED OUT 10 frames. with stm True.
+FPS at 10
