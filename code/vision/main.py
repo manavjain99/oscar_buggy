@@ -17,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -48,13 +48,13 @@ VID_SRC = 2
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
-FRAME_CX = 460.0/2.0
-FRAME_CY = 639.0/2.0
+FRAME_CX = 480.0/2.0
+FRAME_CY = 640.0/2.0
 
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 
-MAX_NO_FRAMES = 10
+MAX_NO_FRAMES = 10000
 
 ACK_MCU_MSG = '1'
 
@@ -178,11 +178,11 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
               pass
               imgQ.put(frame)
           frame_counter = 1
-          logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+          #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
           
         else: 
           frame_counter = frame_counter + 1
-        #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+        logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
         
     cap.stop()
     cap.release()
@@ -212,13 +212,12 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
-      #logging.info(" no of process frames"  + str(imgQ.qsize()))
+      logging.info(" no of process frames"  + str(imgQ.qsize()))
       
       ## May edit to zero if default cam is set to 0
       if (source != -1):
         frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
-      
-      old_objA, old_objCX, old_objCY = objA, objCX, objCY
+
       objA, objCX, objCY = GBT.trackGreenBall(frame)
       logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
@@ -237,6 +236,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
             counter_comms_update = 1
       else:
         counter_comms_update = counter_comms_update + 1
+      logging.info("size of " + str(trajQ.qsize()))
 
       #logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
@@ -246,7 +246,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-    
+
     #cv2.destroyAllWindows()
     #"""
 

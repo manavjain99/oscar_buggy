@@ -209,7 +209,7 @@ void setup(void){
     
     
     init_uart();
-    init_gimbal();
+    //init_gimbal();
 
     // Setting up the tick based ISR.
      #if defined(TIM1)
@@ -239,7 +239,7 @@ void setup(void){
     
     
     init_uart();
-    init_gimbal();
+    //init_gimbal();
 
 
 
