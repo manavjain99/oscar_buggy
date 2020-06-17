@@ -22,6 +22,7 @@ print('S(1.25) = ', cs(1.25))
 # x0 = 0; x1 = 1; x4 = 4; (start of x region interval)
 
 # show values of a0, b0, c0, d0, a1, b1, c1, d1 ...
+
 cs.c
 print(cs.c)
 
@@ -36,7 +37,7 @@ a1 = cs.c.item(3,1)
 b1 = cs.c.item(2,1)
 c1 = cs.c.item(1,1)
 d1 = cs.c.item(0,1)
-
+"""
 # Polynomial coefficients for 2 < x <= 3
 a2 = cs.c.item(3,2)
 b2 = cs.c.item(2,2)
@@ -54,7 +55,7 @@ a4 = cs.c.item(3,4)
 b4 = cs.c.item(2,4)
 c4 = cs.c.item(1,4)
 d4 = cs.c.item(0,4)
-
+"""
 
 
 # Print polynomial equations for different x regions
@@ -62,7 +63,7 @@ print('S0(0<=x<=1) = ', a0, ' + ', b0, '(x-0) + ', c0, '(x-0)^2  + ', d0, '(x-0)
 print('S1(1< x<=2) = ', a1, ' + ', b1, '(x-1) + ', c1, '(x-1)^2  + ', d1, '(x-1)^3')
 
 print('...')
-print('S5(4< x<=5) = ', a4, ' + ', b4, '(x-4) + ', c4, '(x-4)^2  + ', d4, '(x-4)^3')
+#print('S5(4< x<=5) = ', a4, ' + ', b4, '(x-4) + ', c4, '(x-4)^2  + ', d4, '(x-4)^3')
 
 # So we can calculate S(1.25) by using equation S1(1< x<=2)
 print('S(1.25) = ', a1 + b1*0.25 + c1*(0.25**2) + d1*(0.25**3))

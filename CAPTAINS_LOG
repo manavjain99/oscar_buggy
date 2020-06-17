@@ -523,3 +523,41 @@ FPS at 10
 
 4.57 PM 
 Few bug fixes on the python side yet to finish all. 
+
+6.22 PM 
+Found that you can't send a lot of chars via uart bug , don't know how many before code crashes but crashes when sending 3 x4 Coeffs 
+Maybe Speed it may send all values but it would also slow down the speed so much that it crashes ie my FPS process falls below FPS Grab 
+
+Possible solns
+
+1. Increase speed. 
+2. Reduce on the size increase on the frequency. 
+
+Trying option 1 
+Increased baudrate to 921600 buads / Still process loop freezes
+Possible issues 
+1. MCU cant handle such a long message 
+2. Process isnt being slowed down coz thats pretty Fast Baudrate 
+So mostly I dont know what error ? 
+
+Solution 
+Send One pair of coeffs at a time. 
+reprogramme all the stuff. 
+
+7.14 PM 
+fuck me, I didnt typecast that comms message to str before. 
+In the sending 12 parametrs message. 
+|Thats why maybe it didnt work, now I have edited too much for sending only 1 paramter at a time. 
+Need to read up on versioning schemes and start workig upon it 
+Coz this is way too headache despite git logs goinf back and forth writing same pieces of code with little changes ... 
+
+Nonetheless sending 1 curve at a time is much better than sending 3 and Calibrating them. ( which I already wrote .. No issues Thats how progress happens failure after falire and testing stuff in the real world)
+Also remembered why the hell did i cal it a Miracle in the Above times for python 
+
+While using threads python interpreter does not give error output 
+rather doesnt run the thread .. .
+Ha Ha me .. 
+Anyways will be taking a break now Continue later tommorw been working for around 8-10 hrs more or less. 
+Wiedersehen, Sayonara, whatever the shit lang u speak , .. Goodbye .
+
+
