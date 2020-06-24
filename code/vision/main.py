@@ -121,6 +121,7 @@ def spline6pt(y):
   """
   # if a valid entry 
   if( y.size == 6):
+    logging.info("reached spline 6pt")
     x = np.array([0, 1, 2, 3, 4, 5])
     cs = CubicSpline(x,y,bc_type='natural')
 
@@ -131,7 +132,7 @@ def spline6pt(y):
     d4 = cs.c.item(0,4)
 
     coeff4 = [a4, b4 , c4, d4 ]
-
+    logging.info(str(coeff4))
     return coeff4
 
 
@@ -203,7 +204,14 @@ def sendCoeffs(coeffx, coeffy):
   +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
   +">")
   #"""
-  Coeffs = str("<"+str)
+  Coeffs = str('<'\
+  +str(coeffx[0])+','+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','\
+  +str(coeffy[0])+','+str(coeffy[1])+','+str(coeffy[2])+','+str(coeffy[3])+','\
+  +'>')
+  #logging.info('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+',')
+  #logging.info("<"+str(coeffx[1])+',')
+  
+  #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
   stcom.sendToArduino(Coeffs.encode('utf-8'))
 
 
@@ -250,7 +258,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           coeffy_new = spline6pt(frame_cy_buffer)
           sendCoeffs(coeffx_new,coeffy_new)
           counter_comms_update = 1
-      logging.info("size of " + str(trajQ.qsize()))
+      #logging.info("size of " + str(trajQ.qsize()))
 
       #logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
