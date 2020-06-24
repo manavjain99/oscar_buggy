@@ -25,7 +25,9 @@ char last_command[500] = "";
 bool newDataFromPC = false;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
-HardwareSerial uart_gimbal (PA12, PA11);
+HardwareSerial uart_gimbal (PA12, PA11);  //Board RX, TX
+HardwareSerial uart_debugcon (PA10, PA9);  //Board RX, TX
+
 
 static const u_int16_t buffSize = 500;
 static char inputBuffer[buffSize];
@@ -44,9 +46,10 @@ static void parseData();
 
 void init_uart(void){
     uart_obcomp.begin(921600);
-    //uart_dbugcon.begin(9600);
+    uart_debugcon.begin(921600);
     uart_gimbal.begin(115200);   
 }
+
 
 void parse_data_params() {
 
@@ -113,8 +116,6 @@ void parse_data_coeffs(void){
 
   strtokIndx = strtok(NULL, ","); 
   d4x = atof(strtokIndx);   
-
-
 }
 
 // See references for this code. ArduinoPC2.ino
