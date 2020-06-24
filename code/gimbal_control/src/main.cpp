@@ -129,12 +129,13 @@ float object_area = -1.0F;
 float object_cx   = -1.0F;
 float object_cy   = -1.0F;
 
-
+float new_msg_time_MS = 1;  // Used to calc spline interval 
+float old_msg_time_MS = 1;
 
 static bool run_once_ = true;
-double old_time = 0;
-double new_time = 0;
-int del_time_ = 0;
+static double old_time_MS_ = 0;
+static double new_time_MS_ = 0;
+static double del_time_MS_ = 0;
 
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
@@ -163,7 +164,7 @@ static int debug_area_ = 99;
 void Update_IT_callback(HardwareTimer* TIM1ptr){
     
 
-    old_time = millis();
+    old_time_MS_ = millis();
     // takes x msecs to run. Gives me new data.
     rcv_obcomp();
     led_debug_state_  = HIGH;
@@ -180,7 +181,6 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
 
 
       // ack_obcomp clears theflag but still as a safety measure.
-      newDataFromPC == false;
     }
     
     //if(object_area == 100.0F){
@@ -188,8 +188,8 @@ void Update_IT_callback(HardwareTimer* TIM1ptr){
     //led_debug_state = HIGH;
     //digitalWrite(LED_BUILTIN, led_debug_state_);
     //}
-    new_time = millis();
-    del_time_ = new_time - old_time;
+    new_time_MS_ = millis();
+    del_time_MS_ = new_time_MS_ - old_time_MS_;
   
     //orient_gimbal();    
 }
@@ -208,6 +208,7 @@ void setup(void){
        delay(200);
        
     }
+
     
     
     init_uart();
@@ -244,6 +245,7 @@ void setup(void){
     //init_gimbal();
 
 
+    old_time_MS_ = millis();
 
     uart_obcomp.println("<Arduino is ready>");
 
@@ -254,7 +256,7 @@ void setup(void){
 void loop(){
 
   if(run_once_ == true){
-    old_time = millis();
+    old_time_MS_ = millis();
     //read_mavlink_storm32();
     //setAngles(0,0,-45);
     //delay();
@@ -269,12 +271,26 @@ void loop(){
     //setAngles(0,2,67);//9
     //setAngles(0,2,70);
     //read_mavlink_storm32();
-    new_time = millis();
+    new_time_MS_ = millis();
     run_once_ = false;
 
   }
-  //del_time_ = new_time - old_time;
-  //uart_obcomp.println(del_time_);
+  new_time_MS_ = millis();
+  del_time_MS_ = new_time_MS_ - old_time_MS_;
+  if(del_time_MS_ > TICK_DURATION_MS){
+    old_time_MS_ = millis();
+    /***********Enter your code here*******/
+    rcv_obcomp();
+    orient_gimbal(); 
+    if(newDataFromPC == true){
+      digitalWrite(pin,!digitalRead(pin));
+      new_msg_time_MS = millis() - old_msg_time_MS;
+      old_msg_time_MS = millis();
+      ack_obcomp();  // Clears the flag
+    }
+    /**************************************/
+  }
+  //uart_obcomp.println(del_time_MS_);
   //uart_obcomp.print(" ");
   //uart_obcomp.println(gimbalYaw);
 
