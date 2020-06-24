@@ -1,28 +1,48 @@
-#include <Arduino.h>
+/*
+  Timebase callback
+  This example shows how to configure HardwareTimer to execute a callback at regular interval.
+  Callback toggles pin.
+  Once configured, there is only CPU load for callbacks executions.
+*/
 
-  #include "../mavlink/include/mavlink_types.h"
-  #include "../mavlink/include/mavlink.h"
-  #include "../mavlink/include/mavlink.h"
+#include "main.h"
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+//#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
 
-    //v[6] = 5.3;
-    //v[7] = 2.0;
-    //v[8] = 1.6;
-    //v[9] = 3;
+#if defined(LED_BUILTIN)
+#define pin  LED_BUILTIN
+#else
+#define pin  D2
+#endif
+
+void Update_IT_callback(HardwareTimer* TIM1ptr)
+{ // Toggle pin. 10hz toogle --> 5Hz PWM
+  digitalWrite(pin, !digitalRead(pin));
+}
 
 
+void setup()
+{
+#if defined(TIM1)
+  TIM_TypeDef *Instance = TIM1;
+#else
+  TIM_TypeDef *Instance = TIM2;
+#endif
 
-    // Initialize the vector with a function we'd like to interpolate:
-    //for (size_t i = 0; i < v.size(); ++i)
-    //{
-    //    v[i] = sin(i*step);
-    //}
-    // We could define an arbitrary start time, but for now we'll just use 0:
-    
-  void setup(){
-    
-  }
+  // Instantiate HardwareTimer object. Thanks to 'new' instanciation, HardwareTimer is not destructed when setup() function is finished.
+  HardwareTimer *MyTim = new HardwareTimer(Instance);
 
-  void loop(){   
-   
-    //
-  }
+  // configure pin in output mode
+  pinMode(pin, OUTPUT);
+
+  MyTim->setOverflow(10, HERTZ_FORMAT); // 10 Hz
+  MyTim->attachInterrupt(Update_IT_callback);
+  MyTim->resume();
+}
+
+
+void loop()
+{
+  /* Nothing to do all is done by hardware. Even no interrupt required. */
+}
