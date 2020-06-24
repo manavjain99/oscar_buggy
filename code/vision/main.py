@@ -29,6 +29,7 @@ if __name__ == '__main__':
   import time
   import cv2
   import greenBallTracker as GBT 
+  import matplotlibLive as MPLive
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
   import numpy as np

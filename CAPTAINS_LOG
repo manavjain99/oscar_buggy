@@ -641,3 +641,16 @@ I wont ever use Arduino for the projects I promise ( only for quick and dirty th
 MBED Studio installed however wont be using it , stupidity to port all codes , I'd rather than go to using RTOS
 
 I am doing way too shit just to get the timer Interrupt running, Instead putting a 10MS if statement in main loop. 
+
+24/06/2020
+
+9.30 PM 
+
+Compiled and running. 
+Gives wrong output, 
+Observations 
+1. Pich always 0.
+2. total yaw overflow
+3. Integrated yaw indefinitely 
+
+Right now for the sake of visualizing Im looking for plotting live MATPLOTLIB to see If I am sending correct angles.
