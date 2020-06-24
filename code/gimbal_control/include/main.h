@@ -19,6 +19,10 @@
 #include <cmath>
 #include <string> // for string and to_string() 
 
+/*GLOBAL DEFS*/ 
+#define TICK_DURATION_MS (10.0)
+#define UART_DEBUG
+
 /* EXTERN YOUR GLOBAL VARS HERE*/
 
 extern float object_area;
@@ -28,6 +32,7 @@ extern float object_cy  ;
 extern float frame_ht ;
 extern float frame_wd ;
 
+extern float new_msg_time_MS;
 
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
