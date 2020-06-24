@@ -18,7 +18,6 @@
 /* EXTERN YOUR GLOBAL VARS HERE*/
 #define uart_gimbal Serial1
 #define uart_obcomp Serial2
-//#define uart_dbugcon Serial3 
 
 
 #define ACK_REC_PARAMS "<1>"
@@ -26,7 +25,7 @@
 #define STM_READY "<STM_READY>"
 
 extern HardwareSerial uart_obcomp;
-extern HardwareSerial uart_dbugcon;
+extern HardwareSerial uart_debugcon;
 extern HardwareSerial uart_gimbal ;
 
 extern bool newDataFromPC;
