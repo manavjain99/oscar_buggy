@@ -108,16 +108,18 @@ A step by step series of examples that tell you how to get a development env run
        
 **Periferals**
 
+![MCU Pinout](other/nucleo_f411re_right.png)        
+
+
 UART Gimbal TX ( PA 12 )      
 UART Gimbal RX ( PA 11 )      
 
 UART OBCOMP TX ( PA 3 )     
 UART OBCOMP RX ( PA 2 )     
 
-UART STLINK/DEBUG TX ( Not yet assigned )     
-UART STLINK/DEBUG RX ( Not yet assigned )     
+UART STLINK/DEBUGGER TX ( PA10 )     
+UART STLINK/DEBUGGER RX ( PA9  )     
 
-![MCU Pinout](other/nucleo_f411re_right.png)    
 
 **Onboard Computer Connections**
 
