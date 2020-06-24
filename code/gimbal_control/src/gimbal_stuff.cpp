@@ -277,30 +277,19 @@ void init_gimbal(void){
 
 // I have gimbal delta roll,pitch,yaw. 
 /**
- * @input : 4 x3 coeffs of the splines.
+ * @input : 4 coeffs of the splines.
  * @breif : Creates / tells what delta Angs need to be followed for each yaw/pitch.
  * @output : Modifies del_gimbal_angs  
 */
 void gimbal_math(void){
 
-  if(timeStep_ < 110){
-    del_gimbal_yaw   = a2x + b2x*(timeStep_/SIGNAL_UPDATE_MS) + c2x*pow((timeStep_/SIGNAL_UPDATE_MS),2) + d2x*pow((timeStep_/SIGNAL_UPDATE_MS),3);  
-    del_gimbal_pitch = a2y + b2y*(timeStep_/SIGNAL_UPDATE_MS) + c2y*pow((timeStep_/SIGNAL_UPDATE_MS),2) + d2y*pow((timeStep_/SIGNAL_UPDATE_MS),3);  
-  }
-  else if( timeStep_ > 110 and timeStep_ < 220){
-    del_gimbal_yaw   = a3x + b3x*((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS) + c3x*pow(((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS),2) + d3x*pow(((timeStep_- 110.0F)/SIGNAL_UPDATE_MS),3);  
-    del_gimbal_pitch = a3y + b3y*((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS) + c3y*pow(((timeStep_ - 110.0F)/SIGNAL_UPDATE_MS),2) + d3y*pow(((timeStep_- 110.0F)/SIGNAL_UPDATE_MS),3);  
-  }
-  else {
-    del_gimbal_yaw   = a2x + b2x*((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS) + c2x*pow(((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS),2) + d4x*pow(((timeStep_- 220.0F)/SIGNAL_UPDATE_MS),3);  
-    del_gimbal_pitch = a2y + b2y*((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS) + c2y*pow(((timeStep_ - 220.0F)/SIGNAL_UPDATE_MS),2) + d4y*pow(((timeStep_- 220.0F)/SIGNAL_UPDATE_MS),3);  
-  }
-  timeStep_ += 10.0F; // Tick Time 10ms 
+    del_gimbal_yaw   = a2x + b2x*(timeStep_/new_msg_time_MS) + c2x*pow((timeStep_/new_msg_time_MS),2) + d2x*pow((timeStep_/new_msg_time_MS),3);  
+    del_gimbal_pitch = a2y + b2y*(timeStep_/new_msg_time_MS) + c2y*pow((timeStep_/new_msg_time_MS),2) + d2y*pow((timeStep_/new_msg_time_MS),3);  
+    timeStep_ += TICK_DURATION_MS;
 
-  setAngles(inst_gimbal_roll_, inst_gimbal_pitch_, inst_gimbal_yaw_);
-
+  
   if(newDataFromPC == true){
-  timeStep_ = 0.0F; // IE A new spline info is provided. Ideally should be synced with SIGNAL UPDATE MS 
+  timeStep_ = 0.0F;
   }
 }
 
@@ -309,7 +298,7 @@ void orient_gimbal(void){
 
   /*
    * @input : Reads delta gimbal angs.
-   * @brief : Moves gimbal according to the delta gimbal angs and bounds it. 
+   * @brief : Moves gimbal according to the delta gimbal angs, bounds it. And a change of ref frame 
    * @output : Actuates the GIMBAL.
    */ 
   //++pt_num_;
@@ -326,12 +315,46 @@ void orient_gimbal(void){
   inst_gimbal_pitch_ = CHECK_MAX(inst_gimbal_pitch_, MAX_GIMBAL_PITCH);
   inst_gimbal_yaw_   = CHECK_MAX(inst_gimbal_yaw_, MAX_GIMBAL_YAW);
   
+  #ifdef UART_DEBUG 
+  uart_debugcon.print("total pitch");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(total_gimbal_pitch_);
+  uart_debugcon.print(" ");
+  
+  uart_debugcon.print("total yaw");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(total_gimbal_yaw_);
+  uart_debugcon.print(" ");
+  
+  uart_debugcon.print("instn pitch");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(inst_gimbal_pitch_);
+  uart_debugcon.print(" ");
+  
+  uart_debugcon.print("inst yaw");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(inst_gimbal_yaw_);
+  uart_debugcon.print(" ");
+  
+  uart_debugcon.print("del pitch");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(del_gimbal_pitch);
+  uart_debugcon.print(" ");
+  
+  uart_debugcon.print("del yaw");
+  uart_debugcon.print(" ");
+  uart_debugcon.print(del_gimbal_yaw);
+  
+  uart_debugcon.println(" ");
+    
+  #endif 
 
   setAngles(inst_gimbal_roll_, inst_gimbal_pitch_, inst_gimbal_yaw_);
   
+  // The issue : 
+  // Haven't referenced the change in angle meas by the obcomp when the gimbal is moving.
   
   // Now my refernce axis may have been changed. Just Balancing that 
-  // IE delta angles were with respect to old axis 330Ms ago or my prev input. 
   // Assuming gimbal tracked that part now new ref will be where the axis is in the new msg.
   if(newDataFromPC == true){
 
@@ -339,7 +362,6 @@ void orient_gimbal(void){
     total_gimbal_pitch_ += del_gimbal_pitch  ;
     total_gimbal_yaw_   += del_gimbal_yaw  ;    
 
-    pt_num_ = 0;
   }
 
 }
