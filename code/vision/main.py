@@ -28,7 +28,6 @@ if __name__ == '__main__':
   import serial
   import time
   import cv2
-  import matplotlib.pyplot as plt
   import greenBallTracker as GBT 
   #import matplotlibLive as MPLive
   if INCLUDE_STM == True:
@@ -45,7 +44,7 @@ CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
 # 3, 2, 1 for ext webcam 0 for webcam
-VID_SRC = 2
+VID_SRC = 0
 
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
@@ -67,10 +66,8 @@ MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 # should be equal to t_grab / t_tick_mcu
 
 imageQ = queue.Queue(maxsize=10000)
-gimbalParamsQ = queue.Queue(maxsize=30000)
+commQ = queue.Queue(maxsize=30000)
 
-GimbalParamsList = [[0],[0],[0]] # Contains Roll,Pitch ,Yaw 
-gimbalParamsQ.put(GimbalParamsList)
 """ WRITE YOUR FUNCTIONS HERE """
 
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
@@ -172,7 +169,7 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
           
         else: 
           frame_counter = frame_counter + 1
-        logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+        #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
         
     cap.stop()
     cap.release()
@@ -219,7 +216,7 @@ def sendCoeffs(coeffx, coeffy):
   stcom.sendToArduino(Coeffs.encode('utf-8'))
 
 
-def process_thread(event, source = VID_SRC, gimbalQ = gimbalParamsQ, imgQ = imageQ):
+def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
@@ -248,22 +245,31 @@ def process_thread(event, source = VID_SRC, gimbalQ = gimbalParamsQ, imgQ = imag
         frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
       objA, objCX, objCY = GBT.trackGreenBall(frame)
-      #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY))
 
       # Shifting and Updating 1 element at a time. values according to gimbal <S. 
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
-      frame_cx_buffer[5] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
-      frame_cy_buffer[5] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-      GimbalParamsList = [ [0], [frame_cx_buffer[5]], [frame_cy_buffer[5]]   ]
+
+      if(objCX != -1):
+        frame_cx_buffer[5] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+      else:
+        frame_cx_buffer[5] = 0
+
+      if(objCY != -1 ):
+        frame_cy_buffer[5] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+      else:
+        frame_cy_buffer[5] = 0
+
+      logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
+
       with processLock:
         if INCLUDE_STM == True:
-          #gimbalQ.put(GimbalParamsList)
           coeffx_new = spline6pt(frame_cx_buffer)
           coeffy_new = spline6pt(frame_cy_buffer)
           sendCoeffs(coeffx_new,coeffy_new)
           counter_comms_update = 1
       #logging.info("size of " + str(trajQ.qsize()))
+
       #logging.info("size of commsQ" + str(trajQ.qsize()))
       cv2.imshow("Process Frame", frame)
       if cv2.waitKey(1) == ord("q"):
@@ -272,33 +278,11 @@ def process_thread(event, source = VID_SRC, gimbalQ = gimbalParamsQ, imgQ = imag
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-      
+
     #cv2.destroyAllWindows()
     #"""
 
 
-
-def gui_thread(event, gimbalQ = gimbalParamsQ):
-  """
-  () -> ()
-  Description: plots rpy values  
-  >>>
-    """
-  x = np.linspace(0, 6*np.pi, 100)
-  y = np.sin(x)
-
-  # You probably won't need this if you're embedding things in a tkinter plot...
-  plt.ion()
-
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  line1, = ax.plot(x, y, 'r-') # Returns a tuple of line objects, thus the comma
-
-  for phase in np.linspace(0, 10*np.pi, 500):
-      line1.set_ydata(np.sin(x + phase))
-      fig.canvas.draw()
-      fig.canvas.flush_events()
-  time.sleep(0.500)
 
 
 """ START YOUR CODE HERE """
@@ -326,7 +310,6 @@ if __name__ == '__main__':
   with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(process_thread, event)
     executor.submit(grabber_thread, event)
-    #executor.submit(gui_thread, event)
   
   # useless cause of threadpoolExec  
   time.sleep(7)
