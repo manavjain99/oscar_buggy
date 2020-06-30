@@ -34,6 +34,9 @@ q_values = []   # Var 3
 counter = 0
 index = count()
 
+
+new_value_status = False
+
 #if __name__ == '__main__':
   #import 
   #import 
@@ -68,7 +71,7 @@ def updateLive(y,z,q):
     y_values.append(y)
     z_values.append(z)
     q_values.append(q)
-    
+    new_value_status = True
 
 #def ...:
 #  """
@@ -94,8 +97,9 @@ def animate(i):
     Z : 3-8
     Q : 0-10
     '''
-    updateLive(0,0,0)
-    
+    while(new_value_status != True):
+        pass
+    new_value_status = False
     if counter >40:
         '''
         This helps in keeping the graph fresh and refreshes values after every 40 timesteps
@@ -120,10 +124,11 @@ def animate(i):
 
 """ START YOUR CODE HERE """
 
-updateLive(1,2,3)
-ani = FuncAnimation(plt.gcf(), animate, 1000)
-plt.tight_layout()
-plt.show()
+def showGimbalTraj():
+  updateLive(1,2,3)
+  ani = FuncAnimation(plt.gcf(), animate, 1000)
+  plt.tight_layout()
+  plt.show()
 
 if __name__ == '__main__':
   pass
