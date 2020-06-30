@@ -17,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -122,7 +122,7 @@ def spline6pt(y):
   """
   # if a valid entry 
   if( y.size == 6):
-    logging.info("reached spline 6pt")
+    #logging.info("reached spline 6pt")
     x = np.array([0, 1, 2, 3, 4, 5])
     cs = CubicSpline(x,y,bc_type='natural')
 
@@ -261,11 +261,21 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         frame_cy_buffer[5] = 0
 
       logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
-
+      
+      coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+      coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+          
+      #plotting the curve
+      yawplot = []
+      for i in range(100):
+        new_yawValue = coeffx_new[0] + coeffx_new[1]*i + coeffx_new[2]*i**2 + coeffx_new[0]*i**3
+        yawplot.append(new_yawValue)
+        #logging.info("newYaw value " + str(new_yawValue))
+      new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[0]*1**3
+      logging.info("newYaw value " + str(new_yawValue))
+      
       with processLock:
         if INCLUDE_STM == True:
-          coeffx_new = spline6pt(frame_cx_buffer)
-          coeffy_new = spline6pt(frame_cy_buffer)
           sendCoeffs(coeffx_new,coeffy_new)
           counter_comms_update = 1
       #logging.info("size of " + str(trajQ.qsize()))
