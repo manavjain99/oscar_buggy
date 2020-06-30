@@ -6,7 +6,7 @@ from matplotlib.animation import FuncAnimation
 from mpl_toolkits import mplot3d
 plt.style.use('fivethirtyeight')
 fig = plt.figure()
-ax = fig.add_subplot(2,1,1)
+ax = fig.add_subplot(1,1,1)
 #ax2 = fig.add_subplot(2,1,2)
 x_values = []   # time var
 y_values = []   # Var 1
@@ -63,8 +63,8 @@ def animate(i):
     plt.plot(x_values, z_values,linestyle='solid')
     plt.plot(x_values, q_values,linestyle='solid')
     
-    ax.legend(["Value 1 ","Value 2","Value 3"])
-    ax.set_xlabel("X values")
+    ax.legend(["Roll ","Pitch ","Yaw"])
+    ax.set_xlabel("Time (unform and unscaled)")
     ax.set_ylabel("Values for Three different variable")
     plt.title('Dynamic line graphs')
     
