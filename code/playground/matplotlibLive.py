@@ -2,6 +2,11 @@ import random
 from itertools import count
 import time
 import matplotlib.pyplot as plt
+import queue
+import threading
+import concurrent.futures
+
+
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits import mplot3d
 plt.style.use('fivethirtyeight')
@@ -14,6 +19,12 @@ z_values = []   # Var 2
 q_values = []   # Var 3
 counter = 0
 index = count()
+
+#y_values.append(0)
+#z_values.append(0)
+#q_values.append(0)
+
+new_value_status = [False]
 
 def update_vals(y_values,z_values,q_values):
     """
@@ -29,8 +40,10 @@ def update_vals(y_values,z_values,q_values):
     y_values.append(y)
     z_values.append(z)
     q_values.append(q)
-    
 
+    RPY_Q = queue.Queue(maxsize = 100)
+    new_value_status = [True]
+    print(new_value_status)
 def animate(i):
     
     #print(counter)
@@ -47,7 +60,15 @@ def animate(i):
     Q : 0-10
     '''
     update_vals(y_values,z_values,q_values)
-    
+    print("plotting alive")
+    #print(new_value_status)
+    #while(new_value_status != True):
+    #    #time.sleep(.25) # keep refresh rate of 0.25 seconds
+    #    print("struck in while loop")
+    #    print(new_value_status)
+#
+    #    pass
+    ##new_value_status = False
     if counter >40:
         '''
         This helps in keeping the graph fresh and refreshes values after every 40 timesteps
@@ -68,9 +89,26 @@ def animate(i):
     ax.set_ylabel("Values for Three different variable")
     plt.title('Dynamic line graphs')
     
-    time.sleep(.25) # keep refresh rate of 0.25 seconds
+    #time.sleep(.25) # keep refresh rate of 0.25 seconds
 
-ani = FuncAnimation(plt.gcf(), animate, 1000)
-plt.tight_layout()
-plt.show()
+
+def update_thread():
+    while(1):
+        update_vals(y_values,z_values,q_values)
+        print("Update thread alive")
+
+
+def show_thread():
+    print("Show thread alive")
+    ani = FuncAnimation(plt.gcf(), animate, 1000)
+    plt.tight_layout()
+    plt.show()
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+    executor.submit(show_thread)
+
+#update_vals(y_values,z_values,q_values)
+while(1):
+    print("reached end of file")
+    break
 
