@@ -711,10 +711,20 @@ The following things are wrong
 2.pitch doesnt work
 3.Oveflow for total yaw values 
 4.Inst yaw struck at 42/-42 wil debug this today later 
-<<<<<<< HEAD
 
 1/7/2020
 11.51 AM 
 Continuing Debugging 
-=======
->>>>>>> 004f707b134403665def4b10e299fa418e38fc20
+
+2.45 PM 
+The values integrate to +- MAX Value set 
+Need to regularize the ouput feed
+
+Also need to do versioning 
+But that to be done later 
+
+3.07 PM 
+Increased the interval 50MS no effect, keeping it back to 10MS .... ? 
+NEed to visualize th stuff 
+ 
+ Doing this after a break.
