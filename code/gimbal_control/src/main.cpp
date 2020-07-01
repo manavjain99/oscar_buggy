@@ -129,7 +129,7 @@ float object_area = -1.0F;
 float object_cx   = -1.0F;
 float object_cy   = -1.0F;
 
-float new_msg_time_MS = 1;  // Used to calc spline interval 
+float new_msg_time_MS = -1;  // Used to calc spline interval 
 float old_msg_time_MS = 1;
 
 static bool run_once_ = true;
@@ -137,6 +137,7 @@ static double old_time_MS_ = 0;
 static double new_time_MS_ = 0;
 static double del_time_MS_ = 0;
 
+static double overflowCheckTime_ = -1;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
 
@@ -248,7 +249,7 @@ void setup(void){
     old_time_MS_ = millis();
 
     uart_obcomp.println("<Arduino is ready>");
-
+    uart_debugcon.println("Setup complete ");
 
 
 }
@@ -289,6 +290,19 @@ void loop(){
       ack_obcomp();  // Clears the flag
     }
     /**************************************/
+    overflowCheckTime_ = millis() - old_time_MS_;
+    if(overflowCheckTime_ > TICK_DURATION_MS){
+      while (1){
+        /* code */
+        uart_debugcon.print("Tick overflow, took ");
+        uart_debugcon.print(overflowCheckTime_);
+        uart_debugcon.print("MS for a TICK TIME OF ");
+        uart_debugcon.print(TICK_DURATION_MS);
+        uart_debugcon.println("MS please increase tick interval ");
+
+      }
+      
+    }
   }
   //uart_obcomp.println(del_time_MS_);
   //uart_obcomp.print(" ");
