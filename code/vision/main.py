@@ -17,8 +17,8 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = True
-
+INCLUDE_STM = False
+LOG_FILES = True 
 if __name__ == '__main__':
   import concurrent.futures
   import logging
@@ -133,7 +133,7 @@ def spline6pt(y):
     d4 = cs.c.item(0,4)
 
     coeff4 = [a4, b4 , c4, d4 ]
-    logging.info(str(coeff4))
+    #logging.info(str(coeff4))
     return coeff4
 
 
@@ -230,7 +230,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   frame_cy_buffer = np.array([0,0,0,0,0,0])
   coeffx_new = [0,0,0,0]
   coeffy_new = [0,0,0,0]
-    
+  logFile = open("logAngles.txt", "w")
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
@@ -260,19 +260,20 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       else:
         frame_cy_buffer[5] = 0
 
-      logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
+      #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
       #plotting the curve
       yawplot = []
-      for i in range(100):
-        new_yawValue = coeffx_new[0] + coeffx_new[1]*i + coeffx_new[2]*i**2 + coeffx_new[0]*i**3
-        yawplot.append(new_yawValue)
         #logging.info("newYaw v alue " + str(new_yawValue))
-      new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[0]*1**3
-      logging.info("newYaw value " + str(new_yawValue))
+      new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[3]*1**3
+      new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
+      if(LOG_FILES == True):
+        nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
+        logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
+      #print(str(new_yawValue))
       
       with processLock:
         if INCLUDE_STM == True:
@@ -285,6 +286,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       if cv2.waitKey(1) == ord("q"):
         event.set()
         cv2.destroyAllWindows()
+        if(LOG_FILES == True):
+          logFile.close()
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop

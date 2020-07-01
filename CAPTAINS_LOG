@@ -727,4 +727,6 @@ But that to be done later
 Increased the interval 50MS no effect, keeping it back to 10MS .... ? 
 NEed to visualize th stuff 
  
- Doing this after a break.
+Doing this after a break.
+Plotting del yaw angs and total yaw angs 
+After plotting it seems there are many outliers will be using MAD filter to filter out outliers and spikes  
