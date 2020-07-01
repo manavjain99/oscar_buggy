@@ -285,14 +285,15 @@ void gimbal_math(void){
     // If there is a new message 
     if(new_msg_time_MS != -1 ){
       del_gimbal_yaw   = a2x + b2x*(timeStep_/new_msg_time_MS) + c2x*pow((timeStep_/new_msg_time_MS),2) + d2x*pow((timeStep_/new_msg_time_MS),3);  
+      
       del_gimbal_pitch = a2y + b2y*(timeStep_/new_msg_time_MS) + c2y*pow((timeStep_/new_msg_time_MS),2) + d2y*pow((timeStep_/new_msg_time_MS),3);  
       timeStep_ += TICK_DURATION_MS;
     }
     #ifdef UART_DEBUG
-    uart_debugcon.print("new_msg_time_MS");
+    uart_debugcon.print("refresh time ");
     uart_debugcon.print(new_msg_time_MS);
     uart_debugcon.print(" ");
-    uart_debugcon.print("timestep");
+    uart_debugcon.print("timestep ");
     uart_debugcon.println(timeStep_);
 
     #endif 
@@ -315,39 +316,40 @@ void orient_gimbal(void){
   // Takes care of updating delta angles. 
   gimbal_math();
 
-  inst_gimbal_roll_  = total_gimbal_roll_  + del_gimbal_roll;
-  inst_gimbal_pitch_ = total_gimbal_pitch_ + del_gimbal_pitch;
-  inst_gimbal_yaw_   = total_gimbal_yaw_   + del_gimbal_yaw;
+  inst_gimbal_roll_  += del_gimbal_roll;
+  inst_gimbal_pitch_ += del_gimbal_pitch;
+  inst_gimbal_yaw_   += del_gimbal_yaw;
 
   inst_gimbal_roll_  = CHECK_MAX(inst_gimbal_roll_, MAX_GIMBAL_ROLL);
   inst_gimbal_pitch_ = CHECK_MAX(inst_gimbal_pitch_, MAX_GIMBAL_PITCH);
   inst_gimbal_yaw_   = CHECK_MAX(inst_gimbal_yaw_, MAX_GIMBAL_YAW);
   
-  #ifdef UART_DEBUG_GIMBALSTATS 
-  uart_debugcon.print("total pitch");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(total_gimbal_pitch_);
-  uart_debugcon.print(" ");
+  #ifdef UART_DEBUG
   
-  uart_debugcon.print("total yaw");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(total_gimbal_yaw_);
-  uart_debugcon.print(" ");
+  //uart_debugcon.print("total pitch");
+  //uart_debugcon.print(" ");
+  //uart_debugcon.print(total_gimbal_pitch_);
+  //uart_debugcon.print(" ");
   
-  uart_debugcon.print("instn pitch");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(inst_gimbal_pitch_);
-  uart_debugcon.print(" ");
+  //uart_debugcon.print("total yaw");
+  //uart_debugcon.print(" ");
+  //uart_debugcon.print(total_gimbal_yaw_);
+  //uart_debugcon.print(" ");
+  
+  //uart_debugcon.print("instn pitch");
+  //uart_debugcon.print(" ");
+  //uart_debugcon.print(inst_gimbal_pitch_);
+  //uart_debugcon.print(" ");
   
   uart_debugcon.print("inst yaw");
   uart_debugcon.print(" ");
   uart_debugcon.print(inst_gimbal_yaw_);
   uart_debugcon.print(" ");
   
-  uart_debugcon.print("del pitch");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(del_gimbal_pitch);
-  uart_debugcon.print(" ");
+  //uart_debugcon.print("del pitch");
+  //uart_debugcon.print(" ");
+  //uart_debugcon.print(del_gimbal_pitch);
+  //uart_debugcon.print(" ");
   
   uart_debugcon.print("del yaw");
   uart_debugcon.print(" ");
@@ -366,9 +368,9 @@ void orient_gimbal(void){
   // Assuming gimbal tracked that part now new ref will be where the axis is in the new msg.
   if(newDataFromPC == true){
 
-    total_gimbal_roll_  += del_gimbal_roll ;     
-    total_gimbal_pitch_ += del_gimbal_pitch  ;
-    total_gimbal_yaw_   += del_gimbal_yaw  ;    
+    //total_gimbal_roll_  += del_gimbal_roll ;     
+    //total_gimbal_pitch_ += del_gimbal_pitch  ;
+    //total_gimbal_yaw_   += del_gimbal_yaw  ;    
 
   }
 
