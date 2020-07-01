@@ -270,7 +270,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       for i in range(100):
         new_yawValue = coeffx_new[0] + coeffx_new[1]*i + coeffx_new[2]*i**2 + coeffx_new[0]*i**3
         yawplot.append(new_yawValue)
-        #logging.info("newYaw value " + str(new_yawValue))
+        #logging.info("newYaw v alue " + str(new_yawValue))
       new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[0]*1**3
       logging.info("newYaw value " + str(new_yawValue))
       
