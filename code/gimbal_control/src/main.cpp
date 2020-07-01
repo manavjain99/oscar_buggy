@@ -120,7 +120,6 @@ void loop()
 // If you change this make sure to change in .py in waitingforArduino function.
 #define STM32_READY "<Arduino is ready>"
 #define MS_TO_HZ(x) (1e3/x)
-#define TICK_DURATION_MS (10.0)
 
 float frame_ht = -1.0F;
 float frame_wd = -1.0F;
