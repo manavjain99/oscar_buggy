@@ -72,7 +72,7 @@ float d4y = 0 ;
 #define INCREASING HIGH
 #define DECREASING LOW
 
-static float timeStep_ = 0;
+static double timeStep_ = 0;
 
 double gimbalYaw = 0;
 double gimbalPitch = 0;
@@ -282,13 +282,21 @@ void init_gimbal(void){
  * @output : Modifies del_gimbal_angs  
 */
 void gimbal_math(void){
+    // If there is a new message 
+    if(new_msg_time_MS != -1 ){
+      del_gimbal_yaw   = a2x + b2x*(timeStep_/new_msg_time_MS) + c2x*pow((timeStep_/new_msg_time_MS),2) + d2x*pow((timeStep_/new_msg_time_MS),3);  
+      del_gimbal_pitch = a2y + b2y*(timeStep_/new_msg_time_MS) + c2y*pow((timeStep_/new_msg_time_MS),2) + d2y*pow((timeStep_/new_msg_time_MS),3);  
+      timeStep_ += TICK_DURATION_MS;
+    }
+    #ifdef UART_DEBUG
+    uart_debugcon.print("new_msg_time_MS");
+    uart_debugcon.print(new_msg_time_MS);
+    uart_debugcon.print(" ");
+    uart_debugcon.print("timestep");
+    uart_debugcon.println(timeStep_);
 
-    del_gimbal_yaw   = a2x + b2x*(timeStep_/new_msg_time_MS) + c2x*pow((timeStep_/new_msg_time_MS),2) + d2x*pow((timeStep_/new_msg_time_MS),3);  
-    del_gimbal_pitch = a2y + b2y*(timeStep_/new_msg_time_MS) + c2y*pow((timeStep_/new_msg_time_MS),2) + d2y*pow((timeStep_/new_msg_time_MS),3);  
-    timeStep_ += TICK_DURATION_MS;
-
-  
-  if(newDataFromPC == true){
+    #endif 
+  if(newDataFromPC == true || timeStep_ > new_msg_time_MS){
   timeStep_ = 0.0F;
   }
 }
@@ -315,7 +323,7 @@ void orient_gimbal(void){
   inst_gimbal_pitch_ = CHECK_MAX(inst_gimbal_pitch_, MAX_GIMBAL_PITCH);
   inst_gimbal_yaw_   = CHECK_MAX(inst_gimbal_yaw_, MAX_GIMBAL_YAW);
   
-  #ifdef UART_DEBUG 
+  #ifdef UART_DEBUG_GIMBALSTATS 
   uart_debugcon.print("total pitch");
   uart_debugcon.print(" ");
   uart_debugcon.print(total_gimbal_pitch_);
