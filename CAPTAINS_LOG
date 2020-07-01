@@ -654,3 +654,60 @@ Observations
 3. Integrated yaw indefinitely 
 
 Right now for the sake of visualizing Im looking for plotting live MATPLOTLIB to see If I am sending correct angles.
+
+30/06/2020
+10.13 AM 
+Resuming work for matplotlib live plotting 
+
+10.39 PM 
+Failed to integrate matplot lib thread to print stuff parallely 
+Tried following things 
+animation matplot lib ( see MatplotLibLive in playground and subsequent histories)
+Tried canvas flush 
+Tried integration with Tkinter ( tkinter  has it all new set of problems hence dropped it )
+Tried simple integration canvas flush as a separate thread and tried in the same process thread 
+Fails in separate thread doesnt pop up 
+In process thread works as a single thread hence doesn't let opencv display until the plot stuff is completed 
+will retry with same in gui thread 
+
+Works but doesnt , thread balancing issues , wait for 300ms in gui thread still lag for FPS prcoess 
+|Still fails at 500ms sleep 
+Images keep on piling 
+
+Going back to primitive life 
+Will be using log statements to debug my mcu status ALAS 
+
+
+11.36 PM 
+Fuck me like really fuck me 
+Theproblem itself begins at src , the algo isnt giving me correct values for object cx,cy  , now what the fuk 
+Rewrite this >>>> ? 
+No wonder why they ask for proper test cases DAMN 
+*sobs in corner*
+Do the unit testing damn it 
+Write proper test cases 
+Now writing test cases for my algo function first. 
+
+11.48 PM 
+Stupid me I had been running the code entire time for blue colorsa on tennis balls 
+Now it works with green color 
+
+Still I will be writing test cases once i get the gimbal running well.
+Now trying to RUN without WALKING again with the entire setup ? Maybe not No IRON MAN stuff doesnt work that way ..
+
+11.59 PM 
+If object isnt detected The delta angles are 12,16 degs 
+Ingenoius actually 
+(FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+This is the formula to convert pix to degs 
+so if no objs available its pos should be frame cx and cy and not -1,-1 
+
+12.13 AM 
+Fixed atleast 50 % stuff is working in python moving to embedded and real life 
+
+1.16 AM 
+The following things are wrong 
+1.calc value here is half on MCU side 
+2.pitch doesnt work
+3.Oveflow for total yaw values 
+4.Inst yaw struck at 42/-42 wil debug this today later 
