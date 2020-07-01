@@ -20,7 +20,7 @@
 #include <string> // for string and to_string() 
 
 /*GLOBAL DEFS*/ 
-#define TICK_DURATION_MS (10.0)
+#define TICK_DURATION_MS (50.0)
 #define UART_DEBUG
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
