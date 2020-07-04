@@ -19,6 +19,8 @@
 #import gimbalcmd
 INCLUDE_STM = False
 LOG_FILES = True 
+CAMERA_AVAIL = False
+
 if __name__ == '__main__':
   import concurrent.futures
   import logging
@@ -45,7 +47,7 @@ CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
 # 3, 2, 1 for ext webcam 0 for webcam
 VID_SRC = 0
-
+VIDEO_SOURCE = "ball_tracking_example.mp4"
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
@@ -105,6 +107,27 @@ def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
 
   return trajList
 
+
+
+def madFilter(dataArr, threshold =3):
+  """
+  (list),(float) -> (float)
+  Description: Calculate of the last point is an outlier depending on the threshold among the given set of points and returns the value that  should be replaced if it is an outlier. 
+  >>> sampleVal = madFilter([5,4,4,4,4,5,3,3,1,1,2,2,5])
+  >>> sampleVal
+  5
+  """
+  assert (type(dataArr) == list),'Please input a list of nos'
+  bArr = []
+  medianVal = statistics.median(dataArr)
+  for element in dataArr:
+    bArr.append(abs(medianVal - element))
+  madValue =  statistics.median(bArr)
+  if(bArr[-1] > threshold*madValue):
+    return medianVal
+  else :
+    return dataArr[-1]
+
   
 
 def spline6pt(y):
@@ -137,7 +160,7 @@ def spline6pt(y):
     return coeff4
 
 
-def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
+def cam_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     """
     (int, queue) -> NoneType
     Description : Grabs the image and puts it into the imageQ buffer.
@@ -173,6 +196,39 @@ def grabber_thread(event, source = VID_SRC, imgQ = imageQ):
         
     cap.stop()
     cap.release()
+
+
+def video_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
+    
+  cap = cv2.VideoCapture(VIDEO_SOURCE)
+  time.sleep(3.0)
+  grabberLock = threading.Lock()
+  imgQ_size = imgQ.qsize()
+  frame_counter = 1
+  while(cap.isOpened() and (not event.is_set())):
+    start_time = time.time() # start time of the loop
+
+    imgQ_size = imgQ.qsize()
+    #logging.info(" no of frames"  + str(imgQ_size))
+    ret, frame = cap.read()
+    if(frame_counter == PROC_FRAME_FREQ):
+    # to make sure the buffer does not lag as real time as possible.
+      if(imgQ_size < MAX_NO_FRAMES):
+        with grabberLock:
+          pass
+          imgQ.put(frame)
+      frame_counter = 1
+      logging.info("FPS video grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+        
+    else: 
+      frame_counter = frame_counter + 1
+    time.sleep(0.01)  # to avoid this thread taking all control of CPU
+
+    #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+    
+  cap.stop()
+  cap.release()
+  cv2.destroyAllWindows()
 
 
 #def show_frame(frame, event):
@@ -234,15 +290,22 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
+  FILTERBUFFERSIZE = 15
+  filterdataBufferYaw = [0]*FILTERBUFFERSIZE
+  filterdataBufferPitch = [0]*FILTERBUFFERSIZE
+  filterdataBufferRoll = [0]*FILTERBUFFERSIZE # not useful as of now
+  FILTEREDYAW = 0
+  FILTEREDPITCH = 0
   while(1):
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
-      #logging.info(" no of process frames"  + str(imgQ.qsize()))
+      logging.info(" no of process frames "  + str(imgQ.qsize()))
       
       ## May edit to zero if default cam is set to 0
-      if (source != -1):
-        frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+      if CAMERA_AVAIL == True:
+        if (source != -1):
+          frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
       objA, objCX, objCY = GBT.trackGreenBall(frame)
 
@@ -262,17 +325,36 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
       #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
+      # Filtering the data MAD filter
+      
+      filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
+      filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
+      print(type(filterdataBufferYaw))
+      print(len(filterdataBufferYaw))
+      #newVal = madFilter(filterdataBufferYaw) BUG here
+      #print("newVal is " + str(newVal))
+      #frame_cx_buffer[5] = madFilter(filterdataBufferYaw)
+      '''
+      FILTEREDYAW = frame_cx_buffer[5]
+
+      filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
+      filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
+      frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
+      FILTEREDPITCH = frame_cy_buffer[5]
+      '''
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
-      #plotting the curve
-      yawplot = []
-        #logging.info("newYaw v alue " + str(new_yawValue))
+      #  #logging.info("newYaw v alue " + str(new_yawValue))
       new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[3]*1**3
       new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
+      
       if(LOG_FILES == True):
         nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
-        logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
+        logInfoStr = '{0}, {1}, {2}, {3}, {4}, {5}, {6} \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        logFile.write(str(logInfoStr))
+        logging.info(logInfoStr)
+        #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
       #print(str(new_yawValue))
       
       with processLock:
@@ -320,10 +402,17 @@ if __name__ == '__main__':
   #grab_th.start()
 
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(process_thread, event)
-    executor.submit(grabber_thread, event)
-  
+  if CAMERA_AVAIL == True:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+      executor.submit(process_thread, event)
+      executor.submit(cam_grabber_thread, event)
+
+  if CAMERA_AVAIL == False:
+    print("please press q before video ends or quit from task manager")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+      executor.submit(process_thread, event)
+      executor.submit(video_grabber_thread, event)
+
   # useless cause of threadpoolExec  
   time.sleep(7)
   event.set()

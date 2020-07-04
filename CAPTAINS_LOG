@@ -730,3 +730,20 @@ NEed to visualize th stuff
 Doing this after a break.
 Plotting del yaw angs and total yaw angs 
 After plotting it seems there are many outliers will be using MAD filter to filter out outliers and spikes  
+
+3/07/2020
+4.55 PM 
+
+Read upon semVer versioning , implementations starting with 
+
+1. EXplicitly defining my API 
+Software using Semantic Versioning MUST declare a public API. This API could be declared in the code itself or exist strictly in documentation. However it is done, it SHOULD be precise and comprehensive.
+
+2. Starting with 0.0.0 version after all APIs have been declared until that I cannot proceed. 
+
+4/07/2020
+
+Making sure where i go wrong before i go right ie getting good data and visualization. see plottingFromFile.py in /vision.
+
+9.23 PM 
+Did integrate video file option in main.py , getting 6 feeds in log file raw,filtered,curves and having some issues in integrating MAD filter to the main code. 
