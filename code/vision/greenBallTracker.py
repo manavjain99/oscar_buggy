@@ -133,18 +133,29 @@ def trackGreenBall(frame):
 if __name__ == '__main__':
   pass
   vs = VideoStream(src=0).start()
+  #vs = cv2.VideoCapture('ball_tracking_example.mp4')
   # allow the camera or video file to warm up
   time.sleep(3.0)
   objCX = 0
   objCY = 0
+  while(1):
+    ret, frame = vs.read()
 
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    objA, objCX, objCY = trackGreenBall(frame)
+    print(str(objA) + ", " +str(objCX) + ", " +str(objCY))
 
-  frame = vs.read()
+    cv2.imshow('frame',gray)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+  cap.release()
+  cv2.destroyAllWindows()
+
+  #frame = vs.read()
   while(1):
     frame = vs.read()
-    objA, objCX, objCY = trackGreenBall(frame)
-    print(str(objA) + " " +str(objCX) + " " +str(objCY))
-
+  
   #import doctest
   #doctest.testmod()
   
