@@ -18,16 +18,9 @@
 #import 
 import matplotlib.pyplot as plt
 import numpy as np 
-data = np.genfromtxt("logAngles.txt", delimiter=",", names=["date&time", "yaw", "pitch"])
+import statistics
 
 
-plt.figure()
-plt.subplot(211)
-plt.plot(data['yaw'])
-
-plt.subplot(212)
-plt.plot(data['pitch'])
-plt.show()
 
 #if __name__ == '__main__':
   #import 
@@ -35,13 +28,23 @@ plt.show()
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-#def ...:
-#  """
-#  () -> ()
-#  Description: 
-#  >>>
-#  
-#  """
+def madFilter(dataArr, threshold =3):
+  """
+  (list),(float) -> (float)
+  Description: Calculate of the last point is an outlier depending on the threshold among the given set of points and returns the value that  should be replaced if it is an outlier. 
+  >>> sampleVal = madFilter([5,4,4,4,4,5,3,3,1,1,2,2,5])
+  >>> sampleVal
+  5
+  """
+  bArr = []
+  medianVal = statistics.median(dataArr)
+  for element in dataArr:
+    bArr.append(abs(medianVal - element))
+  madValue =  statistics.median(bArr)
+  if(bArr[-1] > threshold*madValue):
+    return medianVal
+  else :
+    return dataArr[-1]
 
 
 #def ...:
@@ -65,10 +68,30 @@ plt.show()
 
 if __name__ == '__main__':
   pass
-  #import doctest
-  #doctest.testmod()
+  import doctest
+  doctest.testmod()
   
+  data = np.genfromtxt("logAngles.txt", delimiter=",", names=["date&time", "yaw", "pitch"])
+  BUFFERSIZE = 15
+  dataBuffer = [0]*BUFFERSIZE
+  print(type(data))
+  data['yaw'][0] = 0
+
+  plt.figure()
+  plt.subplot(211)
+  plt.plot(data['yaw'])
+
+  print(data['yaw'][0])
+  for i in range(len(data)):
+    dataBuffer[0:(BUFFERSIZE-1)] = dataBuffer[1:BUFFERSIZE]
+    dataBuffer[(BUFFERSIZE-1)] = data['yaw'][i]
+    data['yaw'][i] = madFilter(dataBuffer)
+
   
+  plt.subplot(212)
+  plt.plot(data['yaw'])
+  plt.show()
+    
   
   
 """ END OF FILE """
