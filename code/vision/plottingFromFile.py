@@ -71,25 +71,21 @@ if __name__ == '__main__':
   import doctest
   doctest.testmod()
   
-  data = np.genfromtxt("logAngles.txt", delimiter=",", names=["date&time", "yaw", "pitch"])
+  data = np.genfromtxt("logAngles.txt", delimiter=",", names=["date&time","raw_yaw" ,"filter_yaw","smooth_yaw" , "raw_pitch","filter_pitch","smooth_pitch" ])
   BUFFERSIZE = 15
   dataBuffer = [0]*BUFFERSIZE
   print(type(data))
-  data['yaw'][0] = 0
 
   plt.figure()
-  plt.subplot(211)
-  plt.plot(data['yaw'])
-
-  print(data['yaw'][0])
-  for i in range(len(data)):
-    dataBuffer[0:(BUFFERSIZE-1)] = dataBuffer[1:BUFFERSIZE]
-    dataBuffer[(BUFFERSIZE-1)] = data['yaw'][i]
-    data['yaw'][i] = madFilter(dataBuffer)
-
+  plt.subplot(311)
+  plt.plot(data['raw_yaw'])
   
-  plt.subplot(212)
-  plt.plot(data['yaw'])
+  plt.subplot(312)
+  plt.plot(data['filter_yaw'])
+  
+  plt.subplot(313)
+  plt.plot(data['smooth_yaw'])
+  
   plt.show()
     
   
