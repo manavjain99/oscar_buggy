@@ -747,3 +747,42 @@ Making sure where i go wrong before i go right ie getting good data and visualiz
 
 9.23 PM 
 Did integrate video file option in main.py , getting 6 feeds in log file raw,filtered,curves and having some issues in integrating MAD filter to the main code. 
+
+5/07/2020
+11.32 PM 
+Done integrating filtered vaules and getting log file , now plotting and analysis. 
+
+1.17 PM 
+Will be trying to delay the integration more, done testing ....
+
+9.03 PM 
+Delaying time for integration ? GEtting values passed to Gimbal,
+
+6.07.2020
+
+2.15 PM 
+Tried lots of attempts to give it a cinematographic calibration in a spline fashion, failed , waiting for advice .. 
+Till then beginning with buggy .
+01. Making the block diagram of the current status .
+Heres how i plan to proceed, 
+1. getting area from vision algo 
+2. Getting the hardware buggy. 
+3. Starting with trajectory generations ... ? 
+
+3.15 PM 
+Made a brief paint workflow in /presentations ..
+
+7.7.2020
+
+4.18 PM 
+
+1. Starting with aruco/getting area of the object instead of the regular green ball , cause its much easier 
+Found a project with more or less http://jevois.org/moddoc/DemoArUco/modinfo.html cheaper version of what im doing ... 
+
+8.7.20 
+
+4.00 PM 
+Added aruco files in playground, now printing it and writing subsequent code for area, cx and cy.
+4.51 PM
+Finished with the aruco getting area, cx and cy ... 
+Yet to integrate in the main files 

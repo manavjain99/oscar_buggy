@@ -1,9 +1,6 @@
 {
 	"folders": [
 		{
-			"path": "."
-		},
-		{
 			"name": "gimbal_control",
 			"path": "code/gimbal_control"
 		},
