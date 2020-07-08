@@ -17,12 +17,15 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 LOG_FILES = True 
-CAMERA_AVAIL = False
+CAMERA_AVAIL = True
 
 if __name__ == '__main__':
   import concurrent.futures
+  import matplotlib.pyplot as plt
+  import numpy as np 
+  import statistics
   import logging
   import queue
   import random
@@ -291,9 +294,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   processLock = threading.Lock()
   trajList = []
   FILTERBUFFERSIZE = 15
-  filterdataBufferYaw = [0]*FILTERBUFFERSIZE
-  filterdataBufferPitch = [0]*FILTERBUFFERSIZE
-  filterdataBufferRoll = [0]*FILTERBUFFERSIZE # not useful as of now
+  filterdataBufferYaw = [0.001]*FILTERBUFFERSIZE
+  filterdataBufferPitch = [0.001]*FILTERBUFFERSIZE
+  filterdataBufferRoll = [0.001]*FILTERBUFFERSIZE # not useful as of now
   FILTEREDYAW = 0
   FILTEREDPITCH = 0
   while(1):
@@ -329,19 +332,14 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
       filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
-      print(type(filterdataBufferYaw))
-      print(len(filterdataBufferYaw))
-      #newVal = madFilter(filterdataBufferYaw) BUG here
-      #print("newVal is " + str(newVal))
-      #frame_cx_buffer[5] = madFilter(filterdataBufferYaw)
-      '''
+      frame_cx_buffer[5] = madFilter(filterdataBufferYaw, threshold=1.0)
       FILTEREDYAW = frame_cx_buffer[5]
 
       filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
       filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
       frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
       FILTEREDPITCH = frame_cy_buffer[5]
-      '''
+      
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
@@ -351,7 +349,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       
       if(LOG_FILES == True):
         nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
-        logInfoStr = '{0}, {1}, {2}, {3}, {4}, {5}, {6} \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
         logFile.write(str(logInfoStr))
         logging.info(logInfoStr)
         #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
