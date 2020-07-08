@@ -281,13 +281,19 @@ void init_gimbal(void){
  * @breif : Creates / tells what delta Angs need to be followed for each yaw/pitch.
  * @output : Modifies del_gimbal_angs  
 */
+//#define DEBUG_GIMBALMATH
 void gimbal_math(void){
-    // If there is a new message 
-    if(new_msg_time_MS != -1 ){
+    // If there is a new message init case. or done with the current message.
+    #ifndef DEBUG_GIMBALMATH
+    if(new_msg_time_MS != -1){
       del_gimbal_yaw   = a2x + b2x*(timeStep_/new_msg_time_MS) + c2x*pow((timeStep_/new_msg_time_MS),2) + d2x*pow((timeStep_/new_msg_time_MS),3);  
       
       del_gimbal_pitch = a2y + b2y*(timeStep_/new_msg_time_MS) + c2y*pow((timeStep_/new_msg_time_MS),2) + d2y*pow((timeStep_/new_msg_time_MS),3);  
       timeStep_ += TICK_DURATION_MS;
+    }
+    else {
+      del_gimbal_yaw = 0;
+      del_gimbal_pitch = 0;
     }
     #ifdef UART_DEBUG
     uart_debugcon.print("refresh time ");
@@ -300,6 +306,15 @@ void gimbal_math(void){
   if(newDataFromPC == true || timeStep_ > new_msg_time_MS){
   timeStep_ = 0.0F;
   }
+  #endif
+
+  #ifdef DEBUG_GIMBALMATH
+      del_gimbal_yaw   = a2x + b2x*(1) + c2x*pow((1),2) + d2x*pow((1),3);  
+      del_gimbal_pitch = a2y + b2y*(1) + c2y*pow((1),2) + d2y*pow((1),3);  
+
+
+  #endif
+
 }
 
 
@@ -315,6 +330,7 @@ void orient_gimbal(void){
 
   // Takes care of updating delta angles. 
   gimbal_math();
+  #ifndef DEBUG_GIMBALMATH
 
   inst_gimbal_roll_  += del_gimbal_roll;
   inst_gimbal_pitch_ += del_gimbal_pitch;
@@ -373,7 +389,13 @@ void orient_gimbal(void){
     //total_gimbal_yaw_   += del_gimbal_yaw  ;    
 
   }
+  #endif
 
+  #ifdef DEBUG_GIMBALMATH
+  if(newDataFromPC == true){
+  setAngles(inst_gimbal_roll_, del_gimbal_pitch, del_gimbal_yaw);
+  }
+  #endif
 }
 
 
