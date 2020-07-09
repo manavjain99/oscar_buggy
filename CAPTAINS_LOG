@@ -786,3 +786,14 @@ Added aruco files in playground, now printing it and writing subsequent code for
 4.51 PM
 Finished with the aruco getting area, cx and cy ... 
 Yet to integrate in the main files 
+
+9.7.2020 
+3.00 PM
+Printing and testing aruco. 
+
+4.20 PM 
+Verified working of aruco. 
+Wil be doing the following things
+2. Making the integration factor correct , ie making sure of the multiplication factor.
+Testing this 
+1. Gettting correct spline output. ie first doing visualizations of the output ... 

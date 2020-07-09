@@ -1,0 +1,107 @@
+
+
+imageQ = queue.Queue(maxsize=5)
+commQ = queue.Queue(maxsize=10)
+
+
+# let 60 fps. T = 17MS 
+#(f = 5Hz, T = 40ms)
+
+
+def grab_frame(queue, event):
+    """Pretend we're getting a number from the network."""
+    while not event.is_set():
+        logging.info("Producer got message: %s", message)
+        queue.put(message)
+
+    logging.info("Producer received event. Exiting")
+
+
+
+
+def process_frame(queue, event):
+    """Pretend we're saving a number in the database."""
+    while not event.is_set() or not queue.empty():
+        message = queue.get()
+        logging.info(
+            "Consumer storing message: %s (size=%d)", message, queue.qsize()
+        )
+
+    logging.info("Consumer received event. Exiting")
+
+
+def 
+Grab() {
+
+    while(1){
+    
+    
+        frame = cv.capture.read()
+
+
+        (read every X = fprocess/fcomms frame)
+            lock
+                imageQ.push(frame)
+
+    }
+
+}
+
+
+(f = 5Hz, T = 40ms)
+
+Process() {
+
+    while(1) {
+
+        lock
+            frame = imageQ.pop
+
+        newXY = detectPeopleinFrame(frame)
+
+        angleSequence = trajectoryGen(prevXY, newXY, numpts= fcomms/fprocess)
+
+        commsQ.push(angleSequence)
+
+    }
+
+}
+
+(f = 50Hz, T = 20 ms )
+
+Comms() {
+
+    while(1){
+
+        angle_command = commsQ.pop
+        serial.send(angle_command)
+
+        wait(Xms)
+    }
+
+
+}
+
+main(){
+    startThread(grab)
+    startThread()
+    startThread(grab)
+
+    while(!quitcond){
+        checkkey(ESC) -> quitcond = true
+    }
+
+    grab.join
+    process.join
+    comms.join
+}
+
+
+#define maxvelocity
+#define accel
+
+trajectoryGen(prevXY, newXY){
+
+    angleset({}, {}, {}, {} ..... {} , {})
+
+}
