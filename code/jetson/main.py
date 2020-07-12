@@ -18,14 +18,11 @@
 
 #import gimbalcmd
 INCLUDE_STM = False
-LOG_FILES = False
+LOG_FILES = True 
 CAMERA_AVAIL = True
 
 if __name__ == '__main__':
   import concurrent.futures
-  import matplotlib.pyplot as plt
-  import numpy as np 
-  import statistics
   import logging
   import queue
   import random
@@ -33,7 +30,6 @@ if __name__ == '__main__':
   import serial
   import time
   import cv2
-  import aruco_tracking as ART
   import greenBallTracker as GBT 
   #import matplotlibLive as MPLive
   if INCLUDE_STM == True:
@@ -50,10 +46,8 @@ CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
 # 3, 2, 1 for ext webcam 0 for webcam
-VID_SRC = 2
-VIDEO_SOURCE = "../tests/aruco.mp4"
-SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
-GIMBAL_ANGLES_LOG = "../pilotdashboard/logAngles.txt"
+VID_SRC = 0
+VIDEO_SOURCE = "ball_tracking_example.mp4"
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
@@ -78,8 +72,6 @@ commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
-current_milli_time = lambda: int(round(time.time() * 1000))
-epochTimeMillis = current_milli_time
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
@@ -143,7 +135,6 @@ def spline6pt(y):
   (np.array[] (size = 6) ) -> (list[4])
   Description: Generates peicewise spline curves for the 6 y pts, with x pts equally spaced as x[0:5].
   Outputs the coeffs last piecewise curves ie coeffnew. ie ( coeffx = ax, bx, cx, dx)
-
   regenrate the splines example ( for ref of abcd ignore rest) 
   y = a2 + b2*(x-2) + c2*(x-2)**2 + d2*(x-2)**3
   
@@ -263,7 +254,6 @@ def sendCoeffs(coeffx, coeffy):
   +cx2[1]+','+cx2[2]+','+cx2[3]+','+cx2[4]+','\
   +cx3[1]+','+cx3[2]+','+cx3[3]+','+cx3[4]+','\
   +cx4[1]+','+cx4[2]+','+cx4[3]+','+cx4[4]+','\
-
   +cy2[1]+','+cy2[2]+','+cy2[3]+','+cy2[4]+','\
   +cy3[1]+','+cy3[2]+','+cy3[3]+','+cy3[4]+','\
   +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
@@ -294,16 +284,14 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   frame_cy_buffer = np.array([0,0,0,0,0,0])
   coeffx_new = [0,0,0,0]
   coeffy_new = [0,0,0,0]
-  logFile = open(GIMBAL_ANGLES_LOG, "w")
-  logFileCoeffs = open(SPLINE_COEFFS_LOG, "w")
-
+  logFile = open("logAngles.txt", "w")
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
   FILTERBUFFERSIZE = 15
-  filterdataBufferYaw = [0.001]*FILTERBUFFERSIZE
-  filterdataBufferPitch = [0.001]*FILTERBUFFERSIZE
-  filterdataBufferRoll = [0.001]*FILTERBUFFERSIZE # not useful as of now
+  filterdataBufferYaw = [0]*FILTERBUFFERSIZE
+  filterdataBufferPitch = [0]*FILTERBUFFERSIZE
+  filterdataBufferRoll = [0]*FILTERBUFFERSIZE # not useful as of now
   FILTEREDYAW = 0
   FILTEREDPITCH = 0
   while(1):
@@ -317,8 +305,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
-      #objA, objCX, objCY = GBT.trackGreenBall(frame)
-      objA, objCX, objCY = ART.trackArucoMarker(frame)
+      objA, objCX, objCY = GBT.trackGreenBall(frame)
 
       # Shifting and Updating 1 element at a time. values according to gimbal <S. 
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
@@ -340,14 +327,18 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
       filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
-      frame_cx_buffer[5] = madFilter(filterdataBufferYaw, threshold=1.0)
+      print(type(filterdataBufferYaw))
+      print(len(filterdataBufferYaw))
+      #newVal = madFilter(filterdataBufferYaw) BUG here
+      #print("newVal is " + str(newVal))
+      #frame_cx_buffer[5] = madFilter(filterdataBufferYaw)
+      '''
       FILTEREDYAW = frame_cx_buffer[5]
-
       filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
       filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
       frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
       FILTEREDPITCH = frame_cy_buffer[5]
-      
+      '''
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
@@ -356,11 +347,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
       
       if(LOG_FILES == True):
-        nowTimeMillis = current_milli_time() - epochTimeMillis
-        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
-        logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,coeffx_new[0],coeffx_new[1],coeffx_new[2],coeffx_new[3])
+        nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
+        logInfoStr = '{0}, {1}, {2}, {3}, {4}, {5}, {6} \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
         logFile.write(str(logInfoStr))
-        logFileCoeffs.write(str(logCoeffStr))
         logging.info(logInfoStr)
         #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
       #print(str(new_yawValue))
@@ -378,7 +367,6 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         cv2.destroyAllWindows()
         if(LOG_FILES == True):
           logFile.close()
-          logFileCoeffs.close()
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
@@ -466,4 +454,3 @@ if __name__ == '__main__':
   
   
 """ END OF FILE """
-
