@@ -18,8 +18,8 @@
 
 #import gimbalcmd
 INCLUDE_STM = False
-LOG_FILES = True 
-CAMERA_AVAIL = False
+LOG_FILES = False
+CAMERA_AVAIL = True
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -50,8 +50,10 @@ CHANGE_YAW_THOLD = 2
 CHANGE_PITCH_THOLD = 2
 THRES_PERCENT_CHANGE =0.10
 # 3, 2, 1 for ext webcam 0 for webcam
-VID_SRC = 0
+VID_SRC = 2
 VIDEO_SOURCE = "../tests/aruco.mp4"
+SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
+GIMBAL_ANGLES_LOG = "../pilotdashboard/logAngles.txt"
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
@@ -76,6 +78,8 @@ commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
+current_milli_time = lambda: int(round(time.time() * 1000))
+epochTimeMillis = current_milli_time
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
@@ -290,7 +294,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   frame_cy_buffer = np.array([0,0,0,0,0,0])
   coeffx_new = [0,0,0,0]
   coeffy_new = [0,0,0,0]
-  logFile = open("../pilotdashboard/logAngles.txt", "w")
+  logFile = open(GIMBAL_ANGLES_LOG, "w")
+  logFileCoeffs = open(SPLINE_COEFFS_LOG, "w")
+
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
@@ -350,9 +356,11 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
       
       if(LOG_FILES == True):
-        nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
-        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        nowTimeMillis = current_milli_time() - epochTimeMillis
+        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,coeffx_new[0],coeffx_new[1],coeffx_new[2],coeffx_new[3])
         logFile.write(str(logInfoStr))
+        logFileCoeffs.write(str(logCoeffStr))
         logging.info(logInfoStr)
         #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
       #print(str(new_yawValue))
@@ -370,6 +378,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         cv2.destroyAllWindows()
         if(LOG_FILES == True):
           logFile.close()
+          logFileCoeffs.close()
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
