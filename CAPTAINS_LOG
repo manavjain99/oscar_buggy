@@ -797,3 +797,27 @@ Wil be doing the following things
 2. Making the integration factor correct , ie making sure of the multiplication factor.
 Testing this 
 1. Gettting correct spline output. ie first doing visualizations of the output ... 
+
+11.7.2020
+12.05 AM 
+
+Messed up with git logs, lost logs of 10/7/2020
+Basically was fixing this shit .. which i did ? or not .. also was fixing since i changed my home dir on Manjaro
+
+
+12.07 AM 
+Now just moving ahead with the 2 parts of getting correct code output.. 
+Founsd a nice web for showing polynomial plots python 
+https://www.python-course.eu/polynomial_class_in_python.php
+
+Im done for today , c me back on sun/monday ..
+
+12.07.2020
+2.37 PM
+
+Continuiong ... 
+
+4.21 PM 
+Wrote code to get / plot splines according to coeffs every timesteps ie plotting piecewiase curves of my splines .
+Dug deep in the history of git to get the working main working codes.
+Stashed the ouput for plinting coeffs to file. 
