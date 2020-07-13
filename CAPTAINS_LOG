@@ -821,3 +821,29 @@ Continuiong ...
 Wrote code to get / plot splines according to coeffs every timesteps ie plotting piecewiase curves of my splines .
 Dug deep in the history of git to get the working main working codes.
 Stashed the ouput for plinting coeffs to file. 
+
+13.07.2020 
+
+6.30 PM
+
+Contniuing fixing main.py 
+
+7.27 PM 
+Turns out my entire splines plot code IS wrong / Damn I didn't verify it .. okay so now verifying it, 
+Piecewise curves are a no go.... 
+They arent continiuous !!!!! PERIOD , so now what i will be doing is digging back into splines and things straight working ... 
+
+8.00 PM 
+Here are the takeaways ... ( for spline regenration) 
+C1 Send coeffs/degree/knots to the MCU and find compatible regenration methods between python and CPP.
+C2 Send just knots to MCU and let it figure out the spline / or any other curve it wishes ... 
+
+Going with option 2 coz its much easier to manage ... also no point in regeneration in MCU and regenrating it again in jetson ... 
+
+###END OF VERSION###
+Lemme call this 0.1.x 
+So the next one will be 0.0.0 alpha 
+
+Also for the next version I will be making a markdown CAPTAINS_LOG
+
+See you in the next version.
