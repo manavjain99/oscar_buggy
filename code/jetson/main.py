@@ -67,6 +67,9 @@ MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
 # should be equal to t_grab / t_tick_mcu
+SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
+GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
+
 
 imageQ = queue.Queue(maxsize=10000)
 commQ = queue.Queue(maxsize=30000)
@@ -285,7 +288,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   frame_cy_buffer = np.array([0,0,0,0,0,0])
   coeffx_new = [0,0,0,0]
   coeffy_new = [0,0,0,0]
-  logFile = open("logAngles.txt", "w")
+  logFile = open(str(GIMBAL_ANGLES_LOG), "w")
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
