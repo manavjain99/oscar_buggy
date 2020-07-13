@@ -292,6 +292,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   coeffx_new = [0,0,0,0]
   coeffy_new = [0,0,0,0]
   logFile = open(str(GIMBAL_ANGLES_LOG), "w")
+  logFileCoeffs = open(SPLINE_COEFFS_LOG, "w")
+  
   counter_comms_update = 1
   processLock = threading.Lock()
   trajList = []
@@ -375,6 +377,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         cv2.destroyAllWindows()
         if(LOG_FILES == True):
           logFile.close()
+          logFileCoeffs.close()
         break
       #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
       #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
