@@ -77,7 +77,7 @@ commQ = queue.Queue(maxsize=30000)
 """ WRITE YOUR FUNCTIONS HERE """
 
 current_milli_time = lambda: int(round(time.time() * 1000))
-epochTimeMillis = current_milli_time
+epochTimeMillis = current_milli_time()
 
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
@@ -357,9 +357,11 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
       
       if(LOG_FILES == True):
-        nowTime = time.strftime('%d-%m-%Y %H:%M:%S')
-        logInfoStr = '{0}, {1}, {2}, {3}, {4}, {5}, {6} \n'.format(nowTime,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        nowTimeMillis = current_milli_time() - epochTimeMillis
+        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+        logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,coeffx_new[0],coeffx_new[1],coeffx_new[2],coeffx_new[3])
         logFile.write(str(logInfoStr))
+        logFileCoeffs.write(str(logCoeffStr))
         logging.info(logInfoStr)
         #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
       #print(str(new_yawValue))
