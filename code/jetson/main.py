@@ -31,6 +31,7 @@ if __name__ == '__main__':
   import time
   import cv2
   import greenBallTracker as GBT 
+  import aruco_tracking as ART
   #import matplotlibLive as MPLive
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
@@ -305,7 +306,8 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
-      objA, objCX, objCY = GBT.trackGreenBall(frame)
+      #objA, objCX, objCY = GBT.trackGreenBall(frame)
+      objA, objCX, objCY = ART.trackArucoMarker(frame)
 
       # Shifting and Updating 1 element at a time. values according to gimbal <S. 
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
