@@ -76,6 +76,9 @@ commQ = queue.Queue(maxsize=30000)
 
 """ WRITE YOUR FUNCTIONS HERE """
 
+current_milli_time = lambda: int(round(time.time() * 1000))
+epochTimeMillis = current_milli_time
+
 def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
   """
   (tup size2, tup size2, int) -> (list of 3 ints list)
