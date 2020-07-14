@@ -17,6 +17,12 @@
 		},
 		{
 			"path": "code/tests"
+		},
+		{
+			"path": "code"
+		},
+		{
+			"path": "."
 		}
 	],
 	"settings": {
