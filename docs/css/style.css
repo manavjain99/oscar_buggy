@@ -1,7 +1,12 @@
 /**************** extend css start ****************/
 @import url("https://fonts.googleapis.com/css?family=Aclonica|Poppins:300,400,500,600&display=swap");
+
 /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_extends.scss */
-.btn_1, .live_stareams .live_stareams_slide .live_stareams_slide_img:after, .Latest_War .Latest_War_text:after, .gallery_part .single_gallery_item .single_gallery_item_iner:after, .footer_part .single_footer_part .mail_part .email_icon {
+.btn_1,
+.live_stareams .live_stareams_slide .live_stareams_slide_img:after,
+.Latest_War .Latest_War_text:after,
+.gallery_part .single_gallery_item .single_gallery_item_iner:after,
+.footer_part .single_footer_part .mail_part .email_icon {
   background-image: -webkit-gradient(linear, right top, left top, from(#ff0000), color-stop(51%, #c6019a), to(#ff0000));
   background-image: -webkit-linear-gradient(right, #ff0000 0%, #c6019a 51%, #ff0000 100%);
   background-image: -o-linear-gradient(right, #ff0000 0%, #c6019a 51%, #ff0000 100%);
@@ -17,7 +22,8 @@
 }
 
 /* line 14, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_extends.scss */
-.cta_part .banner_btn_1:hover, .cta_part .banner_btn_2:hover {
+.cta_part .banner_btn_1:hover,
+.cta_part .banner_btn_2:hover {
   background-image: -webkit-gradient(linear, right top, left top, from(#57ddff), color-stop(51%, #57ddff), to(#57ddff));
   background-image: -webkit-linear-gradient(right, #57ddff 0%, #57ddff 51%, #57ddff 100%);
   background-image: -o-linear-gradient(right, #57ddff 0%, #57ddff 51%, #57ddff 100%);
@@ -47,7 +53,8 @@ body {
 }
 
 /* line 12, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
-input:hover, input:focus {
+input:hover,
+input:focus {
   outline: none !important;
 }
 
@@ -58,10 +65,11 @@ input:hover, input:focus {
 
 /* line 18, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
 .section_padding {
-  padding: 140px 0px;
+  padding: 50px 0px;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 18, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_padding {
     padding: 100px 0px;
@@ -69,6 +77,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 18, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_padding {
     padding: 70px 0px;
@@ -76,6 +85,7 @@ input:hover, input:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 18, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_padding {
     padding: 70px 0px;
@@ -83,6 +93,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 18, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_padding {
     padding: 70px 0px;
@@ -95,6 +106,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .single_padding_top {
     padding-top: 70px !important;
@@ -102,6 +114,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .single_padding_top {
     padding-top: 70px !important;
@@ -109,6 +122,7 @@ input:hover, input:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .single_padding_top {
     padding-top: 70px !important;
@@ -116,6 +130,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .single_padding_top {
     padding-top: 100px !important;
@@ -128,6 +143,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 48, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_top {
     padding-top: 100px;
@@ -135,6 +151,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 48, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_top {
     padding-top: 70px;
@@ -142,6 +159,7 @@ input:hover, input:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 48, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_top {
     padding-top: 70px;
@@ -149,6 +167,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 48, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_top {
     padding-top: 70px;
@@ -161,6 +180,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 63, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_bottom {
     padding-bottom: 100px;
@@ -168,6 +188,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 63, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_bottom {
     padding-bottom: 70px;
@@ -175,6 +196,7 @@ input:hover, input:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 63, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_bottom {
     padding-bottom: 70px;
@@ -182,6 +204,7 @@ input:hover, input:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 63, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .padding_bottom {
     padding-bottom: 70px;
@@ -202,7 +225,12 @@ a:hover {
 }
 
 /* line 87, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #fff;
   font-family: "Aclonica", sans-serif;
 }
@@ -217,9 +245,9 @@ p {
   font-weight: 300;
 }
 
-p.buugy_text{
-    font-size: 25px;
-    line-height: 2;
+p.buugy_text {
+  font-size: 25px;
+  line-height: 2;
 }
 
 /* line 99, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
@@ -231,6 +259,7 @@ h2 {
 }
 
 @media (max-width: 576px) {
+
   /* line 99, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   h2 {
     font-size: 22px;
@@ -239,6 +268,7 @@ h2 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 99, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   h2 {
     font-size: 24px;
@@ -253,6 +283,7 @@ h3 {
 }
 
 @media (max-width: 576px) {
+
   /* line 115, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   h3 {
     font-size: 20px;
@@ -271,7 +302,10 @@ img {
 }
 
 /* line 132, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
-a:focus, .button:focus, button:focus, .btn:focus {
+a:focus,
+.button:focus,
+button:focus,
+.btn:focus {
   text-decoration: none;
   outline: none;
   box-shadow: none;
@@ -282,19 +316,24 @@ a:focus, .button:focus, button:focus, .btn:focus {
 /* line 139, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
 .section_tittle {
   margin-bottom: 80px;
+  margin-top: 75px;
 }
 
 @media (max-width: 991px) {
+
   /* line 139, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle {
     margin-bottom: 40px;
+    margin-top: 75px;
   }
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 139, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle {
     margin-bottom: 50px;
+    margin-top: 75px;
   }
 }
 
@@ -309,6 +348,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 147, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle h2 {
     font-size: 25px;
@@ -318,6 +358,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 147, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle h2 {
     font-size: 25px;
@@ -327,6 +368,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 147, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle h2 {
     font-size: 30px;
@@ -336,6 +378,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 147, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle h2 {
     font-size: 35px;
@@ -351,6 +394,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media (max-width: 576px) {
+
   /* line 175, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle p {
     margin-bottom: 10px;
@@ -358,6 +402,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 175, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle p {
     margin-bottom: 10px;
@@ -365,6 +410,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 175, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle p {
     margin-bottom: 10px;
@@ -372,6 +418,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 175, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .section_tittle p {
     margin-bottom: 10px;
@@ -391,6 +438,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 198, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mb_110 {
     margin-bottom: 220px;
@@ -403,6 +451,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 205, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mt_130 {
     margin-top: 70px;
@@ -410,6 +459,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 205, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mt_130 {
     margin-top: 70px;
@@ -417,6 +467,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 205, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mt_130 {
     margin-top: 70px;
@@ -424,6 +475,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 205, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mt_130 {
     margin-top: 70px;
@@ -436,6 +488,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 220, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mb_130 {
     margin-bottom: 70px;
@@ -443,6 +496,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 220, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .mb_130 {
     margin-bottom: 100px;
@@ -461,6 +515,7 @@ ul {
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 3640px) {
+
   /* line 238, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .container {
     max-width: 1200px;
@@ -468,6 +523,7 @@ ul {
 }
 
 @media (max-width: 1200px) {
+
   /* line 243, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   [class*="hero-ani-"] {
     display: none !important;
@@ -488,6 +544,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 251, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .black .footer_top {
     padding: 70px 0;
@@ -495,6 +552,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 251, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
   .black .footer_top {
     padding: 100px 0;
@@ -507,7 +565,10 @@ ul {
 }
 
 /* line 263, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_common.scss */
-.black h2, .black h3, .black h4, .black h5 {
+.black h2,
+.black h3,
+.black h4,
+.black h5 {
   color: #2f2d4e;
 }
 
@@ -568,6 +629,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 24, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_1 {
     padding: 10px 30px;
@@ -576,6 +638,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 24, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_1 {
     padding: 10px 30px;
@@ -584,6 +647,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 24, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_1 {
     padding: 10px 30px;
@@ -618,6 +682,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_2 {
     padding: 10px 30px;
@@ -626,6 +691,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_2 {
     padding: 10px 30px;
@@ -634,6 +700,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_2 {
     padding: 10px 30px;
@@ -651,6 +718,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 97, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .btn_4 {
     margin-top: 30px;
@@ -682,6 +750,7 @@ ul {
 }
 
 @media (max-width: 767px) {
+
   /* line 117, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_button.scss */
   .button {
     font-size: 13px;
@@ -745,7 +814,8 @@ ul {
 }
 
 /* line 14, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.blog_area a:hover, .blog_area a :hover {
+.blog_area a:hover,
+.blog_area a :hover {
   color: #ff0000;
 }
 
@@ -755,7 +825,12 @@ ul {
 }
 
 /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.blog_area h1, .blog_area h2, .blog_area h3, .blog_area h4, .blog_area h5, .blog_area h6 {
+.blog_area h1,
+.blog_area h2,
+.blog_area h3,
+.blog_area h4,
+.blog_area h5,
+.blog_area h6 {
   color: #2f2d4e;
 }
 
@@ -835,10 +910,12 @@ ul {
 }
 
 @media (max-width: 1199px) {
+
   /* line 76, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog .tag {
     margin-right: 8px;
   }
+
   /* line 100, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog .tag:after {
     display: none;
@@ -851,6 +928,7 @@ ul {
 }
 
 @media (max-width: 800px) {
+
   /* line 26, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog {
     margin-bottom: 30px;
@@ -876,6 +954,7 @@ ul {
 }
 
 @media (max-width: 1199px) {
+
   /* line 114, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog .single-blog-content {
     padding: 15px;
@@ -890,6 +969,7 @@ ul {
 }
 
 @media (max-width: 1199px) {
+
   /* line 145, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog h4 {
     transition: all 300ms linear 0s;
@@ -897,6 +977,7 @@ ul {
     padding-bottom: 14px;
     margin-bottom: 12px;
   }
+
   /* line 151, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-blog h4 a {
     font-size: 18px;
@@ -920,6 +1001,7 @@ ul {
 }
 
 @media (min-width: 992px) {
+
   /* line 162, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .full_image.single-blog .single-blog-content {
     bottom: 100px;
@@ -1081,7 +1163,7 @@ ul {
 }
 
 /* line 360, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.causes_item .causes_bottom a + a {
+.causes_item .causes_bottom a+a {
   border-color: #eeeeee;
   background: #fff;
   font-size: 14px;
@@ -1146,7 +1228,7 @@ ul {
 }
 
 /* line 433, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.tags .tag_btn + .tag_btn {
+.tags .tag_btn+.tag_btn {
   margin-left: 2px;
 }
 
@@ -1158,6 +1240,7 @@ ul {
 }
 
 @media (min-width: 900px) {
+
   /* line 440, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_categorie_area {
     padding-top: 80px;
@@ -1166,6 +1249,7 @@ ul {
 }
 
 @media (min-width: 1100px) {
+
   /* line 440, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_categorie_area {
     padding-top: 120px;
@@ -1244,6 +1328,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 531, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_details {
     padding: 60px 30px 35px 35px;
@@ -1273,6 +1358,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 551, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_details h2 {
     font-size: 24px;
@@ -1336,6 +1422,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 601, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_item_img .blog_item_date {
     bottom: -20px;
@@ -1354,6 +1441,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 617, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_item_img .blog_item_date h3 {
     font-size: 30px;
@@ -1368,6 +1456,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 629, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .blog_item_img .blog_item_date p {
     font-size: 18px;
@@ -1497,7 +1586,7 @@ ul {
 }
 
 /* line 773, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.blog_right_sidebar .post_category_widget .cat-list li + li {
+.blog_right_sidebar .post_category_widget .cat-list li+li {
   padding-top: 15px;
 }
 
@@ -1529,7 +1618,7 @@ ul {
 }
 
 /* line 819, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
-.blog_right_sidebar .popular_post_widget .post_item + .post_item {
+.blog_right_sidebar .popular_post_widget .post_item+.post_item {
   margin-top: 20px;
 }
 
@@ -1674,6 +1763,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 1086, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .quote-wrapper {
     padding: 30px;
@@ -1688,6 +1778,7 @@ ul {
 }
 
 @media (min-width: 768px) {
+
   /* line 1100, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .quotes {
     padding: 25px 25px 25px 30px;
@@ -1771,6 +1862,7 @@ ul {
 }
 
 @media (max-width: 600px) {
+
   /* line 1181, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .blog-author {
     padding: 20px 8px;
@@ -1786,6 +1878,7 @@ ul {
 }
 
 @media (max-width: 600px) {
+
   /* line 1190, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .blog-author img {
     margin-right: 15px;
@@ -1869,6 +1962,7 @@ ul {
 }
 
 @media (max-width: 767px) {
+
   /* line 1239, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .navigation-area .nav-left {
     margin-bottom: 30px;
@@ -1911,6 +2005,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 1306, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .single-post-area .sidebar-widgets {
     padding-bottom: 0px;
@@ -1926,6 +2021,7 @@ ul {
 }
 
 @media (max-width: 414px) {
+
   /* line 1313, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comments-area {
     padding: 50px 8px;
@@ -1960,14 +2056,17 @@ ul {
 }
 
 @media (max-width: 413px) {
+
   /* line 1353, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comments-area .comment-list .single-comment h5 {
     font-size: 12px;
   }
+
   /* line 1357, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comments-area .comment-list .single-comment .date {
     font-size: 11px;
   }
+
   /* line 1361, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comments-area .comment-list .single-comment .comment {
     font-size: 10px;
@@ -2036,6 +2135,7 @@ ul {
 }
 
 @media (max-width: 767px) {
+
   /* line 1427, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comment-form .name {
     padding-right: 0px;
@@ -2049,6 +2149,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 1436, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog.scss */
   .comment-form .email {
     padding-left: 0px;
@@ -2225,6 +2326,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu .main-menu-item ul li .nav-link {
     padding: 35px 20px;
@@ -2286,6 +2388,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 75, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu #search_input_box {
     margin-top: 15px;
@@ -2412,27 +2515,33 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 214, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu {
     padding: 26px 0px;
   }
+
   /* line 218, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .home_menu .main-menu-item {
     padding-left: 0px;
   }
+
   /* line 222, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu .main-menu-item {
     text-align: left !important;
   }
+
   /* line 225, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu .main-menu-item .nav-item {
     padding: 10px 15px !important;
   }
+
   /* line 228, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .main_menu .main-menu-item .nav-item .nav-link {
     padding: 5px 15px !important;
     color: #000;
   }
+
   /* line 235, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-collapse {
     z-index: 9999 !important;
@@ -2443,30 +2552,36 @@ ul {
     background-color: #fff;
     text-align: center !important;
   }
+
   /* line 246, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .dropdown .dropdown-menu {
     transform: scale(1, 0);
     display: none;
     margin-top: 10px;
   }
+
   /* line 253, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .dropdown:hover .dropdown-menu {
     transform: scale(1);
     display: block;
     color: #ff0000;
   }
+
   /* line 260, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .dropdown .dropdown-item:hover {
     color: #ff0000 !important;
   }
+
   /* line 265, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-brand img {
     max-width: 100px;
   }
+
   /* line 269, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-light .navbar-toggler {
     border-color: transparent;
   }
+
   /* line 274, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .menu_icon i {
     color: #fff;
@@ -2474,6 +2589,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 281, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-collapse {
     z-index: 9999 !important;
@@ -2484,6 +2600,7 @@ ul {
     background-color: #fff;
     text-align: center !important;
   }
+
   /* line 291, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-brand img {
     max-width: 100px;
@@ -2494,12 +2611,14 @@ ul {
     display: inline-block;
     top: 10px;
   }
+
   /* line 301, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-light .navbar-toggler {
     border-color: transparent;
     position: absolute;
     left: 0;
   }
+
   /* line 307, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .btn_1 {
     margin-top: 0;
@@ -2507,6 +2626,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 313, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-collapse {
     z-index: 9999 !important;
@@ -2517,6 +2637,7 @@ ul {
     background-color: #fff;
     text-align: center !important;
   }
+
   /* line 323, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-brand img {
     max-width: 100px;
@@ -2527,12 +2648,14 @@ ul {
     display: inline-block;
     top: 10px;
   }
+
   /* line 333, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .navbar-light .navbar-toggler {
     border-color: transparent;
     position: absolute;
     left: 0;
   }
+
   /* line 339, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_menu.scss */
   .btn_1 {
     margin-top: 0;
@@ -2576,8 +2699,8 @@ ul {
 /**************** banner part css start ****************/
 /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
 .banner_part {
-  position: relative;
   background-image: url(../img/bg_image11.jpg);
+  position: relative;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: right;
@@ -2597,6 +2720,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 8, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text {
     height: 650px;
@@ -2604,6 +2728,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 8, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text {
     height: 650px;
@@ -2621,6 +2746,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text h1 {
     font-size: 25px;
@@ -2630,6 +2756,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text h1 {
     font-size: 30px;
@@ -2639,6 +2766,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text h1 {
     font-size: 40px;
@@ -2648,6 +2776,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text h1 {
     font-size: 40px;
@@ -2673,6 +2802,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 53, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text p {
     padding-right: 0;
@@ -2681,6 +2811,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 53, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text p {
     padding-right: 0;
@@ -2688,6 +2819,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 68, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_banner.scss */
   .banner_part .banner_text .btn_1 {
     margin-top: 30px;
@@ -2731,6 +2863,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams {
     padding: 70px 0 115px 15px;
@@ -2738,6 +2871,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams {
     padding: 100px 0 145px 15px;
@@ -2765,6 +2899,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 23, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams .live_stareams_text h2 {
     margin-bottom: 20px;
@@ -2774,6 +2909,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 23, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams .live_stareams_text h2 {
     font-size: 30px;
@@ -2800,6 +2936,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 51, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams .live_stareams_slide {
     margin-left: 0;
@@ -2807,6 +2944,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 51, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
   .live_stareams .live_stareams_slide {
     margin-left: 0;
@@ -2883,13 +3021,15 @@ ul {
 }
 
 /* line 138, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
-.live_stareams .owl-next, .live_stareams .owl-prev {
+.live_stareams .owl-next,
+.live_stareams .owl-prev {
   position: absolute;
   margin-top: 20px;
 }
 
 /* line 141, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_live_stareams.scss */
-.live_stareams .owl-next i, .live_stareams .owl-prev i {
+.live_stareams .owl-next i,
+.live_stareams .owl-prev i {
   font-size: 30px;
   color: #fff;
 }
@@ -2912,6 +3052,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .Latest_War_text {
     height: 400px;
@@ -3015,6 +3156,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 83, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .war_text_item img {
     max-width: 50px;
@@ -3027,6 +3169,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .war_text_item h2 {
     font-size: 20px;
@@ -3034,6 +3177,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .war_text_item h2 {
     font-size: 20px;
@@ -3046,6 +3190,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 105, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .latest_war_list {
     margin-bottom: 40px;
@@ -3058,6 +3203,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 109, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .latest_war_list .war_text_item {
     padding-left: 0;
@@ -3065,6 +3211,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 109, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_Latest_War.scss */
   .Latest_War .latest_war_list .war_text_item {
     padding-left: 0;
@@ -3181,6 +3328,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 78, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-sizer,
   .gallery_part .grid-item {
@@ -3189,6 +3337,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 78, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-sizer,
   .gallery_part .grid-item {
@@ -3197,6 +3346,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 78, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-sizer,
   .gallery_part .grid-item {
@@ -3213,6 +3363,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 98, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-item {
     border: 0px solid transparent;
@@ -3226,6 +3377,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 108, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-item--width-1 {
     width: 100%;
@@ -3233,6 +3385,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 108, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-item--width-1 {
     width: 50%;
@@ -3240,6 +3393,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 108, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .grid-item--width-1 {
     width: 50%;
@@ -3257,6 +3411,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 131, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_gallery_part.scss */
   .gallery_part .sm_weight {
     width: 100%;
@@ -3285,6 +3440,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 7, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_upcomming_war.scss */
   .upcomming_war .upcomming_war_iner {
     height: 350px;
@@ -3292,6 +3448,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 7, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_upcomming_war.scss */
   .upcomming_war .upcomming_war_iner {
     height: 450px;
@@ -3304,6 +3461,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 15, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_upcomming_war.scss */
   .upcomming_war .upcomming_war_iner h2 {
     font-size: 25px;
@@ -3311,6 +3469,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 15, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_upcomming_war.scss */
   .upcomming_war .upcomming_war_iner h2 {
     font-size: 29px;
@@ -3376,6 +3535,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 30, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text {
     padding-left: 0;
@@ -3383,6 +3543,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 30, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text {
     padding-left: 0;
@@ -3390,6 +3551,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 30, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text {
     padding-left: 0;
@@ -3397,6 +3559,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 30, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text {
     padding-left: 0;
@@ -3414,6 +3577,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 47, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text h2 {
     font-size: 25px;
@@ -3424,6 +3588,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 47, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text h2 {
     font-size: 25px;
@@ -3434,6 +3599,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 47, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text h2 {
     font-size: 25px;
@@ -3444,6 +3610,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 47, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text h2 {
     font-size: 28px;
@@ -3469,6 +3636,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 84, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .feature_part_text .feature_part_text_iner {
     padding: 20px 15px 15px;
@@ -3502,6 +3670,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 115, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature {
     margin: 0;
@@ -3509,6 +3678,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 115, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature {
     margin: 0;
@@ -3521,6 +3691,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 124, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature:nth-child(2) {
     margin-top: 30px;
@@ -3528,6 +3699,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 124, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature:nth-child(2) {
     margin-top: 30px;
@@ -3546,6 +3718,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 135, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part {
     padding: 25px 15px;
@@ -3554,6 +3727,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 135, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part {
     margin-top: 25px;
@@ -3567,6 +3741,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 152, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part img {
     margin-bottom: 21px;
@@ -3589,6 +3764,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 168, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3596,6 +3772,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 168, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3603,6 +3780,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 168, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .feature_part .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3622,6 +3800,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 196, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .single_feature_padding {
     padding-top: 70px;
@@ -3629,6 +3808,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 196, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .single_feature_padding {
     padding-top: 70px;
@@ -3636,6 +3816,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 196, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .single_feature_padding {
     padding-top: 70px;
@@ -3643,6 +3824,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 196, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_feature_part.scss */
   .single_feature_padding {
     padding-top: 70px;
@@ -3666,6 +3848,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 10, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text h2 {
     font-size: 25px;
@@ -3675,6 +3858,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 10, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text h2 {
     font-size: 25px;
@@ -3684,6 +3868,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 10, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text h2 {
     font-size: 25px;
@@ -3693,6 +3878,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 10, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text h2 {
     font-size: 28px;
@@ -3708,6 +3894,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 41, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text p {
     margin-bottom: 10px;
@@ -3715,6 +3902,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 41, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text p {
     margin-bottom: 20px;
@@ -3722,6 +3910,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 41, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text p {
     margin-bottom: 20px;
@@ -3734,6 +3923,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text .btn_1 {
     margin-right: 10px;
@@ -3741,6 +3931,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .about_us .about_us_text .btn_1 {
     margin-right: 10px;
@@ -3748,10 +3939,12 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 73, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .learning_img {
     margin-top: 30px;
   }
+
   /* line 77, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .right_time .learning_img {
     margin-top: 0;
@@ -3759,10 +3952,12 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 84, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .learning_img {
     margin-top: 40px;
   }
+
   /* line 89, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .right_time .learning_img {
     margin-top: 0;
@@ -3770,6 +3965,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 98, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_about_us.scss */
   .right_time .about_us_text h2 {
     margin-top: 30px;
@@ -3829,6 +4025,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part {
     padding: 25px 10px;
@@ -3837,6 +4034,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part {
     padding: 30px 15px;
@@ -3845,6 +4043,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part {
     padding: 30px 25px;
@@ -3853,6 +4052,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 33, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part {
     margin-top: 25px;
@@ -3866,6 +4066,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 60, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part img {
     margin-bottom: 21px;
@@ -3888,6 +4089,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 76, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3895,6 +4097,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 76, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3902,6 +4105,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 76, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_use_sasu.scss */
   .use_sasu .single_feature_part h4 {
     margin-bottom: 15px;
@@ -3938,6 +4142,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 8, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part {
     padding: 20px 15px;
@@ -3946,6 +4151,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 8, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part {
     padding: 20px;
@@ -3969,6 +4175,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 30, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part p {
     margin-bottom: 25px;
@@ -4004,6 +4211,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 56, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part .btn_2 {
     padding: 10px 30px;
@@ -4011,6 +4219,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 56, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part .btn_2 {
     padding: 10px 12px;
@@ -4024,6 +4233,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 77, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part ul {
     margin: 16px 0;
@@ -4032,6 +4242,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 77, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_pricing_plan.scss */
   .pricing_part .single_pricing_part ul {
     margin: 20px 0;
@@ -4075,6 +4286,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 4, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part h2 {
     font-size: 30px;
@@ -4083,6 +4295,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 4, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part h2 {
     font-size: 25px;
@@ -4091,6 +4304,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 4, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part h2 {
     font-size: 35px;
@@ -4106,6 +4320,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part p {
     margin-bottom: 20px;
@@ -4113,6 +4328,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part p {
     margin-bottom: 15px;
@@ -4120,6 +4336,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 22, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_cta_part.scss */
   .cta_part p {
     margin-bottom: 30px;
@@ -4160,6 +4377,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 70px 0;
@@ -4167,6 +4385,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 70px 0;
@@ -4174,6 +4393,7 @@ ul {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 100px 0;
@@ -4186,6 +4406,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -4193,6 +4414,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -4200,6 +4422,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -4214,6 +4437,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -4221,6 +4445,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -4228,6 +4453,7 @@ ul {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -4260,6 +4486,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 75, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part .social_icon {
     margin-top: 15px;
@@ -4341,6 +4568,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 144, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon li a {
     margin-left: 0px;
@@ -4349,6 +4577,7 @@ ul {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 144, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon li a {
     margin-left: 0px;
@@ -4362,6 +4591,7 @@ ul {
 }
 
 @media (max-width: 576px) {
+
   /* line 138, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon {
     float: left;
@@ -4381,6 +4611,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 183, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .copyright_text {
     text-align: center !important;
@@ -4405,6 +4636,7 @@ ul {
 }
 
 @media (max-width: 991px) {
+
   /* line 214, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon {
     text-align: center;
@@ -4470,7 +4702,12 @@ h6 {
 }
 
 /* line 117, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.2em;
 }
 
@@ -5126,7 +5363,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 619, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.default-switch input + label {
+.default-switch input+label {
   position: absolute;
   top: 1px;
   left: 1px;
@@ -5143,7 +5380,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 632, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.default-switch input:checked + label {
+.default-switch input:checked+label {
   left: 19px;
 }
 
@@ -5170,7 +5407,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 655, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-switch input + label {
+.primary-switch input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5181,7 +5418,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 663, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-switch input + label:before {
+.primary-switch input+label:before {
   content: "";
   position: absolute;
   left: 0;
@@ -5200,7 +5437,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 677, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-switch input + label:after {
+.primary-switch input+label:after {
   content: "";
   position: absolute;
   top: 1px;
@@ -5218,12 +5455,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 693, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-switch input:checked + label:after {
+.primary-switch input:checked+label:after {
   left: 19px;
 }
 
 /* line 696, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-switch input:checked + label:before {
+.primary-switch input:checked+label:before {
   background: #ff0000;
 }
 
@@ -5250,7 +5487,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 720, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-switch input + label {
+.confirm-switch input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5261,7 +5498,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 728, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-switch input + label:before {
+.confirm-switch input+label:before {
   content: "";
   position: absolute;
   left: 0;
@@ -5280,7 +5517,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 742, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-switch input + label:after {
+.confirm-switch input+label:after {
   content: "";
   position: absolute;
   top: 1px;
@@ -5298,12 +5535,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 758, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-switch input:checked + label:after {
+.confirm-switch input:checked+label:after {
   left: 19px;
 }
 
 /* line 761, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-switch input:checked + label:before {
+.confirm-switch input:checked+label:before {
   background: #4cd3e3;
 }
 
@@ -5330,7 +5567,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 785, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-checkbox input + label {
+.primary-checkbox input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5344,7 +5581,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 798, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-checkbox input:checked + label {
+.primary-checkbox input:checked+label {
   background: url(../img/elements/primary-check.png) no-repeat center center/cover;
   border: none;
 }
@@ -5372,7 +5609,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 822, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-checkbox input + label {
+.confirm-checkbox input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5386,7 +5623,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 835, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-checkbox input:checked + label {
+.confirm-checkbox input:checked+label {
   background: url(../img/elements/success-check.png) no-repeat center center/cover;
   border: none;
 }
@@ -5414,7 +5651,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 859, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.disabled-checkbox input + label {
+.disabled-checkbox input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5434,7 +5671,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 876, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.disabled-checkbox input:checked + label {
+.disabled-checkbox input:checked+label {
   background: url(../img/elements/disabled-check.png) no-repeat center center/cover;
   border: none;
 }
@@ -5462,7 +5699,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 900, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-radio input + label {
+.primary-radio input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5476,7 +5713,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 913, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.primary-radio input:checked + label {
+.primary-radio input:checked+label {
   background: url(../img/elements/primary-radio.png) no-repeat center center/cover;
   border: none;
 }
@@ -5504,7 +5741,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 937, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-radio input + label {
+.confirm-radio input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5518,7 +5755,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 950, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.confirm-radio input:checked + label {
+.confirm-radio input:checked+label {
   background: url(../img/elements/success-radio.png) no-repeat center center/cover;
   border: none;
 }
@@ -5546,7 +5783,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 974, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.disabled-radio input + label {
+.disabled-radio input+label {
   position: absolute;
   left: 0;
   top: 0;
@@ -5566,7 +5803,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 991, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_elements.scss */
-.disabled-radio input:checked + label {
+.disabled-radio input:checked+label {
   background: url(../img/elements/disabled-radio.png) no-repeat center center/cover;
   border: none;
 }
@@ -5723,6 +5960,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /**************** blog part css start ****************/
 @media (max-width: 576px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part {
     padding-bottom: 50px;
@@ -5730,6 +5968,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part {
     padding-bottom: 50px;
@@ -5737,6 +5976,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part {
     padding-bottom: 50px;
@@ -5744,6 +5984,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 2, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part {
     padding-bottom: 50px;
@@ -5763,6 +6004,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 23, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog {
     margin-bottom: 20px;
@@ -5770,6 +6012,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 23, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog {
     margin-bottom: 20px;
@@ -5777,6 +6020,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 23, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog {
     margin-bottom: 20px;
@@ -5811,6 +6055,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 44, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card .card-body {
     padding: 15px 10px;
@@ -5818,6 +6063,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 44, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card .card-body {
     padding: 15px;
@@ -5825,6 +6071,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 44, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card .card-body {
     padding: 20px;
@@ -5871,6 +6118,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card span {
     margin-bottom: 5px;
@@ -5879,6 +6127,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card span {
     margin-bottom: 5px;
@@ -5887,6 +6136,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card span {
     margin-bottom: 5px;
@@ -5895,6 +6145,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 90, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card span {
     margin-bottom: 5px;
@@ -5913,6 +6164,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 112, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card h5 {
     margin-bottom: 5px;
@@ -5921,6 +6173,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 112, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card h5 {
     margin-bottom: 10px;
@@ -5929,6 +6182,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 112, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card h5 {
     margin-bottom: 10px;
@@ -5936,6 +6190,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 112, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card h5 {
     margin-bottom: 10px;
@@ -5965,6 +6220,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 143, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card ul li {
     margin-right: 10px;
@@ -5972,6 +6228,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 143, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card ul li {
     margin-right: 10px;
@@ -5979,6 +6236,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 143, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card ul li {
     margin-right: 10px;
@@ -5986,6 +6244,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 143, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_blog_part.scss */
   .blog_part .single-home-blog .card ul li {
     margin-right: 10px;
@@ -6009,7 +6268,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* line 9, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_contact.scss */
-.contact-info__icon i, .contact-info__icon span {
+.contact-info__icon i,
+.contact-info__icon span {
   color: #8f9195;
   font-size: 27px;
 }
@@ -6075,6 +6335,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 119, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_contact.scss */
   .contact-section .btn_1 {
     margin-bottom: 0px !important;
@@ -6083,6 +6344,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 127, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_contact.scss */
   .contact-section .btn_1 {
     margin-bottom: 0px !important;
@@ -6091,6 +6353,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 135, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_contact.scss */
   .contact-section .btn_1 {
     margin-bottom: 0px !important;
@@ -6099,6 +6362,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 143, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_contact.scss */
   .contact-section .btn_1 {
     margin-bottom: 0px !important;
@@ -6190,6 +6454,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 17, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_breadcrumb.scss */
   .breadcrumb .breadcrumb_iner .breadcrumb_iner_item h2 {
     font-size: 35px;
@@ -6197,6 +6462,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 17, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_breadcrumb.scss */
   .breadcrumb .breadcrumb_iner .breadcrumb_iner_item h2 {
     font-size: 35px;
@@ -6204,6 +6470,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 17, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_breadcrumb.scss */
   .breadcrumb .breadcrumb_iner .breadcrumb_iner_item h2 {
     font-size: 40px;
@@ -6211,6 +6478,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 17, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_breadcrumb.scss */
   .breadcrumb .breadcrumb_iner .breadcrumb_iner_item h2 {
     font-size: 50px;
@@ -6241,6 +6509,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 70px 0;
@@ -6248,6 +6517,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 991px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 70px 0;
@@ -6255,6 +6525,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
+
   /* line 3, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_top {
     padding: 100px 0;
@@ -6267,6 +6538,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -6274,6 +6546,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -6281,6 +6554,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 21, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part {
     margin-bottom: 20px;
@@ -6295,6 +6569,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -6302,6 +6577,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -6309,6 +6585,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+
   /* line 36, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part h4 {
     margin-bottom: 15px;
@@ -6341,6 +6618,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 991px) {
+
   /* line 75, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .single_footer_part .social_icon {
     margin-top: 15px;
@@ -6422,6 +6700,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 144, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon li a {
     margin-left: 0px;
@@ -6430,6 +6709,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
+
   /* line 144, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon li a {
     margin-left: 0px;
@@ -6443,6 +6723,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 576px) {
+
   /* line 138, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon {
     float: left;
@@ -6462,6 +6743,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 991px) {
+
   /* line 183, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .copyright_text {
     text-align: center !important;
@@ -6486,6 +6768,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 991px) {
+
   /* line 214, ../../01 cl html template/03_jun 2019/186_Gaiming_html/sass/_footer.scss */
   .footer_part .footer_icon {
     text-align: center;
