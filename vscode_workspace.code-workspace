@@ -1,28 +1,22 @@
 {
 	"folders": [
 		{
-			"path": "references"
-		},
-		{
-			"path": "code/playground"
-		},
-		{
 			"path": "code/jetson"
-		},
-		{
-			"path": "code/mcu"
 		},
 		{
 			"path": "code/pilotdash"
 		},
 		{
-			"path": "code/tests"
+			"path": "code/mcu"
 		},
 		{
 			"path": "code"
 		},
 		{
 			"path": "."
+		},
+		{
+			"path": "references"
 		}
 	],
 	"settings": {

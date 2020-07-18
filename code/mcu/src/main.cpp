@@ -21,95 +21,48 @@
 #include "../include/uart.hpp"
 #include "gimbal_stuff.h"
 //#include "boost/math/interpolators/cubic_b_spline.hpp"
+#include "InterpolationLib.h"
 
-void setup(){
-
-}
-void loop(){
-  
-}
-/*
-//*DEFINE YOUR GLOBAL VARS HERE*
-
-// If you change this make sure to change in .py in waitingforArduino function.
-
-#include <iostream>
-#include <random>
-#include </usr/include/boost/math/interpolators/cubic_b_spline.hpp>
-#include </usr/include/boost/random/mersenne_twister.hpp>
-#include </usr/include/boost/random/uniform_real_distribution.hpp>
-
-
-#define STM32_READY "<Arduino is ready>"
-#define MS_TO_HZ(x) (1e3/x)
-#define TICK_DURATION_MS (7.0)
-
-static const byte times_flash_ = 3;
+const int numValues = 10;
+double xValues[10] = {   5,  12,  30,  50,  60,  70,  74,  84,  92, 100 };
+double yValues[10] = { 150, 200, 200, 200, 180, 100, 100, 150, 220, 320 };
 
 void setup()
 {
+	//while (!Serial) { ; }
+  init_uart();
+    uart_debugcon.println("hi ");
 
-    Serial.begin(115200);
-  
-    // tell the PC we are ready
-   Serial.println("<Arduino is ready>");
+	//Serial.begin(115200);
+
+	for (float xValue = 0; xValue <= 110; xValue += .25)
+	{
+	  uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 0.0));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 0.5));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 1.0));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::SmoothStep(xValues, yValues, numValues, xValue));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::Linear(xValues, yValues, numValues, xValue, false));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::Linear(xValues, yValues, numValues, xValue, true));
+		uart_debugcon.print(',');
+		uart_debugcon.print(Interpolation::CatmullSpline(xValues, yValues, numValues, xValue));
+		uart_debugcon.print(',');
+		uart_debugcon.println(Interpolation::ConstrainedSpline(xValues, yValues, numValues, xValue));
+	}
 }
-
 
 void loop()
 {
-  //* Nothing to do all is done by hardware. Even no interrupt required. *
-
-      // We begin with an array of samples:
-    std::vector<double> v(6);
-    // And decide on a stepsize:
-    double step = 1;
-
-    v[0] = 5;
-    v[1] = 2.3;
-    v[2] = 3;
-    v[3] = 4.3;
-    v[4] = 2.9;
-    v[5] = 3.1;
-    
-    // make spline of size 6.
-    boost::math::cubic_b_spline<double> spline(v.data(), v.size(), 0 /* start time *, step);
-
-    // start from len/2 to len.
-    
-    long double ctr =0;
-    while(ctr < 6){
-        std::cout << spline(ctr) << "," << std::endl;
-        ctr = ctr + 0.05;
-    }
-
-    // Remove first 3 and add 3 new vals.
-    v[0] = v[3];
-    v[1] = v[4];
-    v[2] = v[5];
-    v[3] = 5.3;
-    v[4] = 2.0;
-    v[5] = 1.6;
-
-
-    std::cout << "done with old spline" << std::endl << std::endl ;
-    // make a spline of size 6. ...
-
-    boost::math::cubic_b_spline<double> spline2(v.data(), v.size(), 0 /* start time *, step);
-
-    // start from len/2 to len.
-    
-    ctr =0;
-    while(ctr < 6){
-        std::cout << spline2(ctr) << "," << std::endl;
-        ctr = ctr + 0.05;
-    }
+  
 }
-*/
 
 #endif
 
-#ifndef DEBUG
+#ifndef DEBUG33
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
@@ -227,9 +180,9 @@ void setup(void){
   // configure pin in output mode
   pinMode(pin, OUTPUT);
 
-  MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
-  MyTim->attachInterrupt(Update_IT_callback);
-  MyTim->resume();
+  //MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
+  //MyTim->attachInterrupt(Update_IT_callback);
+  //MyTim->resume();
 
     // flash LEDs so we know we are alive
     for (byte n = 0; n < times_flash_; n++) {

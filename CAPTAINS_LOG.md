@@ -847,3 +847,125 @@ So the next one will be 0.0.0 alpha
 Also for the next version I will be making a markdown CAPTAINS_LOG
 
 See you in the next version.
+
+14.7.2020  
+9.27 PM     
+turns out you cant retain history even after git mv -f README.md README     
+Its just equivalent of
+``` 
+$ mv README.md README
+$ git rm README.md
+$ git add README
+```
+
+15/07/2020 
+
+2.45 PM 
+So far I have been looking for spline codes for POSIX standards so even if they were to work, they wouldnt work on ardiuno.
+Trying to use this library .. https://github.com/luisllamasbinaburo/Arduino-Interpolation
+
+16.07.2020
+12.50 AM 
+Fuck platformIO and fuck arduino even more ... 
+The codes arent working back again on STM32 , verified if the board is working using online ARM COMPILER https://ide.mbed.com/compiler/#nav:/mbed-os-example-blinky_fresh; 
+Like litreally fuck both arduino environment and platform io ( why not )
+
+Looked into working of freeRTOS, hah uses IAR embedded workbench IDE ( For windows only... paid versions for linux get a quote bs  ) 
+
+Options 
+
+1. Get working with unknown RTOS ... ( Looking for the first time )
+1.1 Use either FreeRTOS on windows 
+1.2 Use Zephyr platform IO 
+1.3 PlatformIO third party FreeRTOS 
+2. Port codes to get working to the ARM mbed APIS. Fuck . ( Little familiar )
+3. FlexTape arduino again ... ( Very FAMILIAR ) 
+
+PROS RTOS 
+More stable , people say .
+I can use standard boost stuff for spline generations etc ... a relief there whew ...    
+ie POSIX compliants
+
+CONS RTOS         
+Change either my this OS ( ie move from Manjaro to Windows to using IAR limited size version )
+Or use prewritten thirdParty versions for STM on PLATFORMIO
+Change entire source code to9 get POSIX compliant , modules availabilitty an ISSUE
+ 
+PROS MBED          
+Familiar a bit , 
+More easier to setup 
+Has vscode like ide 
+
+CONS MBED       
+Not POSIX COMPLIANT 
+Will need to dig SPLINE codes 
+
+PROS FLEXTAPE        
+No need to rewrite the entire project APIs. 
+
+CONS FLEXTAPE        
+May breakdown again in future ... Very unreliable experience 
+
+What I need            
+POSIX compliant spline codes (coz of bsdk floating Points ) , arduino api support (coz of madchod MAVLINK) , stability( fucku arduino) , portability ( fucku platformio) , basically everything with less effort .
+
+They SAY its easier to make a 4feet mirror and then make a 6feet mirror than to make a 6feet mirror. 
+or it takes less time """ to """ than """ . 
+
+So going with porting codes to MBED then to RTOS ( hopefully )
+
+FUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK       TTTTTTTTTTTTTTTTTTTHHHHHHHHHHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIIIIIIIISSSSSSSSSSSSSSSSSSSSSSsss 
+
+1.15 AM 
+Reistalling MBED IDE coz stuff breaks down in Linux , i changed my home dir to ssd 
+Getting STRAIGHT FROM ARCH
+Coz last time it didnt work the normal way ( it didnt work the arch way either ): )
+
+I really dont  wish to port all the bloody CODES , porting isnt a joke 
+Can I go directly to RTOS ... ?    yes , but will 
+
+1.48 PM 
+ARCH desnt work shoews arm clang not registered rmoving it and adding from officvial websirte    
+The stuff was 2.8 GB i deleted it , funny it still shows up in app menu , now downloadng shit inside the semi broken mbed compiler 
+2.20 AM 
+Got MBED IDE running 
+
+16.7.2020
+
+11.37 PM 
+Got splines code running for cpp ![spline/splinePlot.py](sshots/playgsplinecpp.png)
+
+11.43 PM 
+Retrying if things work with arduino ?
+
+Tried using debugger shows ![this message](sshots/debugArduino.png)
+
+Dont know whats the issue.
+Seeing ig things work out well in MBED ie if spline codes work there.
+
+19.07.2020 
+ 
+12.33 AM 
+
+Spent 6 hrs yesterday and 3hrs today tring to get *professional* in this embedded world, 
+simply trying to get the led blinking the *professional* way using bareMetal I think. 
+
+Found a old dated blog to setup eclipse and use RTOS on it,  see this https://www.carminenoviello.com/2014/12/28/setting-gcceclipse-toolchain-stm32nucleo-part-1/
+This is justg the setup part. 
+
+Failed like shit yesterday, tried 2 Operating systems this manjaro and shitty windows      
+Today 
+Was struck on how to flash via stlink, i was searching for a GUI like shown in windows there, however found a command line interface ( noob me ) for the linux version 
+Shown by this 
+https://amitesh-singh.github.io/stm32/2017/04/09/setting-stm32-dev-environment-arch-linux.html
+
+
+The amount of different things and commands I have tried to just get the board flashing is beyond the scope and remebering and a complete chaos, If i were to replicate it it would be fully impossible, I dont think i will bw able to write a GoodEnough Readme for this setup, GOD help someone who will do this setup, you are on your own. 
+
+Still the LED isnt exactly blinking, but I **do** have flashed the file 
+using this 
+```
+st-flash write -V1 /home/zero/eclipse-workspace/blinkyretry/Debug/blinkyretry.hex 0x08000000
+```
+
+Hopefully this is a correct approach, lemme see bis balt, Tssüchs . 
