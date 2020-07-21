@@ -21,95 +21,21 @@
 #include "../include/uart.hpp"
 #include "gimbal_stuff.h"
 //#include "boost/math/interpolators/cubic_b_spline.hpp"
-
-void setup(){
-
-}
-void loop(){
-  
-}
-/*
-//*DEFINE YOUR GLOBAL VARS HERE*
-
-// If you change this make sure to change in .py in waitingforArduino function.
-
-#include <iostream>
-#include <random>
-#include </usr/include/boost/math/interpolators/cubic_b_spline.hpp>
-#include </usr/include/boost/random/mersenne_twister.hpp>
-#include </usr/include/boost/random/uniform_real_distribution.hpp>
-
-
-#define STM32_READY "<Arduino is ready>"
-#define MS_TO_HZ(x) (1e3/x)
-#define TICK_DURATION_MS (7.0)
-
-static const byte times_flash_ = 3;
+#include "InterpolationLib.h"
 
 void setup()
 {
 
-    Serial.begin(115200);
-  
-    // tell the PC we are ready
-   Serial.println("<Arduino is ready>");
 }
-
 
 void loop()
 {
-  //* Nothing to do all is done by hardware. Even no interrupt required. *
-
-      // We begin with an array of samples:
-    std::vector<double> v(6);
-    // And decide on a stepsize:
-    double step = 1;
-
-    v[0] = 5;
-    v[1] = 2.3;
-    v[2] = 3;
-    v[3] = 4.3;
-    v[4] = 2.9;
-    v[5] = 3.1;
-    
-    // make spline of size 6.
-    boost::math::cubic_b_spline<double> spline(v.data(), v.size(), 0 /* start time *, step);
-
-    // start from len/2 to len.
-    
-    long double ctr =0;
-    while(ctr < 6){
-        std::cout << spline(ctr) << "," << std::endl;
-        ctr = ctr + 0.05;
-    }
-
-    // Remove first 3 and add 3 new vals.
-    v[0] = v[3];
-    v[1] = v[4];
-    v[2] = v[5];
-    v[3] = 5.3;
-    v[4] = 2.0;
-    v[5] = 1.6;
-
-
-    std::cout << "done with old spline" << std::endl << std::endl ;
-    // make a spline of size 6. ...
-
-    boost::math::cubic_b_spline<double> spline2(v.data(), v.size(), 0 /* start time *, step);
-
-    // start from len/2 to len.
-    
-    ctr =0;
-    while(ctr < 6){
-        std::cout << spline2(ctr) << "," << std::endl;
-        ctr = ctr + 0.05;
-    }
+  
 }
-*/
 
 #endif
 
-#ifndef DEBUG
+#ifndef DEBUG33 // Basically runs every time remove 33 if need to trest above debug part code
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
@@ -214,22 +140,12 @@ void setup(void){
     init_uart();
     //init_gimbal();
 
-    // Setting up the tick based ISR.
-     #if defined(TIM1)
-      TIM_TypeDef *Instance = TIM1;
-    #else
-      TIM_TypeDef *Instance = TIM2;
-    #endif
-
-  // Instantiate HardwareTimer object. Thanks to 'new' instanciation, HardwareTimer is not destructed when setup() function is finished.
-  HardwareTimer *MyTim = new HardwareTimer(Instance);
-
   // configure pin in output mode
   pinMode(pin, OUTPUT);
 
-  MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
-  MyTim->attachInterrupt(Update_IT_callback);
-  MyTim->resume();
+  //MyTim->setOverflow(MS_TO_HZ(TICK_DURATION_MS), HERTZ_FORMAT); 
+  //MyTim->attachInterrupt(Update_IT_callback);
+  //MyTim->resume();
 
     // flash LEDs so we know we are alive
     for (byte n = 0; n < times_flash_; n++) {
