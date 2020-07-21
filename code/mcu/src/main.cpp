@@ -23,36 +23,9 @@
 //#include "boost/math/interpolators/cubic_b_spline.hpp"
 #include "InterpolationLib.h"
 
-const int numValues = 10;
-double xValues[10] = {   5,  12,  30,  50,  60,  70,  74,  84,  92, 100 };
-double yValues[10] = { 150, 200, 200, 200, 180, 100, 100, 150, 220, 320 };
-
 void setup()
 {
-	//while (!Serial) { ; }
-  init_uart();
-    uart_debugcon.println("hi ");
 
-	//Serial.begin(115200);
-
-	for (float xValue = 0; xValue <= 110; xValue += .25)
-	{
-	  uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 0.0));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 0.5));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::Step(xValues, yValues, numValues, xValue, 1.0));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::SmoothStep(xValues, yValues, numValues, xValue));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::Linear(xValues, yValues, numValues, xValue, false));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::Linear(xValues, yValues, numValues, xValue, true));
-		uart_debugcon.print(',');
-		uart_debugcon.print(Interpolation::CatmullSpline(xValues, yValues, numValues, xValue));
-		uart_debugcon.print(',');
-		uart_debugcon.println(Interpolation::ConstrainedSpline(xValues, yValues, numValues, xValue));
-	}
 }
 
 void loop()
@@ -62,7 +35,7 @@ void loop()
 
 #endif
 
-#ifndef DEBUG33
+#ifndef DEBUG33 // Basically runs every time remove 33 if need to trest above debug part code
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
