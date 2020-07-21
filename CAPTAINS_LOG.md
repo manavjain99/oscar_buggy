@@ -945,8 +945,7 @@ Seeing ig things work out well in MBED ie if spline codes work there.
 
 19.07.2020 
  
-12.33 AM 
-
+12.33 AM  ___
 Spent 6 hrs yesterday and 3hrs today tring to get *professional* in this embedded world, 
 simply trying to get the led blinking the *professional* way using bareMetal I think. 
 
@@ -969,3 +968,26 @@ st-flash write -V1 /home/zero/eclipse-workspace/blinkyretry/Debug/blinkyretry.he
 ```
 
 Hopefully this is a correct approach, lemme see bis balt, Tssüchs . 
+
+9.30 PM   
+___
+
+Continued this [blog](https://www.carminenoviello.com/2015/06/22/running-freertos-stm32nucleo-free-gcceclipse-toolchain/)
+
+Spent 4 hrs still trying to figure things out , and how stuff works (still a lot unclear ) 
+Managed to glow the led based on this [repo's](https://github.com/cnoviello/stm32-nucleof4) code compiled on eclipse.       
+
+Flashed the led using this [help](https://stackoverflow.com/questions/37644823/how-to-flash-stm32-using-only-linux-terminal)
+
+Wrote a bash script to run those commands, works wierdly still testing stuff..     
+In general Stuff is difficult , just getting the led to blink seems impossible ( spent over 15 hrs now ) , do i really need to upgrade/port to RTOS.
+
+
+21/07/2020 
+
+9.10 PM 
+
+Wrote a working bash script to flash the STM32 properly from .elf files, now adding the project, 
+Now On I will be parallery working on RTOS and will be fixing spline codes on bloody ARUDINO 
+
+Resuming proper spline testing for ARDUINO for the 4 th time IG, have lost the count, hopefully the above used cpp code works.
