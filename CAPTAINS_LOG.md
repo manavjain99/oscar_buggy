@@ -1002,3 +1002,25 @@ Found a nice thing online [freeRTOS arduino implementations](https://create.ardu
 
 As mentioned earlier, arduino is fucked even with the official ide, a lot of incompatible changes are needed to be done to get the code running . 
 
+2.23 AM 
+Not A Joke this RTOS thing, it takes around a page full of code just to send or recieve chars .... 
+
+Fixing flex tape arduino best , 
+Porting to MBED apis , 2nd best
+using RTOS no best
+
+issue platformio doesnt seem to upload the code to the  board well 
+
+possible solns tried 
+1. Use RTOS ( not building a rocket, dont need )
+2. Port to MBED , rewrite all the stuff ( havent tried  )
+3. Flex tape platform IO ie try led code ( didnt work i think )
+4. use another OS ( ie windows for platform io )
+5. port to fit the native arduino ( ie downgrade )
+
+Also A little FEEDBACK to myself 
+
+I do need to improve and include these things in these NOTES with proper keywords for finding things easily 
+
+the file(s) location that i have tried and the commit message or ID
+Keywords for tried planned debug , issue, and NOTEfor imp things
