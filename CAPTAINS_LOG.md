@@ -991,3 +991,14 @@ Wrote a working bash script to flash the STM32 properly from .elf files, now add
 Now On I will be parallery working on RTOS and will be fixing spline codes on bloody ARUDINO 
 
 Resuming proper spline testing for ARDUINO for the 4 th time IG, have lost the count, hopefully the above used cpp code works.
+
+10.58 PM    
+
+Theres some issues in platform IO i guess, installing plain ol arduino IDE to see if things work out well 
+
+Found a nice thing online [freeRTOS arduino implementations](https://create.arduino.cc/projecthub/feilipu/using-freertos-semaphores-in-arduino-ide-b3cd6c?ref=similar&ref_id=105093&offset=3)
+
+12.28 AM     
+
+As mentioned earlier, arduino is fucked even with the official ide, a lot of incompatible changes are needed to be done to get the code running . 
+

@@ -36,10 +36,10 @@ void loop()
 #endif
 
 #ifndef DEBUG33 // Basically runs every time remove 33 if need to trest above debug part code
-#include "../include/main.h"
+//#include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
-#include "gimbal_stuff.h"
+#include "../include/gimbal_stuff.h"
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
