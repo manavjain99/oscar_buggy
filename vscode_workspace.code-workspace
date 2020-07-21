@@ -1,20 +1,25 @@
 {
 	"folders": [
 		{
-			"name": "gimbal_control",
-			"path": "code/gimbal_control"
+			"path": "code/jetson"
 		},
 		{
-			"path": "code/vision"
+			"path": "code/pilotdash"
+		},
+		{
+			"path": "code/mcu"
+		},
+		{
+			"path": "code"
+		},
+		{
+			"path": "."
 		},
 		{
 			"path": "references"
 		},
 		{
 			"path": "code/playground"
-		},
-		{
-			"path": "."
 		}
 	],
 	"settings": {
