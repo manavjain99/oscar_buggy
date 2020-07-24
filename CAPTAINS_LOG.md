@@ -1024,3 +1024,25 @@ I do need to improve and include these things in these NOTES with proper keyword
 
 the file(s) location that i have tried and the commit message or ID
 Keywords for tried planned debug , issue, and NOTEfor imp things
+
+
+6.15 PM 
+
+Been thinking how to proceed for the past 4 hrs and setting up stuff 
+Platform IO is shit tried the following things on platform io 
+1. blinky code arduino 
+2. blinky code mbed
+3. windows both versions 
+Just doesnt work 
+tried luck with freeRTOS, way too ugly to configure ....
+Looked into zephyr platform IO , also way vauge for me at the moment , didnt find much easier 
+Came to using MBED , the ide is having some issues the cpp linter doesnt work, on manjaro insdtalled everything on windows 
+
+Now finally PORTING all the codes to fit MBED apis         
+
+Heres a list of all the files I need to edit        
+
+gimbalstuff          
+main.cpp        
+uart.cpp         
+
