@@ -10,24 +10,24 @@ resize the image to (608,608,3)"""
 import numpy as np
 import cv2
 
-def yolo_v3_opencv(frame):
-    size = (608,608)
-    confidence_threshold = 0.5
-    nms_threshold = 0.6
+def yolo_v3_opencv(img, size, confidence_threshold, nms_threhold, net, layer_names, output_layers):
+    #size = (608,608)
+    #confidence_threshold = 0.5
+    #nms_threshold = 0.6
     class_ids = []
     confidences = []
     boxes = []
     area = []
     centers = []
     labels = []
-    classes = []
-    net = cv2.dnn.readNet('yolov3.weights', 'yolov3.cfg')
-    with open(os.getcwd() + 'coco_classes.txt', 'r') as f:
-        classes = [line.strip() for line in f.readlines()]
-    layer_names = net.getLayerNames()
-    outputLayers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-    img = frame
-    img = cv2.resize(img, size)
+    #classes = []
+    #net = cv2.dnn.readNet('yolov3.weights', 'yolov3.cfg')
+    #with open(os.getcwd() + 'coco_classes.txt', 'r') as f:
+        #classes = [line.strip() for line in f.readlines()]
+    #layer_names = net.getLayerNames()
+    #outputLayers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+    #img = frame
+    #img = cv2.resize(img, size)
     height, width, channels = img.shape
     blob = cv2.dnn.blobFromImage(img,1/255,size,(0,0,0),True,crop = False)
     net.setInput(blob)
@@ -54,13 +54,15 @@ def yolo_v3_opencv(frame):
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
-            area.append((w * h) / (width * height))
+            areas = (w*h) / (width * height)
+            area.append(areas)
             label = str(classes[class_ids[i]])
             labels.append(label)
             # color = colors[i]
             centers.append([x, y])
-            #cv2.rectangle(img, (x, y), (x + w, y + h), 2)  # color,2)
-            #cv2.putText(img, label, (x, y + 30), font, 1, (255, 255, 255), 2)
+            cv2.rectangle(img, (x, y), (x + w, y + h), 2)  # color,2)
+            cv2.putText(img, label, (x, y + 30), font, 1, (255, 255, 255), 2)
+            cv2.putText(img, areas, (x, y + 100), font, 1, (255,255,255),2)
     return area, centers, labels
     #cv2.imshow("Image", img)
     #cv2.waitKey(0)
