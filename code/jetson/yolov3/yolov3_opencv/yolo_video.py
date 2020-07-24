@@ -13,6 +13,8 @@ if __name__ == '__main__':
     confidence_threshold = 0.5
     nms_threshold = 0.6
     net = cv2.dnn.readNet('yolov3.weights', 'yolov3.cfg')
+    net.setPreferableBackend(cv.dnn.DNN_BACKEND_OPENCV)
+    net.setPreferableTarget(cv.dnn.DNN_TARGET_OPENCL_FP16)
     with open(os.getcwd() + 'coco_classes.txt', 'r') as f:
         classes = [line.strip() for line in f.readlines()]
     layer_names = net.getLayerNames()
