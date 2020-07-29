@@ -17,7 +17,7 @@
 #include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
-#include "gimbal_stuff.h"
+#include "../include/gimbal_stuff.h"
 
 /*DEFINE YOUR GLOBAL VARS HERE*/
 
@@ -25,8 +25,8 @@ char last_command[500] = "";
 bool newDataFromPC = false;
 
 /*DEFINE YOUR PRIVATE VARS HERE*/
-HardwareSerial uart_gimbal (PA12, PA11);  //Board RX, TX
-HardwareSerial uart_debugcon (PA10, PA9);  //Board RX, TX
+BufferedSerial uart_gimbal (PA12, PA11);  //Board RX, TX
+BufferedSerial uart_debugcon (PA10, PA9);  //Board RX, TX
 
 
 static const u_int16_t buffSize = 500;
@@ -36,6 +36,9 @@ static const char endMarker = '>';
 static byte bytesRecvd = 0;
 static bool readInProgress = false;
 
+#define MAXIMUM_BUFFER_SIZE                                                  128
+
+char buf[MAXIMUM_BUFFER_SIZE] = {0};
 
 /*DEFINE YOUR PRIVATE FUNCTION PROTOTYPES HERE*/
 static void parseData();
@@ -45,9 +48,25 @@ static void parseData();
 
 
 void init_uart(void){
-    uart_obcomp.begin(921600);
-    uart_debugcon.begin(921600);
-    uart_gimbal.begin(115200);   
+    uart_obcomp.set_baud(921600);
+    uart_debugcon.set_baud(921600);
+    uart_gimbal.set_baud(115200);   
+
+    uart_obcomp.set_format(
+        /* bits */ 8,
+        /* parity */ BufferedSerial::None,
+        /* stop bit */ 1
+    );
+    uart_debugcon.set_format(
+        /* bits */ 8,
+        /* parity */ BufferedSerial::None,
+        /* stop bit */ 1
+    );
+    uart_gimbal.set_format(
+        /* bits */ 8,
+        /* parity */ BufferedSerial::None,
+        /* stop bit */ 1
+    );
 }
 
 
@@ -123,9 +142,9 @@ void rcv_obcomp(void){
 
     // receive data from PC and save it into inputBuffer
     
-  while(uart_obcomp.available()) {
+  while(uart_obcomp.readable()) {
 
-    char x = uart_obcomp.read();
+    char x = uart_obcomp.read(buf, sizeof(buf));
 
       // the order of these IF clauses is significant
       
@@ -161,13 +180,13 @@ void ack_obcomp(void){
  
   if (newDataFromPC) {
     newDataFromPC = false;
-    uart_obcomp.print(ACK_REC_PARAMS);
+    uart_obcomp.write(ACK_REC_PARAMS, sizeof(ACK_REC_PARAMS));
   }   
 }
 
 void send_until_ack(void){
     while(1){
-        uart_obcomp.print(ACK_REC_PARAMS);
+        uart_obcomp.write(ACK_REC_PARAMS,sizeof(ACK_REC_PARAMS));
 
     }
 }

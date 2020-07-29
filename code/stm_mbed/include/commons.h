@@ -14,8 +14,6 @@
 #ifndef commons_h
 #define commons_h
 
-#include "MemoryFree.h"
-#include "pgmStrToRAM.h"
 
 /* EXTERN YOUR GLOBAL VARS HERE*/
 

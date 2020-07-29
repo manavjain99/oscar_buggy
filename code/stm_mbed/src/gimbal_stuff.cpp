@@ -13,10 +13,10 @@
 * ------------------------------------------------------------
 */
 
-#include "main.h"
-#include "commons.h"
-#include "gimbal_stuff.h"
-#include "uart.hpp"
+#include "../include/main.h"
+#include "../include/commons.h"
+#include "../include/gimbal_stuff.h"
+#include "../include/uart.hpp"
 #include "../mavlink/include/mavlink_types.h"
 #include "../mavlink/include/mavlink.h"
 
@@ -230,12 +230,12 @@ static int pt_num_ = 0;
     
     mavlink_message_t msg;
     mavlink_status_t status;
-    
+    char buf[64] = {0};
     requestAttitude();
   
-    while (uart_gimbal.available() > 0) {
+    while (uart_obcomp.readable() > 0) {
       
-      uint8_t c = uart_gimbal.read();
+      uint8_t c = uart_gimbal.read(buf, sizeof(buf));
       //trying to grab msg
       if (mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {   
         switch (msg.msgid) {
@@ -264,11 +264,11 @@ static int pt_num_ = 0;
 
 void init_gimbal(void){
   setAngles(3, -30, 20);
-  delay(1000);
+  wait(0.5);
   setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
-  delay(1000);
+  wait(0.5);
   setAngles(-3, 30, -20);
-  delay(1000);
+  wait(0.5);
   setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
   
   read_mavlink_storm32();
@@ -296,11 +296,18 @@ void gimbal_math(void){
       del_gimbal_pitch = 0;
     }
     #ifdef UART_DEBUG
-    uart_debugcon.print("refresh time ");
-    uart_debugcon.print(new_msg_time_MS);
-    uart_debugcon.print(" ");
-    uart_debugcon.print("timestep ");
-    uart_debugcon.println(timeStep_);
+    string debugMsg = "refresh time ";
+
+    //debugMsg = "refresh time ";
+    uart_debugcon.write(debugMsg , sizeof(debugMsg));
+    debugMsg = to_string(new_msg_time_MS);
+    uart_debugcon.write(debugMsg , sizeof(debugMsg));
+    
+    //uart_debugcon.write(debugMsg , sizeof(debugMsg));
+//
+    //uart_debugcon.print(" ");
+    //uart_debugcon.print("timestep ");
+    //uart_debugcon.println(timeStep_);
 
     #endif 
   if(newDataFromPC == true || timeStep_ > new_msg_time_MS){

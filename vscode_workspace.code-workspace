@@ -1,25 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "code/jetson"
-		},
-		{
-			"path": "code/pilotdash"
-		},
-		{
 			"path": "code/mcu"
-		},
-		{
-			"path": "code"
 		},
 		{
 			"path": "."
 		},
 		{
-			"path": "references"
+			"path": "code/playground"
 		},
 		{
-			"path": "code/playground"
+			"path": "code/stm_mbed"
 		}
 	],
 	"settings": {
@@ -35,7 +26,11 @@
 			"vector": "cpp",
 			"string_view": "cpp",
 			"initializer_list": "cpp",
-			"cmath": "cpp"
+			"cmath": "cpp",
+			"condition_variable": "cpp",
+			"future": "cpp",
+			"mutex": "cpp",
+			"*.ipp": "cpp"
 		}
 	}
 }

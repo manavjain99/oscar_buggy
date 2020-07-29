@@ -24,9 +24,9 @@
 #define ACK_STM "<STM_ACK>"
 #define STM_READY "<STM_READY>"
 
-extern HardwareSerial uart_obcomp;
-extern HardwareSerial uart_debugcon;
-extern HardwareSerial uart_gimbal ;
+extern BufferedSerial uart_obcomp;
+extern BufferedSerial uart_debugcon;
+extern BufferedSerial uart_gimbal ;
 
 extern bool newDataFromPC;
 

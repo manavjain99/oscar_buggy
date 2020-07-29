@@ -1,9 +1,34 @@
-/* mbed Microcontroller Library
+/* 
+ Author: Param Deshpande
+ * Date created:  Sat 25 Apr 19:21:45 IST 2020
+ * Description: 
+ * Main file for the stm32 MCU responsilble for controlling the gimbal and the buggy.
+ * mbed Microcontroller Library
  * Copyright (c) 2019 ARM Limited
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#define DEBUG_MAIN
+
+#ifdef DEBUG_MAIN
+
+int main(void){
+
+    while(1){
+
+    }
+    return 0;
+}
+
+#endif
+
+#ifndef DEBUG_MAIN
+
 #include "mbed-os/mbed.h"
+#include "include/main.h"
+#include "include/commons.h"
+#include "include/uart.hpp"
+#include "include/gimbal_stuff.h"
 
 
 #define MAXIMUM_BUFFER_SIZE                                                  32
@@ -29,12 +54,13 @@ int main(void)
 
     while (1) {
             led = true;
-
+        serial_port.readable();
         if (uint32_t num = serial_port.read(buf, sizeof(buf))) {
             // Toggle the LED.
-
+            
             // Echo the input back to the terminal.
             serial_port.write(buf, num);
         }
     }
 }
+#endif

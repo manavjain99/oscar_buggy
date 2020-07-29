@@ -15,7 +15,8 @@
 #ifndef main_h
 #define main_h
 
-#include <Arduino.h>
+#include "mbed-os/mbed.h"
+
 #include <cmath>
 #include <string> // for string and to_string() 
 

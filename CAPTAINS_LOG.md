@@ -1042,7 +1042,21 @@ Now finally PORTING all the codes to fit MBED apis
 
 Heres a list of all the files I need to edit        
 
-gimbalstuff          
+gimbalstuff.cpp       
 main.cpp        
 uart.cpp         
 
+29.07.2020 
+
+9.20 PM 
+I have ordered a new STM nucleo board as a backup, 
+Juggling on Windows betn VSCODE and MBED srudio, 
+Starting porting of CODES . 
+
+Starting with 1 . 
+uart.cpp
+then gimbal then main 
+
+11 pm 
+
+Partially ported wrote gimbal and uart 
