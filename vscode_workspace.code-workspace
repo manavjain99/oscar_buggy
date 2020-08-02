@@ -4,13 +4,10 @@
 			"path": "code/mcu"
 		},
 		{
-			"path": "."
-		},
-		{
-			"path": "code/playground"
-		},
-		{
 			"path": "code/stm_mbed"
+		},
+		{
+			"path": "code/mbed_testing"
 		}
 	],
 	"settings": {
@@ -30,7 +27,8 @@
 			"condition_variable": "cpp",
 			"future": "cpp",
 			"mutex": "cpp",
-			"*.ipp": "cpp"
+			"*.ipp": "cpp",
+			"cstddef": "cpp"
 		}
 	}
 }

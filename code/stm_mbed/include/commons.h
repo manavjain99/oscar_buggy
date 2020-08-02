@@ -14,12 +14,28 @@
 #ifndef commons_h
 #define commons_h
 
+#include "../mbed-os/mbed.h"
 
+#include <cstdlib>
+//#include <iostream>
+#include <cmath>
+#include <string> // for string and to_string() 
+
+/*GLOBAL DEFS*/ 
+#define TICK_DURATION_MS (300.0)
+#define UART_DEBUG
+
+typedef char byte ;
 /* EXTERN YOUR GLOBAL VARS HERE*/
 
-//extern 
-//extern 
+extern float object_area;
+extern float object_cx  ; 
+extern float object_cy  ;
 
+extern float frame_ht ;
+extern float frame_wd ;
+
+extern float new_msg_time_MS;
 
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
 

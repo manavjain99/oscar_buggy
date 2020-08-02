@@ -1060,3 +1060,16 @@ then gimbal then main
 11 pm 
 
 Partially ported wrote gimbal and uart 
+
+30.7.2020      
+10.47 PM       
+Seems some compiler bugs in mbed c/cpp compatibily  
+[ERROR] Warning: L3912W: Option 'legacyalign' is deprecated.     
+
+3/8/2020 
+12.35 AM 
+
+Ported compilable code for MBED , had a discussion was asked to use baremetal , above my paygrade honesstly .. 
+
+Continuing debugging on mbed doesnt show any outputs ps this is the [current main file](code/stm_mbed/main.cpp)
+

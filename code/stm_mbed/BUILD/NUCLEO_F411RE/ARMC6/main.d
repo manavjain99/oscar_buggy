@@ -236,4 +236,5 @@ BUILD\NUCLEO_F411RE\ARMC6\main.o: main.cpp \
   mbed-os\platform\mbed_mpu_mgmt.h mbed-os\hal\mpu_api.h \
   mbed-os\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\mbed_stats.h mbed-os\platform\Callback.h \
-  mbed-os\platform\ScopedLock.h
+  mbed-os\platform\ScopedLock.h include\commons.h \
+  include\..\mbed-os\mbed.h include\nucleo_ports.h include\nucleo_uart.h

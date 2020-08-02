@@ -11,12 +11,11 @@
 * meet someday, and you think this stuff is worth it, you can
 * buy me a beer in return.
 * ------------------------------------------------------------
-*/
+*///
 
-#include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/gimbal_stuff.h"
-#include "../include/uart.hpp"
+#include "../include/nucleo_uart.h"
 #include "../mavlink/include/mavlink_types.h"
 #include "../mavlink/include/mavlink.h"
 
@@ -26,6 +25,9 @@
 int del_gimbal_roll  = 0;
 int del_gimbal_pitch = 0;
 int del_gimbal_yaw   = 0;
+
+float new_msg_time_MS = 0;
+
 
 float a2x = 0 ;
 float b2x = 0 ;
@@ -131,7 +133,6 @@ static int pt_num_ = 0;
       float f;
   };
 
-
   void requestAttitude(){
 
     mavlink_message_t msg;
@@ -151,7 +152,6 @@ static int pt_num_ = 0;
     uart_gimbal.write(buf, len);   
     
   }
-
   void setParameter(int id, int val){
 
       intFloat parameterValue;
@@ -164,7 +164,6 @@ static int pt_num_ = 0;
       uart_gimbal.write(buf, len); 
         
   }
-
 
   void setAngles(float roll, float pitch, float yaw){
     
@@ -264,13 +263,14 @@ static int pt_num_ = 0;
 
 void init_gimbal(void){
   setAngles(3, -30, 20);
-  wait(0.5);
+  ThisThread::sleep_for(500ms);
   setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
-  wait(0.5);
+  ThisThread::sleep_for(500ms);
   setAngles(-3, 30, -20);
-  wait(0.5);
+  ThisThread::sleep_for(500ms);
   setAngles(total_gimbal_roll_, total_gimbal_pitch_, total_gimbal_yaw_);
-  
+  ThisThread::sleep_for(500ms);
+
   read_mavlink_storm32();
 
 }
@@ -299,9 +299,9 @@ void gimbal_math(void){
     string debugMsg = "refresh time ";
 
     //debugMsg = "refresh time ";
-    uart_debugcon.write(debugMsg , sizeof(debugMsg));
-    debugMsg = to_string(new_msg_time_MS);
-    uart_debugcon.write(debugMsg , sizeof(debugMsg));
+    //uart_debugcon.write(debugMsg , sizeof(debugMsg));
+    //debugMsg = to_string(new_msg_time_MS);
+    //uart_debugcon.write(debugMsg , sizeof(debugMsg));
     
     //uart_debugcon.write(debugMsg , sizeof(debugMsg));
 //
@@ -338,7 +338,7 @@ void orient_gimbal(void){
   // Takes care of updating delta angles. 
   gimbal_math();
   #ifndef DEBUG_GIMBALMATH
-
+  
   inst_gimbal_roll_  += del_gimbal_roll;
   inst_gimbal_pitch_ += del_gimbal_pitch;
   inst_gimbal_yaw_   += del_gimbal_yaw;
@@ -348,7 +348,8 @@ void orient_gimbal(void){
   inst_gimbal_yaw_   = CHECK_MAX(inst_gimbal_yaw_, MAX_GIMBAL_YAW);
   
   #ifdef UART_DEBUG
-  
+  //string debugMsg = "inst yaw ";
+  //debugMsg.append(to_string(inst_gimbal_yaw_));
   //uart_debugcon.print("total pitch");
   //uart_debugcon.print(" ");
   //uart_debugcon.print(total_gimbal_pitch_);
@@ -364,21 +365,22 @@ void orient_gimbal(void){
   //uart_debugcon.print(inst_gimbal_pitch_);
   //uart_debugcon.print(" ");
   
-  uart_debugcon.print("inst yaw");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(inst_gimbal_yaw_);
-  uart_debugcon.print(" ");
+  //uart_debugcon.write(debugMsg,sizeof(debugMsg));
+  //uart_debugcon.print("inst yaw");
+  //uart_debugcon.print(" ");
+  //uart_debugcon.print(inst_gimbal_yaw_);
+  //uart_debugcon.print(" ");
   
   //uart_debugcon.print("del pitch");
   //uart_debugcon.print(" ");
   //uart_debugcon.print(del_gimbal_pitch);
-  //uart_debugcon.print(" ");
-  
-  uart_debugcon.print("del yaw");
-  uart_debugcon.print(" ");
-  uart_debugcon.print(del_gimbal_yaw);
-  
-  uart_debugcon.println(" ");
+  //  //uart_debugcon.print(" ");
+    //
+  //  uart_debugcon.print("del yaw");
+    ////uart_debugcon.print(" ");
+    //uart_debugcon.print(del_gimbal_yaw);
+  //  
+  //uart_debugcon.println(" ");
     
   #endif 
 

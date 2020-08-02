@@ -8,59 +8,45 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#define DEBUG_MAIN
-
-#ifdef DEBUG_MAIN
-
-int main(void){
-
-    while(1){
-
-    }
-    return 0;
-}
-
-#endif
-
-#ifndef DEBUG_MAIN
-
 #include "mbed-os/mbed.h"
-#include "include/main.h"
+
 #include "include/commons.h"
-#include "include/uart.hpp"
-#include "include/gimbal_stuff.h"
+#include "include/nucleo_ports.h"
+#include "include/nucleo_uart.h"
+//#include "include/gimbal_stuff.h"
 
 
-#define MAXIMUM_BUFFER_SIZE                                                  32
 
-// Create a DigitalOutput object to toggle an LED whenever data is received.
+/* PRIVATE VARIABLES */
+
 static DigitalOut led(LED1);
 
-// Create a BufferedSerial object with a default baud rate.
-static BufferedSerial serial_port(PA_9, PA_10);
+/* PUBLIC VARIABLES */
 
-int main(void)
-{
-    // Set desired properties (9600-8-N-1).
-    serial_port.set_baud(9600);
-    serial_port.set_format(
-        /* bits */ 8,
-        /* parity */ BufferedSerial::None,
-        /* stop bit */ 1
-    );
+/* FUNCTION PROTOTYPES */
+void blink_ntimes(uint8_t );
 
-    // Application buffer to receive the data
-    char buf[MAXIMUM_BUFFER_SIZE] = {0};
+int main(void){
+    //setup 
+
+    //blink_ntimes(3);
+        
+    //init_uart();
+    //init_gimbal();
 
     while (1) {
             led = true;
-        serial_port.readable();
-        if (uint32_t num = serial_port.read(buf, sizeof(buf))) {
-            // Toggle the LED.
-            
-            // Echo the input back to the terminal.
-            serial_port.write(buf, num);
-        }
     }
 }
-#endif
+
+void blink_ntimes(uint8_t ntimes_){
+    // flash LEDs so we know we are alive
+    static DigitalOut led(LED1);
+    for (uint16_t n = 0; n < ntimes_; n++) {
+       led = true;
+       ThisThread::sleep_for(200ms);
+       led = false;
+       ThisThread::sleep_for(200ms);
+    }
+}
+

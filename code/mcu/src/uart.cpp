@@ -14,7 +14,6 @@
 */
 
 
-#include "../include/main.h"
 #include "../include/commons.h"
 #include "../include/uart.hpp"
 #include "gimbal_stuff.h"
