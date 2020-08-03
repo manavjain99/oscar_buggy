@@ -21,7 +21,7 @@ static DigitalOut led(LED1);
 
 // Create a BufferedSerial object with a default baud rate.
 //static BufferedSerial serial_port(PA_9, PA_10);
-//void blink_ntimes(uint8_t );
+void blink_ntimes(uint8_t );
 
 
 int main()
@@ -29,13 +29,13 @@ int main()
     // Initialise the digital pin LED1 as an output
     DigitalOut led(LED1);
       // Set desired properties (9600-8-N-1).
-//    blink_ntimes(10);
+    blink_ntimes(10);
     while (true) {
         led = !led;
         ThisThread::sleep_for(BLINKING_RATE);
     }
 }
-/*
+
 void blink_ntimes(uint8_t ntimes_){
     // flash LEDs so we know we are alive
     static DigitalOut led(LED1);
@@ -47,5 +47,3 @@ void blink_ntimes(uint8_t ntimes_){
     }
 }
 
- */
- 
