@@ -27,7 +27,7 @@
             ".text": 65796,
             ".data": 0,
             ".bss": 2920,
-            ".text-delta": -76,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -68,10 +68,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 431,
+            ".text": 456,
             ".data": 0,
             ".bss": 61,
-            ".text-delta": -104,
+            ".text-delta": -28,
             ".data-delta": 0,
             ".bss-delta": -832
         }
@@ -156,20 +156,20 @@
     {
         "module": "src\\nucleo_uart.o",
         "size": {
-            ".text": 186,
+            ".text": 62,
             ".data": 0,
-            ".bss": 2496,
-            ".text-delta": 94,
+            ".bss": 832,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
         "summary": {
-            "static_ram": 14820,
+            "static_ram": 13156,
             "static_ram_delta": -832,
-            "total_flash": 120615,
-            "total_flash_delta": -86
+            "total_flash": 120516,
+            "total_flash_delta": -28
         }
     }
 ]

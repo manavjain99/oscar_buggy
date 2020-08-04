@@ -1,9 +1,6 @@
 {
 	"folders": [
 		{
-			"path": "code/mcu"
-		},
-		{
 			"path": "code/stm_mbed"
 		},
 		{
@@ -28,7 +25,9 @@
 			"future": "cpp",
 			"mutex": "cpp",
 			"*.ipp": "cpp",
-			"cstddef": "cpp"
+			"cstddef": "cpp",
+			"ostream": "cpp",
+			"*.tpp": "cpp"
 		}
 	}
 }

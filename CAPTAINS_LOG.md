@@ -1073,3 +1073,21 @@ Ported compilable code for MBED , had a discussion was asked to use baremetal , 
 
 Continuing debugging on mbed doesnt show any outputs ps this is the [current main file](code/stm_mbed/main.cpp)
 
+4.8.2020 
+1.57 AM 
+
+Found that only one Buffered serial works on MBED code 
+ie if I use multiple Serial ports the code just doesnt run 
+On MCU gives no errors on compiler ,  [current main file](code/mbed_testing/main.cpp) Commit : uart debugcon . 
+
+
+2.58 PM 
+
+Yeah the same issue as above, cant use multiple uarts on this 
+
+4.37 PM 
+
+Added MIT License 
+
+11.11 PM 
+ Blinky code baremetal added 

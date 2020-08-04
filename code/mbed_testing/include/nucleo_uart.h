@@ -9,6 +9,8 @@
 
 
 //extern  BufferedSerial serial_port;
+//extern  BufferedSerial uart_gimbal ;
+//extern  BufferedSerial uart_obcomp ;
 extern  BufferedSerial uart_debugcon;
 
 void init_uart( BufferedSerial& );
