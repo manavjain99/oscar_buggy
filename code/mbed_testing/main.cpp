@@ -33,14 +33,14 @@ int main()
     blink_ntimes(10);
     //serial_port.set_baud(9600);
     //serial_port.set_format(8,BufferedSerial::None,1);
-    init_uart(serial_port);
-    char buf[MAXIMUM_BUFFER_SIZE] = "Hello World! \n";;
+    init_uart(uart_debugcon);
+    char buf[MAXIMUM_BUFFER_SIZE] = "Hello World2! \n";;
     //buf = 
     while (true) {
 
         led = !led;
-        serial_port.write(buf, sizeof(buf));
-        //uart_debugcon.write(buf, sizeof(buf));
+        //serial_port.write(buf, sizeof(buf));
+        uart_debugcon.write(buf, sizeof(buf));
         ThisThread::sleep_for(BLINKING_RATE);
     }
 }
@@ -55,4 +55,5 @@ void blink_ntimes(uint8_t ntimes_){
        ThisThread::sleep_for(200ms);
     }
 }
+
 

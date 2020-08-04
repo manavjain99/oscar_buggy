@@ -8,7 +8,8 @@
 #include "../mbed-os/mbed.h"
 
 
-extern  BufferedSerial serial_port;
+//extern  BufferedSerial serial_port;
+extern  BufferedSerial uart_debugcon;
 
 void init_uart( BufferedSerial& );
 /* DEFINE YOUR GLOBAL FUNCTION OR TASKS PROTOTYPES HERE*/
