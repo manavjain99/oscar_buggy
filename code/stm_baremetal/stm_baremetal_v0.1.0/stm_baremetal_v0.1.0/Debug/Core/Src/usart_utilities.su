@@ -1,0 +1,3 @@
+usart_utilities.c:14:6:UU_PutChar	16	static
+usart_utilities.c:20:6:UU_PutString	16	static
+usart_utilities.c:29:6:UU_PutNumber	32	static

@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "code/stm_mbed"
+			"path": "code\\stm_baremetal"
 		},
 		{
-			"path": "code/mbed_testing"
+			"path": "..\\STM32CubeF4-master\\STM32CubeF4-master\\Projects\\STM32F411RE-Nucleo\\Examples"
 		}
 	],
 	"settings": {
