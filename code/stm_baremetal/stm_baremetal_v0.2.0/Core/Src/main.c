@@ -123,14 +123,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  //UU_PutString(USART2, &debugMsg[0]);
-	     /* Insert a 100ms delay */
-	  //HAL_Delay(100);
 	   HAL_UART_Receive_IT(&huart2, &bufferRx[0], 5);
 	    // Magic pixie dust
 	   if (UartReady != SET) {
-	        /* do shit all...*/
+	        /* do shit all... The Part When interrupt is not running  */
+		   	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		   	  //UU_PutString(USART2, &debugMsg[0]);
+		   	     /* Insert a 100ms delay */
+		   	  HAL_Delay(100);
+
 	        continue;
 	    }
 	   else {
