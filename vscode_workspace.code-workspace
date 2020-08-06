@@ -1,16 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "code\\stm_baremetal"
-		},
-		{
-			"path": "code\\jetson"
-		},
-		{
-			"path": "code\\pilotdash"
-		},
-		{
-			"path": "code\\tests"
+			"path": "code/stm_baremetal"
 		}
 	],
 	"settings": {
