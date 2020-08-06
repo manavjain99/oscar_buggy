@@ -22,8 +22,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "../Inc/stm32f4xx_hal_conf.h"
+#include "../Inc/stm32f4xx_it.h"
 #include "../Inc/usart_utilities.h"
-
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +61,19 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+UART_HandleTypeDef UartHandle;
+__IO ITStatus UartReady = RESET;
+char commBuff[50];
+char action[50];
+
+#define RXBUFFERSIZE    10
+uint8_t aRxBuffer[RXBUFFERSIZE];
+
+char buffbuff[100];
+uint8_t bufferRx[5];
+char prompt[5] = "\r\n>>>";
+int commBuff_index=0;
+int sent_index=0;
 /* USER CODE END 0 */
 
 /**
@@ -91,19 +107,38 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   uint8_t debugMsg[] = "hi\n";
+
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE); // flag receive
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_TC); // flat Tx_IT
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  sprintf(buffbuff, "This is me testing...\r\n>>>");
+  HAL_UART_Transmit_IT(&huart2, (uint8_t*)buffbuff, 90);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  UU_PutString(USART2, &debugMsg[0]);
+	  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	  //UU_PutString(USART2, &debugMsg[0]);
 	     /* Insert a 100ms delay */
-	  HAL_Delay(100);
+	  //HAL_Delay(100);
+	   HAL_UART_Receive_IT(&huart2, &bufferRx[0], 5);
+	    // Magic pixie dust
+	   if (UartReady != SET) {
+	        /* do shit all...*/
+	        continue;
+	    }
+	   else {
+	        UartReady = RESET;
+	        sprintf(action, "\r\nComm: %s", commBuff);
+	        HAL_UART_Transmit(&huart2, (uint8_t*)action, 60, 100);
+	        HAL_UART_Transmit_IT(&huart2, (uint8_t*)prompt, 5);
+	    }
 
   }
   /* USER CODE END 3 */
@@ -113,6 +148,7 @@ int main(void)
   * @brief System Clock Configuration
   * @retval None
   */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};

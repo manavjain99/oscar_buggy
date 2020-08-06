@@ -58,6 +58,15 @@
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
+extern int commBuff_index;
+extern uint8_t bufferRx[5];
+extern char prompt;
+extern UART_HandleTypeDef UartHandle;
+extern ITStatus UartReady ;
+extern char buffbuff[100];
+extern int sent_index;
+extern char commBuff[50];
+
 
 /* USER CODE END EV */
 
@@ -207,7 +216,22 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+  HAL_UART_Receive_IT(&huart2, &bufferRx[0], 1 );
+   // write the bytes to our Command buffer
+   commBuff[commBuff_index] = bufferRx[0];
+   if (bufferRx[0] == '\r' || bufferRx[0] == '\n')
+   {
+       UartReady = SET;
+       HAL_UART_Transmit(&huart2, (uint8_t*)commBuff, 50, 100);
+       sent_index=commBuff_index;
+       bufferRx[0] = '\0';
+       commBuff_index = 0;
+   }
+   // use normal transmit (not transmit_IT) so we don't
+   // get duplicates in the buffer
+   // TODO - stop using this dirty hack...
+   HAL_UART_Transmit(&huart2, bufferRx, 5,100);
+   commBuff_index++;
   /* USER CODE END USART2_IRQn 1 */
 }
 

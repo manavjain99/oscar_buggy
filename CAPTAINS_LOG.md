@@ -1091,3 +1091,15 @@ Added MIT License
 
 11.11 PM 
  Blinky code baremetal added 
+
+
+6.8.2020      
+12.25 AM          
+
+Today I did v 0.2.0 for baremetal ie blinky code and UART TX
+
+
+6.8.2020 
+
+12.45 PM 
+finisheed v0.3.0 ie receiving Chars through interrupts. 
