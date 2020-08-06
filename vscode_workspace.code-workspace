@@ -4,7 +4,13 @@
 			"path": "code\\stm_baremetal"
 		},
 		{
-			"path": "..\\STM32CubeF4-master\\STM32CubeF4-master\\Projects\\STM32F411RE-Nucleo\\Examples"
+			"path": "code\\jetson"
+		},
+		{
+			"path": "code\\pilotdash"
+		},
+		{
+			"path": "code\\tests"
 		}
 	],
 	"settings": {

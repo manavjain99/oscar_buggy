@@ -1103,3 +1103,5 @@ Today I did v 0.2.0 for baremetal ie blinky code and UART TX
 
 12.45 PM 
 finisheed v0.3.0 ie receiving Chars through interrupts. 
+
+Now testing the feasability of splines 

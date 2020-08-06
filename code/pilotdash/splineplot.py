@@ -2,7 +2,7 @@
  Author: Param Deshpande
  Date created:  Fri Jul 10 23:48:41 IST 2020
  Description: 
- plots individual spline curves according to the timestamps in the splineCoeffs.txt
+ plots individual piecewise  spline curves according to the timestamps in the splineCoeffs.txt
  License :
  ------------------------------------------------------------
  "THE BEERWARE LICENSE" (Revision 42):
