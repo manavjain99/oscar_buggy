@@ -17,6 +17,7 @@
 #import 
 #import 
 import matplotlib.pyplot as plt
+#%matplotlib inline
 import numpy as np 
 import statistics
 import Polynomial as poly
@@ -73,6 +74,7 @@ if __name__ == '__main__':
     print(str(a) + ',' +str(b) + ',' +str(c) + ',' + str(d) + ',')
     p = poly.Polynomial(d, c, b, a)
     X = np.linspace(prevTimeStamp, t, 50, endpoint=True)
+    print("x[0] is " + str(X[0]) )
     prevTimeStamp = t
     F = p(X)
     plt.plot(X, F, label="F")
