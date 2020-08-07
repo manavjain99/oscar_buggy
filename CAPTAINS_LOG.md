@@ -1121,3 +1121,47 @@ Whats happening here ?
 Each **F** is a curve for each set of splines that are being sent to the MCU ( the update 1 pt keep 5 pt buffer , turns out the splines that way arent continious. Let me see if things work out different using this properer piecewise coeffs provided in [this curveplanner file](jetson/curveplanner.py) )
 
 In this file I am doing a little different things , erm ...  a diffferent python function to get the splines lemme see if things are continious if any .. if not adjust first and last values maybe .. ?
+
+
+1.06 AM      
+So heres the following scenario      
+the piecewise curves are not continious ![seethisimg](sshots/notcontsplines.png)
+
+The Piecewise splines are gotten from this [link](https://stackoverflow.com/questions/13384859/coefficients-of-spline-interpolation-in-scipy)
+
+More particularly this [imgcode](sshots/stackoverflowSplines.png)
+
+Turns out that code is deprecated hence I went to undeprecate it and came to the following code in code/jetson/curveplanner.py
+
+Now during this codes unittesting I gave a set of sample vals shown in green in the graph , and was happy to get the pieceeise splines but they arent continious .
+
+So now I am left With the Following things 
+Assuming that my piewise splines are correct and are always this fucked up    . 
+I can go ahead and use the tck or spline parameters from [here](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splrep.html#scipy.interpolate.splrep)
+
+**SideNote**
+TCK stands for T - knots ( points through which splines passes )
+C - coeffs ( these are 1 coeffs per knot )
+K - degree of the curve in question. 
+What basically i was doing is converting these tck vals using some other python lib into piecewise splines. 
+**SideNoteEnd**
+
+And decode those params using [this](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html#scipy.interpolate.splev)
+
+ie make / regen spline from this python lib ( but this is depreacated ) which brings me 
+
+to regenrate splines by using this [method](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html#scipy.interpolate.BSpline)
+
+This tells the exact relation of tck vals of a spline to an output val of x in mathematcal terms. 
+ ie 
+ for reference these are the values ... in this ![img](sshots/bsplinescipy.png)
+
+ This is the clean way of how python makes smooth curves ... 
+
+The ISSUE / OPTIONS 
+
+1. See the above code and try to rewrite the bsplines maths or search online cpp versions of this above maths ... ( was not recommended earlier )   
+2. go ahead with the piecewise splines for this much varying / variability 
+3. Let the  math part be done by some c lib and rather send direct cx,cy, area to the MCU and let it ( the library) interpolate the points for me ( done already above (readup). ). 
+
+
