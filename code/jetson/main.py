@@ -334,7 +334,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
       # Filtering the data MAD filter
-      
+        
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
       filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
       print(type(filterdataBufferYaw))
