@@ -32,6 +32,7 @@ if __name__ == '__main__':
   import cv2
   import greenBallTracker as GBT 
   import aruco_tracking as ART
+  import curveplanner as CPLAN
   #import matplotlibLive as MPLive
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
@@ -52,6 +53,8 @@ VIDEO_SOURCE = "ball_tracking_example.mp4"
 # ie processing every nth frame.
 PROC_FRAME_FREQ = 3
 
+SPLINE_FRAME_SIZE = 6 # too less cant calc splines too high vmuch delay prop to PROC_FRAME_FREQ
+
 FRAME_CX = 480.0/2.0
 FRAME_CY = 640.0/2.0
 
@@ -66,7 +69,6 @@ ACK_MCU_MSG = '1'
 MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
-# should be equal to t_grab / t_tick_mcu
 SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
 GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
 
@@ -314,6 +316,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
+
+      #####choose your tracking algo  here##############3
+      #
       #objA, objCX, objCY = GBT.trackGreenBall(frame)
       objA, objCX, objCY = ART.trackArucoMarker(frame)
 
@@ -321,6 +326,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
       frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
 
+      # Zero o/p if obj not detected
       if(objCX != -1):
         frame_cx_buffer[5] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       else:
@@ -333,7 +339,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
       #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
-      # Filtering the data MAD filter
+      ######## Filtering the data MAD filter ################
         
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
       filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
@@ -349,10 +355,14 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
       FILTEREDPITCH = frame_cy_buffer[5]
       '''
+      
+      ########## GET THE CURVES HERE #################
+      for
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
-      #  #logging.info("newYaw v alue " + str(new_yawValue))
+      ############ LOGGING THE VALUES FOR CROSS CHECKING ##############
+      #  #logging.info("newYaw v alue " + str(new_yawValue)) used for cross checking wrto the MCU 
       new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[3]*1**3
       new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
       
@@ -364,7 +374,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         logFileCoeffs.write(str(logCoeffStr))
         logging.info(logInfoStr)
         #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
-      #print(str(new_yawValue))
+        #print(str(new_yawValue))
       
       with processLock:
         if INCLUDE_STM == True:
