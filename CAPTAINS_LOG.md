@@ -1105,3 +1105,8 @@ Today I did v 0.2.0 for baremetal ie blinky code and UART TX
 finisheed v0.3.0 ie receiving Chars through interrupts. 
 
 Now testing the feasability of splines 
+
+7.8.2020 
+6.10 PM 
+Regenrated splines using coeffs see files 
+splineplot.py splinetest.py splineCoeffs.txt

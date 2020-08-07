@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "code/playground"
+		},
+		{
+			"path": "code"
 		}
 	],
 	"settings": {
