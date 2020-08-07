@@ -1109,4 +1109,15 @@ Now testing the feasability of splines
 7.8.2020 
 6.10 PM 
 Regenrated splines using coeffs see files 
-splineplot.py splinetest.py splineCoeffs.txt
+splineplot.py splinetest.py splineCoeffs.txt see ![this photo](sshots/splinesPythonCoeffsRegenerated.png). 
+
+
+7.42 PM 
+The previous really fucked up output btw :) ( *picture that laughing emoji here* )
+
+![F](sshots/F.png)
+
+Whats happening here ?     
+Each **F** is a curve for each set of splines that are being sent to the MCU ( the update 1 pt keep 5 pt buffer , turns out the splines that way arent continious. Let me see if things work out different using this properer piecewise coeffs provided in [this curveplanner file](jetson/curveplanner.py) )
+
+In this file I am doing a little different things , erm ...  a diffferent python function to get the splines lemme see if things are continious if any .. if not adjust first and last values maybe .. ?
