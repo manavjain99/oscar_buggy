@@ -35,9 +35,6 @@ import Polynomial as poly
 #  
 #  """
 
-def p(x):
-    return x**4 - 4*x**2 + 3*x
-
 
 #def ...:
 #  """
@@ -67,26 +64,35 @@ if __name__ == '__main__':
   #dataBuffer = [0]*BUFFERSIZE
   #print(type(data))
 
-  p = poly.Polynomial(4, 0, -4, 3, 0)
-  print(p)
-  prevTimeStamp = 0
-  for t,a,b,c,d in zip( data["time"],data["coeffa"],data["coeffb"],data["coeffc"],data["coeffd"]):
-    print(str(a) + ',' +str(b) + ',' +str(c) + ',' + str(d) + ',')
-    p = poly.Polynomial(d, c, b, a)
-    X = np.linspace(prevTimeStamp, t, 50, endpoint=True)
-    print("x[0] is " + str(X[0]) )
-    prevTimeStamp = t
-    F = p(X)
-    plt.plot(X, F, label="F")
+  #p = poly.Polynomial(4, 0, -4, 3, 0)
+  #print(p)
+  
+  totalTime = data["time"][-1] - data["time"][0]
 
-    #F_derivative = p_der(X)
+  for i in range(len(data["time"])):
+    currentTimeStamp = data["time"][i]/totalTime
     
-    pass
+    a = data["coeffa"][i]
+    b = data["coeffb"][i]
+    c = data["coeffc"][i]
+    d = data["coeffd"][i]
+
+    if(i != (len(data["time"]) - 1)):
+      nextTimeStamp = data["time"][i+1]/totalTime
+      p = poly.Polynomial(d, c, b, a)
+      X = np.linspace(currentTimeStamp,nextTimeStamp , 200, endpoint=True)
+      F = p(X)
+      print("x[0] is " + str(X[0]*totalTime) + "F value is " + str(F[0]))
+      plt.plot(X, F, label="This is itself a piecewise spline")
+
 
   #plt.plot(X, F_derivative, label="F_der")
-
+  y2 = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
+  x2 = np.linspace(0, 1, 10)
+  
+  plt.plot(x2, y2,'-o')
   plt.legend()
   plt.show()
-    
+
 """ END OF FILE """
 
