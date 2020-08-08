@@ -35,6 +35,7 @@ def getBsplineCoeffs(y):
   """
   #assert (type(y) == list or  ), 'y needs to be a single dim list'
   x = np.linspace(0, len(y), len(y))
+  print(x[:5])
   tck = splrep(x, y)
   pp = PPoly.from_spline(tck)
   return pp.c.T
@@ -63,6 +64,7 @@ if __name__ == '__main__':
   #import doctest
   #doctest.testmod()
   x = np.linspace(0, 10, 10)
+  print(x[:9])
   y = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
   print(getBsplineCoeffs(y))
   
