@@ -1164,4 +1164,42 @@ The ISSUE / OPTIONS
 2. go ahead with the piecewise splines for this much varying / variability 
 3. Let the  math part be done by some c lib and rather send direct cx,cy, area to the MCU and let it ( the library) interpolate the points for me ( done already above (readup). ). 
 
+8.8.2020  
+11.24 AM  
 
+Plotting the Bspline curve along with peicewise curve here 
+
+EDIT : Found a nice claener way of implementing Bsplines on the [scipy website itself](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html#scipy.interpolate.BSpline) 
+see this ![image](sshots/bsplinesimplemath.png)
+
+12.16 PM 
+
+Heres the ![BFTHING](sshots/allin1splines.png)
+
+I have regen the Bspline curves usign the same tck data as for the piecewise curves , it has its own way of implementing stuff yeah its based on general maths and may/should follow the convention , ie it follows the formulas listed above in the docx. 
+
+They have given a simple math implementation if I were to do it in CPP.   But the assumption that knots are passing pts seems to be gone NULL and VOID heres the snippent from spline plot which is plotiing the stuff 
+
+```
+  y2 = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
+  x2 = np.linspace(0, 1, 10)
+
+  y3 = [1,7,3,4,10,2]
+  x3 = list(range(1,7))
+  tck = splrep(x2, y2)
+  print( " len of knots is " + str(len(tck[0])))
+  print( " len of coeffs is " + str(len(tck[1])))
+  print( " degree of Bspline is " + str((tck[2])))
+
+  Bspl = BSpline(tck[0],tck[1],tck[2])
+  By2 = Bspl(x2)
+  print( " len of bspline is " + str(len(By2)))
+  print("  knots / nodes are " + str(tck[0]))
+  plt.plot(x2, y2,'o', label=" Y output passed")
+  knotx =list(range(0,len(tck[0])))
+  knotx[:] = (x/len(tck[0]) for x in knotx)
+  plt.plot(knotx , tck[0], 'gs', label="Nodes or knots")
+  plt.plot(x2, By2, label="Bspline curve ")
+
+```
+you can find this [here](code/pilotdash/splineplot.py) in somecommit made 
