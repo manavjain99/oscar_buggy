@@ -357,7 +357,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       '''
       
       ########## GET THE CURVES HERE #################
-      for
+      #for
       coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
           
