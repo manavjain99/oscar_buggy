@@ -21,6 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np 
 import statistics
 import Polynomial as poly
+import scipy
+from scipy.interpolate import BSpline, splev, splrep, PPoly
 #if __name__ == '__main__':
   #import 
   #import 
@@ -89,8 +91,24 @@ if __name__ == '__main__':
   #plt.plot(X, F_derivative, label="F_der")
   y2 = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
   x2 = np.linspace(0, 1, 10)
-  
-  plt.plot(x2, y2,'-o')
+
+  y3 = [1,7,3,4,10,2]
+  x3 = list(range(1,7))
+  tck = splrep(x2, y2)
+  print( " len of knots is " + str(len(tck[0])))
+  print( " len of coeffs is " + str(len(tck[1])))
+  print( " degree of Bspline is " + str((tck[2])))
+
+  Bspl = BSpline(tck[0],tck[1],tck[2])
+  By2 = Bspl(x2)
+  print( " len of bspline is " + str(len(By2)))
+  print("  knots / nodes are " + str(tck[0]))
+  plt.plot(x2, y2,'o', label=" Y output passed")
+  knotx =list(range(0,len(tck[0])))
+  knotx[:] = (x/len(tck[0]) for x in knotx)
+  plt.plot(knotx , tck[0], 'gs', label="Nodes or knots")
+  plt.plot(x2, By2, label="Bspline curve ")
+
   plt.legend()
   plt.show()
 
