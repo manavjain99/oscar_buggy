@@ -78,17 +78,17 @@ if __name__ == '__main__':
 
   plt.figure()
   plt.subplot(311)
-  plt.plot(data['raw_yaw'])
-  plt.legend(["Raw yaw"])
+  plt.plot(data['raw_yaw'], label=" Raw Data ")
 
   plt.subplot(312)
-  plt.plot(data['filter_yaw'])
+  plt.plot(data['filter_yaw'], label=" Filtered Data ")
   #plt.label("Filtered yaw")
   
   plt.subplot(313)
-  plt.plot(data['smooth_yaw'])
+  plt.plot(data['smooth_yaw'], label=" Spline Curve Keypoints ")
   #plt.label("Smooth yaw")
-  
+
+  plt.legend()
   plt.show()
     
   
