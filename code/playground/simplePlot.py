@@ -8,9 +8,8 @@ from scipy.interpolate import CubicSpline
 def getBsplineCoeffs(y):
   """
   (np.array) -> (np.array)
-  Description: Input a np.array of vectors, will smoothen it out and generate a spline to give np.array of subsequent coeffs(ie a list of 4 vals abcd).  
-  Each list has a sublist of coeffs ie op = [c1,c2,c3,c4,c5 ... ]
-  where each cx = np.arary([ax,bx,cx,dx])
+  Description: Input a np.array of vectors, will smoothen it out and generate a piecewise set of splines coeff format dcba
+  ie [[dcba0], [dcba1], [dcba2], ....] 
   where y val = a +b*x + c*x**2 + d*x**3 
   >>>
   
@@ -19,10 +18,29 @@ def getBsplineCoeffs(y):
   # the values of x are insignifacant coz we are outputting coeffs, its just that deltax should be same always value ie equidistant . 
   x = np.linspace(0, len(y), len(y))
   cs = CubicSpline(x,y,bc_type='natural')
-  coeffs = cs.c
-  return np.array(coeffs)
+  set_of_coeffs = cs.c  # list of [ [alld], [allc], ... ]
+  piecewise_coeffs = []
+  for d,c,b,a in zip(set_of_coeffs[0],set_of_coeffs[1],set_of_coeffs[2],set_of_coeffs[3]):
+      piecewise_coeffs.append([d,c,b,a])
+  return np.array(piecewise_coeffs)
 
 if __name__ == '__main__':
+    
+    y = np.array([1,3,3,0,5,8,7,8,4,0])
+    coef = getBsplineCoeffs(y)
+    print(coef)
+    """
+    for i,d,c,b,a in zip(range(len(coef)),coef[0],coef[1],coef[2],coef[3]):
+        #for singc in 
+        pass
+        # printing in d,c,b,a fashion coz thats how python uses convention 
+        print(str(i) + str(', ') + str(d)  + str(', ') + str(c) + str(', ') + str(b) + str(',') + str(a) )
+    #print()
+    
+    
+    
+    
+    #
     x0 = np.linspace(0,1,50)
     y0 = np.array(12*x0**0 + x0 + x0**3)
 
@@ -49,7 +67,6 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-    """
     12.0, 1.0000000000000002, -2.220446049250313e-16, 1.0, 
     14.0, 3.9999999999999996, 3.0, 1.0, 
     22.0, 13.000000000000002, 5.999999999999998, -2.0, 
