@@ -64,7 +64,7 @@ if __name__ == '__main__':
   pass
   #import doctest
   #doctest.testmod()
-  data = np.genfromtxt("splineCoeffs.txt", delimiter=",", names=["time","coeffa" ,"coeffb","coeffc" , "coeffd" ])
+  data = np.genfromtxt("splineCoeffs.txt", delimiter=",", names=["time","coeffd" ,"coeffc","coeffb" , "coeffa" ])
   #BUFFERSIZE = 15
   #dataBuffer = [0]*BUFFERSIZE
   #print(type(data))
