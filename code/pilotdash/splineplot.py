@@ -38,13 +38,16 @@ from scipy.interpolate import BSpline, splev, splrep, PPoly
 #  """
 
 
-#def ...:
-#  """
-#  () -> ()
-#  Description: 
-#  >>>
-#  
-#  """
+def curve3(x,a,b,c,d):
+  """
+  (np.array,int,int,int,int) -> (np.array)
+  Description: 
+  Returns a cubic curve pts formed by x,a,b,c,d
+  >>>
+  """
+  assert (type(x) ==np.ndarray), 'x should be passed input array'
+  y = a + b*x + c*x**2 + d*x**3 
+  return y
 
 
 #def ...:
@@ -72,7 +75,7 @@ if __name__ == '__main__':
   totalTime = data["time"][-1] - data["time"][0]
 
   for i in range(len(data["time"])):
-    currentTimeStamp = data["time"][i]/totalTime
+    currentTimeStamp = data["time"][i]
     
     a = data["coeffa"][i]
     b = data["coeffb"][i]
@@ -80,18 +83,24 @@ if __name__ == '__main__':
     d = data["coeffd"][i]
 
     if(i != (len(data["time"]) - 1)):
-      nextTimeStamp = data["time"][i+1]/totalTime
-      p = poly.Polynomial(d, c, b, a)
-      X = np.linspace(currentTimeStamp,nextTimeStamp , 200, endpoint=True)
-      F = p(X)
-      print("x[0] is " + str(X[0]*totalTime) + "F value is " + str(F[0]))
-      plt.plot(X, F, label="This is itself a piecewise spline")
+      nextTimeStamp = data["time"][i+1]
+      unitTimeStep = np.linspace(currentTimeStamp,nextTimeStamp , 50)
+      x = unitTimeStep - currentTimeStamp
+      F = curve3(x,a,b,c,d)
+      #print("x[0] is " + str(X[0]*totalTime) + "F value is " + str(F[0]))
+      plt.plot(unitTimeStep, F, label=("piecewise spline from t = " + str(currentTimeStamp) + " to " + str(nextTimeStamp) ))
+      #plt.plot(X, F)
+
 
 
   #plt.plot(X, F_derivative, label="F_der")
   y2 = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
-  x2 = np.linspace(0, 1, 10)
+  x2 = np.linspace(0, 1, 30)
+  y3 = curve3(x2,1,2,3,4)
+  #plt.plot(x2, y3)
+  #plt.show()
 
+  """
   y3 = [1,7,3,4,10,2]
   x3 = list(range(1,7))
   tck = splrep(x2, y2)
@@ -108,7 +117,7 @@ if __name__ == '__main__':
   knotx[:] = (x/len(tck[0]) for x in knotx)
   plt.plot(knotx , tck[0], 'gs', label="Nodes or knots")
   plt.plot(x2, By2, label="Bspline curve ")
-
+  """
   plt.legend()
   plt.show()
 
