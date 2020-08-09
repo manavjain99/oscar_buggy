@@ -18,7 +18,7 @@
 
 #import gimbalcmd
 INCLUDE_STM = False
-LOG_FILES = False 
+LOG_FILES = True
 CAMERA_AVAIL = True
 
 if __name__ == '__main__':
@@ -44,7 +44,8 @@ if __name__ == '__main__':
 
 NO_OF_PTS = 3
 ####### EXTERNAL FILES ##########
-VIDEO_SOURCE = "ball_tracking_example.mp4"
+#VIDEO_SOURCE = "ball_tracking_example.mp4"
+VIDEO_SOURCE = "../tests/aruco.mp4"
 SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
 GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
 
@@ -85,40 +86,6 @@ commQ = queue.Queue(maxsize=30000)
 current_milli_time = lambda: int(round(time.time() * 1000))
 epochTimeMillis = current_milli_time()
 
-def trajectoryGen(centerXY, newXY, numpts = NO_OF_PTS):
-  """
-  (tup size2, tup size2, int) -> (list of 3 ints list)
-  Description:generates linear trajectory for delta gimbal <s, 
-  """
-
-  trajList = []
-  
-  # make sure to negate the vals as axis / coords are inverted wtro gimbal.
-
-  delYaw   = -(newXY[0] - centerXY[0])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-  delPitch = -(newXY[1] - centerXY[1])/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-  
-  # if less than min of (th% of max <s change or default).
-  # if less than min of (th% of max <s change or default).
-  if(abs(delYaw) < min(CHANGE_YAW_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_YAW)):
-    delYaw = 0
-
-  if(abs(delPitch) < min(CHANGE_PITCH_THOLD,THRES_PERCENT_CHANGE*MAX_DEL_PITCH)):
-    delPitch = 0
-    # S1 linearly diving pts from 0 to del<s as roll pitch yaw 
-  
-  if((newXY[0] != -1) and (newXY[1] != -1)):
-    #if delYaw , delPitch greater than angle threshold.
-    for i in range(numpts):
-      trajList.append([0, i*delPitch/(numpts-1), i*delYaw/(numpts-1)])
-
-  # if no obj detected.
-  else:
-    for i in range(numpts):
-      trajList.append([0, 0, 0])
-
-
-  return trajList
 
 
 
@@ -142,35 +109,6 @@ def madFilter(dataArr, threshold =3):
     return dataArr[-1]
 
   
-
-def spline6pt(y):
-  """
-  (np.array[] (size = 6) ) -> (list[4])
-  Description: Generates peicewise spline curves for the 6 y pts, with x pts equally spaced as x[0:5].
-  Outputs the coeffs last piecewise curves ie coeffnew. ie ( coeffx = ax, bx, cx, dx)
-  regenrate the splines example ( for ref of abcd ignore rest) 
-  y = a2 + b2*(x-2) + c2*(x-2)**2 + d2*(x-2)**3
-  
-  Similarly for coeff 3 for x betn 3,4 as 
-  y = a3 + b3*(x-3) + c3*(x-3)**2 + d3*(x-3)**3
-  >>>
-  """
-  # if a valid entry 
-  if( y.size == 6):
-    #logging.info("reached spline 6pt")
-    x = np.array([0, 1, 2, 3, 4, 5])
-    cs = CubicSpline(x,y,bc_type='natural')
-
-    # Polynomial coefficients for 4 < x <= 5 ie the last curve among 6 pts.
-    a4 = cs.c.item(3,4)
-    b4 = cs.c.item(2,4)
-    c4 = cs.c.item(1,4)
-    d4 = cs.c.item(0,4)
-
-    coeff4 = [a4, b4 , c4, d4 ]
-    #logging.info(str(coeff4))
-    return coeff4
-
 
 def cam_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     """
@@ -323,39 +261,41 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       frame = imgQ.get()
       logging.info(" no of process frames "  + str(imgQ.qsize()))
       
-      ## May edit to zero if default cam is set to 0
+      ## May edit to source != zero if default cam is set to 0
       if CAMERA_AVAIL == True:
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
 
-      #####choose your tracking algo  here##############3
+      #####  choose your tracking algo  here ##############
       #
       #objA, objCX, objCY = GBT.trackGreenBall(frame)
       objA, objCX, objCY = ART.trackArucoMarker(frame)
 
-      #Updating 1 element at a time. values according to gimbal <S. 
-      frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
-      frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
-      curveplanner_iterator_ += 1 
+      ############## LOADING .... PARAMS INTO BUFFER ##########
+      curveplanner_iterator_ += 1
+      if(curveplanner_iterator_ == 1):
+        # Making first and last elem same to avoid discontinuities in every hyperframe's output
+        frame_cx_buffer[0] = frame_cx_buffer[-1]   
+        frame_cy_buffer[0] = frame_cy_buffer[-1]   
 
-
-      # Zero o/p if obj not detected
-      if(objCX != -1):
-        frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       else:
-        frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
+      # Zero o/p if obj not detected       
+        if(objCX != -1):
+          frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+        else:
+          frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
 
-      if(objCY != -1 ):
-        frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-      else:
-        frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
+        if(objCY != -1 ):
+          frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+        else:
+          frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
 
 
       #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
       ######## Filtering the data MAD filter ################
-        
+      # DONT COMMENT OUT STUFF YOU DONT KNOW # 
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
       filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[curveplanner_iterator_ -1]
       #print(type(filterdataBufferYaw))
@@ -373,33 +313,34 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       FILTEREDPITCH = frame_cy_buffer[5]
       '''
       
-      ########## GET THE CURVES HERE #################
-      #for
+      ############# GET THE CURVES HERE #################
       if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
         curveplanner_iterator_ = 0
-        coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer)
-        coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer)
+        coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
+        coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
         #coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
         #coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       
         if(LOG_FILES == True):
           for uniset_coeffs_x,uniset_coeffs_y in zip(coeffx_new,coeffy_new):  
             nowTimeMillis = current_milli_time() - epochTimeMillis
-            logging.info(coeffx_new)
-            #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
-            #logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
+            logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+            logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
             logFile.write(str(logInfoStr))
             logFileCoeffs.write(str(logCoeffStr))
             logging.info(logInfoStr)
             #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
             #print(str(new_yawValue))
         
+        ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
         with processLock:
           if INCLUDE_STM == True:
             sendCoeffs(coeffx_new,coeffy_new)
             counter_comms_update = 1
         #logging.info("size of " + str(trajQ.qsize()))
+        #################################################################
 
+        #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
         #logging.info("size of commsQ" + str(trajQ.qsize()))
         cv2.imshow("Process Frame", frame)
         if cv2.waitKey(1) == ord("q"):
