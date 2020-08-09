@@ -18,7 +18,7 @@
 
 #import gimbalcmd
 INCLUDE_STM = False
-LOG_FILES = True 
+LOG_FILES = False 
 CAMERA_AVAIL = True
 
 if __name__ == '__main__':
@@ -32,7 +32,7 @@ if __name__ == '__main__':
   import cv2
   import greenBallTracker as GBT 
   import aruco_tracking as ART
-  import curveplanner as CPLAN
+  import curveplanner as CPLN
   #import matplotlibLive as MPLive
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
@@ -43,36 +43,40 @@ if __name__ == '__main__':
 """ WRITE YOUR VARIABLES HERE """
 
 NO_OF_PTS = 3
+####### EXTERNAL FILES ##########
+VIDEO_SOURCE = "ball_tracking_example.mp4"
+SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
+GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
 
-CHANGE_YAW_THOLD = 2
-CHANGE_PITCH_THOLD = 2
-THRES_PERCENT_CHANGE =0.10
+
+####### CAMERA AND FRAMES PARAMS #########
 # 3, 2, 1 for ext webcam 0 for webcam
 VID_SRC = 0
-VIDEO_SOURCE = "ball_tracking_example.mp4"
-# ie processing every nth frame.
-PROC_FRAME_FREQ = 3
-
-SPLINE_FRAME_SIZE = 6 # too less cant calc splines too high vmuch delay prop to PROC_FRAME_FREQ
-
 FRAME_CX = 480.0/2.0
 FRAME_CY = 640.0/2.0
 
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
-
 MAX_NO_FRAMES = 10000
 
-ACK_MCU_MSG = '1'
+# ie processing every nth frame.
+PROC_FRAME_FREQ = 3
 
 # need not change these vars.
 MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
-SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
-GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
+######### TRAJECTORYT GEN #########3
+CHANGE_YAW_THOLD = 2
+CHANGE_PITCH_THOLD = 2
+THRES_PERCENT_CHANGE =0.10
 
+########## PROCESS PARAMS #############
+# too less cant calc splines too high vmuch delay prop to PROC_FRAME_FREQ
+SPLINE_FRAME_SIZE = 6 
+ACK_MCU_MSG = '1'
 
+######## THREADS AND OTHER VALUES ########
 imageQ = queue.Queue(maxsize=10000)
 commQ = queue.Queue(maxsize=30000)
 
@@ -283,28 +287,36 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
+  ########THREAD SPECIFIC PARAMS ################
+  processLock = threading.Lock()
+  logFile = open(str(GIMBAL_ANGLES_LOG), "w")
+  logFileCoeffs = open(SPLINE_COEFFS_LOG, "w")
+  counter_comms_update = 1
+  # Counts how many times has the frame/while loop run RESETS ONCE IT HITS SPLINE_FRAME_SIZE
+  curveplanner_iterator_ = 0 
+  ##############################################
+
+  ###### OBJECT STORING PARAMS INIT ############
   objA = 0
   objCX = 0
   objCY = 0
   old_objA = 0
   old_objCX = 0
   old_objCY = 0
-  frame_cx_buffer = np.array([0,0,0,0,0,0])
-  frame_cy_buffer = np.array([0,0,0,0,0,0])
-  coeffx_new = [0,0,0,0]
-  coeffy_new = [0,0,0,0]
-  logFile = open(str(GIMBAL_ANGLES_LOG), "w")
-  logFileCoeffs = open(SPLINE_COEFFS_LOG, "w")
-  
-  counter_comms_update = 1
-  processLock = threading.Lock()
-  trajList = []
-  FILTERBUFFERSIZE = 15
+  frame_cx_buffer = np.zeros(SPLINE_FRAME_SIZE)
+  frame_cy_buffer = np.zeros(SPLINE_FRAME_SIZE)
+  coeffx_new = [] # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
+  coeffy_new = [] # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
+  #############################################
+
+  ########## MAD FILTER VARS INIT ###########
+  FILTERBUFFERSIZE = 15 # How many values to filter from ie MAD of how many vals 
   filterdataBufferYaw = [0]*FILTERBUFFERSIZE
   filterdataBufferPitch = [0]*FILTERBUFFERSIZE
   filterdataBufferRoll = [0]*FILTERBUFFERSIZE # not useful as of now
   FILTEREDYAW = 0
   FILTEREDPITCH = 0
+  ###########################################
   while(1):
     if not imgQ.empty():
       start_time_proc = time.time()
@@ -322,32 +334,37 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       #objA, objCX, objCY = GBT.trackGreenBall(frame)
       objA, objCX, objCY = ART.trackArucoMarker(frame)
 
-      # Shifting and Updating 1 element at a time. values according to gimbal <S. 
+      #Updating 1 element at a time. values according to gimbal <S. 
       frame_cx_buffer[0:5] = frame_cx_buffer[1:6]
       frame_cy_buffer[0:5] = frame_cy_buffer[1:6]
+      curveplanner_iterator_ += 1 
+
 
       # Zero o/p if obj not detected
       if(objCX != -1):
-        frame_cx_buffer[5] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+        frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       else:
-        frame_cx_buffer[5] = 0
+        frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
 
       if(objCY != -1 ):
-        frame_cy_buffer[5] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+        frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
       else:
-        frame_cy_buffer[5] = 0
+        frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
+
 
       #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
       
       ######## Filtering the data MAD filter ################
         
       filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
-      filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
-      print(type(filterdataBufferYaw))
-      print(len(filterdataBufferYaw))
+      filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[curveplanner_iterator_ -1]
+      #print(type(filterdataBufferYaw))
+      #print(len(filterdataBufferYaw))
       #newVal = madFilter(filterdataBufferYaw) BUG here
       #print("newVal is " + str(newVal))
-      #frame_cx_buffer[5] = madFilter(filterdataBufferYaw)
+
+      ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
+      #frame_cx_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
       '''
       FILTEREDYAW = frame_cx_buffer[5]
       filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
@@ -358,44 +375,45 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       
       ########## GET THE CURVES HERE #################
       #for
-      coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
-      coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
-          
-      ############ LOGGING THE VALUES FOR CROSS CHECKING ##############
-      #  #logging.info("newYaw v alue " + str(new_yawValue)) used for cross checking wrto the MCU 
-      new_yawValue = coeffx_new[0] + coeffx_new[1]*1 + coeffx_new[2]*1**2 + coeffx_new[3]*1**3
-      new_pitchValue = coeffy_new[0] + coeffy_new[1]*1 + coeffy_new[2]*1**2 + coeffy_new[3]*1**3
+      if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
+        curveplanner_iterator_ = 0
+        coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer)
+        coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer)
+        #coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+        #coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
       
-      if(LOG_FILES == True):
-        nowTimeMillis = current_milli_time() - epochTimeMillis
-        logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
-        logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,coeffx_new[0],coeffx_new[1],coeffx_new[2],coeffx_new[3])
-        logFile.write(str(logInfoStr))
-        logFileCoeffs.write(str(logCoeffStr))
-        logging.info(logInfoStr)
-        #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
-        #print(str(new_yawValue))
-      
-      with processLock:
-        if INCLUDE_STM == True:
-          sendCoeffs(coeffx_new,coeffy_new)
-          counter_comms_update = 1
-      #logging.info("size of " + str(trajQ.qsize()))
-
-      #logging.info("size of commsQ" + str(trajQ.qsize()))
-      cv2.imshow("Process Frame", frame)
-      if cv2.waitKey(1) == ord("q"):
-        event.set()
-        cv2.destroyAllWindows()
         if(LOG_FILES == True):
-          logFile.close()
-          logFileCoeffs.close()
-        break
-      #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-      #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+          for uniset_coeffs_x,uniset_coeffs_y in zip(coeffx_new,coeffy_new):  
+            nowTimeMillis = current_milli_time() - epochTimeMillis
+            logging.info(coeffx_new)
+            #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+            #logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
+            logFile.write(str(logInfoStr))
+            logFileCoeffs.write(str(logCoeffStr))
+            logging.info(logInfoStr)
+            #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
+            #print(str(new_yawValue))
+        
+        with processLock:
+          if INCLUDE_STM == True:
+            sendCoeffs(coeffx_new,coeffy_new)
+            counter_comms_update = 1
+        #logging.info("size of " + str(trajQ.qsize()))
 
-    #cv2.destroyAllWindows()
-    #"""
+        #logging.info("size of commsQ" + str(trajQ.qsize()))
+        cv2.imshow("Process Frame", frame)
+        if cv2.waitKey(1) == ord("q"):
+          event.set()
+          cv2.destroyAllWindows()
+          if(LOG_FILES == True):
+            logFile.close()
+            logFileCoeffs.close()
+          break
+        #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+        #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+
+      #cv2.destroyAllWindows()
+      #"""
 
 
 
