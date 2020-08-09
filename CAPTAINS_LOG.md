@@ -1203,3 +1203,13 @@ They have given a simple math implementation if I were to do it in CPP.   But th
 
 ```
 you can find this [here](code/pilotdash/splineplot.py) in somecommit made 
+
+9.8.2020 
+7.45 PM     
+
+THe splineplot was wrongly written verified it mathematically by writing correct code. 
+
+this is the oldaruco output a lot of things to go wrong to but mostly thanks to the 6 spline idea where creating a new spline from using 5 old pts and assuming stuff will turn out to be correct. 
+
+Now writing / implementing main.py the other way ie 
+![t](sshots/oldarucocorrectplot.png)    .

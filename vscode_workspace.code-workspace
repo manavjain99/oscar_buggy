@@ -17,6 +17,9 @@
 		},
 		{
 			"path": "sshots"
+		},
+		{
+			"path": "code/tests"
 		}
 	],
 	"settings": {
