@@ -1212,4 +1212,27 @@ THe splineplot was wrongly written verified it mathematically by writing correct
 this is the oldaruco output a lot of things to go wrong to but mostly thanks to the 6 spline idea where creating a new spline from using 5 old pts and assuming stuff will turn out to be correct. 
 
 Now writing / implementing main.py the other way ie 
-![t](sshots/oldarucocorrectplot.png)    .
+![t](sshots/oldarucocorrectplot.png).
+
+10.8.2020 
+5.35 PM
+ 
+FINALLLY FUCK !!  A GAZILLION TIMES F
+Got the spline smooth continious output see ![this](sshots/aintsheabeauty.png) 
+
+ I had to make the time redundant in plotting coz it logs data instanteneously so that was one of the reasons why the graphs above were such a big mess. 
+
+ The time I have now indexed separately, ie from 0 to len -1 
+
+ Thats why such a graph. 
+
+9.30 PM 
+
+Finally got nice graphs, integrated main and spline plot pipeline for jetson set including Pitch and Yaw also wrote splineplot to fit the new csv file. 
+
+See verified images 
+![pitch](sshots/arucovideoPitch.png)
+![yaw](sshots/arucovideoYaw.png)
+
+PS : THE disconiuities **may** get taken care of once MAD Filter comes into play. Need to fix that BUG. .. 
+
