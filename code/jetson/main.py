@@ -194,7 +194,7 @@ def sendParams(objArea, objCX, objCY):
   stcom.sendToArduino(params.encode('utf-8'))
   
 
-def sendCoeffs(coeffx, coeffy):
+def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   """
   (list[], list[], list[], list[], list[], list[] size = 4each) -> NoneType
   description : Sends spline coeffcients to the MCU 
@@ -211,15 +211,35 @@ def sendCoeffs(coeffx, coeffy):
   +">")
   #"""
   Coeffs = str('<'\
-  +str(coeffx[0])+','+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','\
-  +str(coeffy[0])+','+str(coeffy[1])+','+str(coeffy[2])+','+str(coeffy[3])+','\
+
+  +str(coeffv[0])+','\
+  +str(coeffv[1])+','\
+  +str(coeffv[2])+','\
+  +str(coeffv[3])+','\
+
+  +str(coeffw[0])+','\
+  +str(coeffw[1])+','\
+  +str(coeffw[2])+','\
+  +str(coeffw[3])+','\
+
+  +str(coeffx[0])+','\
+  +str(coeffx[1])+','\
+  +str(coeffx[2])+','\
+  +str(coeffx[3])+','\
+
+  +str(coeffy[0])+','\
+  +str(coeffy[1])+','\
+  +str(coeffy[2])+','\
+  +str(coeffy[3])+','\
+
   +'>')
+
   #logging.info('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+',')
   #logging.info("<"+str(coeffx[1])+',')
   
   #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
   stcom.sendToArduino(Coeffs.encode('utf-8'))
-
+  logging.info(len(Coeffs))
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
@@ -235,18 +255,20 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   ##############################################
 
   ###### OBJECT STORING PARAMS INIT ############
-  objA = 0
-  objCX = 0
-  objCY = 0
-  old_objA = 0
-  old_objCX = 0
-  old_objCY = 0
-  frame_cx_buffer = np.zeros(SPLINE_FRAME_SIZE)
-  frame_cy_buffer = np.zeros(SPLINE_FRAME_SIZE)
-  coeffx_new = [] # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
-  coeffy_new = [] # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
+  objA = 0  #area
+  objR = 0  # rotation 
+  objCX = 0 # center x
+  objCY = 0 # center y
+  # oframe stands for object frame ie a frame with object present in it.
+  oframe_ca_buffer = np.zeros(SPLINE_FRAME_SIZE) # area 
+  oframe_cr_buffer = np.zeros(SPLINE_FRAME_SIZE) # roll
+  oframe_cp_buffer = np.zeros(SPLINE_FRAME_SIZE) # pitch
+  oframe_cy_buffer = np.zeros(SPLINE_FRAME_SIZE) # yaw  
+  coeff_area = []  # unused kept as a buffer for future development 
+  coeff_roll = []  # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
+  coeff_pitch = [] # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
+  coeff_yaw = []   # Set of piecewise coeffs returned of len (SPLINE_FRAME_SIZE)
   #############################################
-
   ########## MAD FILTER VARS INIT ###########
   FILTERBUFFERSIZE = 15 # How many values to filter from ie MAD of how many vals 
   filterdataBufferYaw = [0]*FILTERBUFFERSIZE
@@ -255,11 +277,13 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   FILTEREDYAW = 0
   FILTEREDPITCH = 0
   ###########################################
+  logging.info("Process thread init success")
+
   while(1):
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
-      #logging.info(" no of process frames "  + str(imgQ.qsize()))
+      logging.info(" no of process frames "  + str(imgQ.qsize()))
       
       ## May edit to source != zero if default cam is set to 0
       if CAMERA_AVAIL == True:
@@ -268,68 +292,72 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
 
       #####  choose your tracking algo  here ##############
-      #
-      #objA, objCX, objCY = GBT.trackGreenBall(frame)
-      objA, objCX, objCY = ART.trackArucoMarker(frame)
-      logging.info(" got params as " + str(objA) + " " + str(objCX) + " " + str(objCY))
+      
+      objA, objR, objCX, objCY = ART.trackArucoMarker(frame)
+      logging.info(" got params as " + str(objA) + " " + str(objR) +" " + str(objCX) + " " + str(objCY))
       ############## LOADING ....*VALID* PARAMS INTO BUFFER ##########
       if( objA != -1):
         curveplanner_iterator_ += 1
+        ocyclic_index = curveplanner_iterator_ - 1
         #logging.info("curve planner iterator is " + str(curveplanner_iterator_))
         if(curveplanner_iterator_ == 1):
           # Making first and last elem same to avoid discontinuities in every hyperframe's output
-          frame_cx_buffer[0] = frame_cx_buffer[-1]   
-          frame_cy_buffer[0] = frame_cy_buffer[-1]   
+          oframe_cr_buffer[0] = oframe_cr_buffer[-1]   
+          oframe_cp_buffer[0] = oframe_cp_buffer[-1]   
+          oframe_cy_buffer[0] = oframe_cy_buffer[-1]   
 
         else:
-        # Zero o/p if obj not detected       
-          if(objCX != -1):
-            frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-          else:
-            frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
+        # Zero o/p if obj not detected converting from pixels to angs 
+          oframe_cr_buffer[ocyclic_index] = 0 #for future planning ...
+          oframe_cy_buffer[ocyclic_index] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR) if(objCX != -1) else 0.0
+          oframe_cp_buffer[ocyclic_index] = (FRAME_CY - objCY)/(PIX_PER_DEG+PIX_PER_DEG_VAR) if(objCY != -1) else 0.0
 
-          if(objCY != -1 ):
-            frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-          else:
-            frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
-
-        logging.info(" got frame x buffer as  " + str(frame_cx_buffer) + " got frame y buffer as  " + str(frame_cy_buffer) )
-        #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
+        #logging.info(" got frame x buffer as  " + str(oframe_cy_buffer) + " got frame y buffer as  " + str(oframe_cp_buffer) )
+        #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(oframe_cy_buffer[5]) + " " +str(oframe_cp_buffer[5]) )
         
         ######## Filtering the data MAD filter ################
         # DONT COMMENT OUT STUFF YOU DONT KNOW # 
         filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
-        filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[curveplanner_iterator_ -1]
+        filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[ocyclic_index]
         #print(type(filterdataBufferYaw))
         #print(len(filterdataBufferYaw))
         #newVal = madFilter(filterdataBufferYaw) BUG here
         #print("newVal is " + str(newVal))
 
         ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
-        #frame_cx_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
+        #oframe_cy_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
         '''
-        FILTEREDYAW = frame_cx_buffer[5]
+        FILTEREDYAW = oframe_cy_buffer[5]
         filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
-        filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
-        frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
-        FILTEREDPITCH = frame_cy_buffer[5]
+        filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[5]
+        oframe_cp_buffer[5] = madFilter(filterdataBufferPitch)
+        FILTEREDPITCH = oframe_cp_buffer[5]
         '''
         
         ############# GET THE CURVES HERE #################
         if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
           curveplanner_iterator_ = 0
-          coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
-          coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
-          #coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
-          #coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+          coeff_area = CPLN.getBsplineCoeffs(oframe_cr_buffer) # 0s for now. do whatever you want to do, using 4 values per piecewise spline
+          coeff_roll = CPLN.getBsplineCoeffs(oframe_cr_buffer)  # its just zeros ... for now 
+          coeff_pitch = CPLN.getBsplineCoeffs(oframe_cp_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
+          coeff_yaw = CPLN.getBsplineCoeffs(oframe_cy_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
+          #coeff_yaw = spline6pt(oframe_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+          #coeff_pitch = spline6pt(oframe_cp_buffer) # 4 coeffs for piecewise curve using six pts as a support.
         
           if(LOG_FILES == True):
-            for uniset_coeffs_x,uniset_coeffs_y in zip(coeffx_new,coeffy_new):  
+            
+            for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
               nowTimeMillis = current_milli_time() - epochTimeMillis
               # time , raw algo x, filtered x, 
-              #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+              #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,oframe_cy_buffer[5],FILTEREDYAW,new_yawValue,oframe_cp_buffer[5],FILTEREDPITCH,new_pitchValue )
               # time , d ,c , b, a for (x)
-              logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
+              logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6},\t {7},\t {8},\t {9},\t {10},\t {11},\t {12},\t {13},\t {14},\t {15},\t {16},\t \n'.format(\
+              nowTimeMillis,\
+              coeffs_a[0],coeffs_a[1],coeffs_a[2],coeffs_a[3],\
+              coeffs_r[0],coeffs_r[1],coeffs_r[2],coeffs_r[3],\
+              coeffs_p[0],coeffs_p[1],coeffs_p[2],coeffs_p[3],\
+              coeffs_y[0],coeffs_y[1],coeffs_y[2],coeffs_y[3],\
+              )
               #logFile.write(str(logInfoStr))
               logFileCoeffs.write(str(logCoeffStr))
               #logging.info(logInfoStr)
@@ -339,8 +367,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
           with processLock:
             if INCLUDE_STM == True:
-              sendCoeffs(coeffx_new,coeffy_new)
-              counter_comms_update = 1
+              for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
+                sendCoeffs(coeffs_a,coeffs_r,coeffs_p,coeffs_y)
+                counter_comms_update = 1
           #logging.info("size of " + str(trajQ.qsize()))
           #################################################################
 
