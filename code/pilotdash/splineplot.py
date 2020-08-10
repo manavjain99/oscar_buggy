@@ -64,7 +64,25 @@ if __name__ == '__main__':
   pass
   #import doctest
   #doctest.testmod()
-  data = np.genfromtxt("splineCoeffs.txt", delimiter=",", names=["time","coeffd" ,"coeffc","coeffb" , "coeffa" ])
+  data = np.genfromtxt("splineCoeffs.txt", delimiter=",", \
+  names=["time",\
+  "coeffAd", \
+  "coeffAc", \
+  "coeffAb", \
+  "coeffAa", \
+  "coeffRd", \
+  "coeffRc", \
+  "coeffRb", \
+  "coeffRa", \
+  "coeffPd", \
+  "coeffPc", \
+  "coeffPb", \
+  "coeffPa", \
+  "coeffYd", \
+  "coeffYc", \
+  "coeffYb", \
+  "coeffYa", \
+  ])
   #BUFFERSIZE = 15
   #dataBuffer = [0]*BUFFERSIZE
   #print(type(data))
@@ -73,14 +91,15 @@ if __name__ == '__main__':
   #print(p)
   
   totalTime = data["time"][-1] - data["time"][0]
+  data["time"] = list(range(0,len(data["time"])))
 
   for i in range(len(data["time"])):
     currentTimeStamp = data["time"][i]
     
-    a = data["coeffa"][i]
-    b = data["coeffb"][i]
-    c = data["coeffc"][i]
-    d = data["coeffd"][i]
+    a = data["coeffPa"][i]
+    b = data["coeffPb"][i]
+    c = data["coeffPc"][i]
+    d = data["coeffPd"][i]
 
     if(i != (len(data["time"]) - 1)):
       nextTimeStamp = data["time"][i+1]
@@ -88,9 +107,41 @@ if __name__ == '__main__':
       x = unitTimeStep - currentTimeStamp
       F = curve3(x,a,b,c,d)
       #print("x[0] is " + str(X[0]*totalTime) + "F value is " + str(F[0]))
-      plt.plot(unitTimeStep, F, label=("piecewise spline from t = " + str(currentTimeStamp) + " to " + str(nextTimeStamp) ))
+      #plt.plot(unitTimeStep, F, label=("piecewise spline from t = " + str(currentTimeStamp) + " to " + str(nextTimeStamp) ))
+      plt.plot(unitTimeStep, F )
+      
       #plt.plot(X, F)
 
+  plt.xlabel('frames ( assuming ~fixed fps camera ) ')
+  plt.ylabel('absolute gimbal Pitch angles')
+  #plt.legend()
+  plt.show()
+
+  data["time"] = list(range(0,len(data["time"])))
+
+  for i in range(len(data["time"])):
+    currentTimeStamp = data["time"][i]
+    
+    a = data["coeffYa"][i]
+    b = data["coeffYb"][i]
+    c = data["coeffYc"][i]
+    d = data["coeffYd"][i]
+
+    if(i != (len(data["time"]) - 1)):
+      nextTimeStamp = data["time"][i+1]
+      unitTimeStep = np.linspace(currentTimeStamp,nextTimeStamp , 50)
+      x = unitTimeStep - currentTimeStamp
+      F = curve3(x,a,b,c,d)
+      #print("x[0] is " + str(X[0]*totalTime) + "F value is " + str(F[0]))
+      #plt.plot(unitTimeStep, F, label=("piecewise spline from t = " + str(currentTimeStamp) + " to " + str(nextTimeStamp) ))
+      plt.plot(unitTimeStep, F )
+      
+      #plt.plot(X, F)
+
+  plt.xlabel('frames ( assuming ~fixed fps camera ) ')
+  plt.ylabel('absolute gimbal Yaw angles')
+  #plt.legend()
+  plt.show()
 
 
   #plt.plot(X, F_derivative, label="F_der")
@@ -118,8 +169,7 @@ if __name__ == '__main__':
   plt.plot(knotx , tck[0], 'gs', label="Nodes or knots")
   plt.plot(x2, By2, label="Bspline curve ")
   """
-  plt.legend()
-  plt.show()
+
 
 """ END OF FILE """
 
