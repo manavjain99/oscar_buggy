@@ -259,7 +259,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
-      logging.info(" no of process frames "  + str(imgQ.qsize()))
+      #logging.info(" no of process frames "  + str(imgQ.qsize()))
       
       ## May edit to source != zero if default cam is set to 0
       if CAMERA_AVAIL == True:
@@ -271,90 +271,94 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       #
       #objA, objCX, objCY = GBT.trackGreenBall(frame)
       objA, objCX, objCY = ART.trackArucoMarker(frame)
+      logging.info(" got params as " + str(objA) + " " + str(objCX) + " " + str(objCY))
+      ############## LOADING ....*VALID* PARAMS INTO BUFFER ##########
+      if( objA != -1):
+        curveplanner_iterator_ += 1
+        #logging.info("curve planner iterator is " + str(curveplanner_iterator_))
+        if(curveplanner_iterator_ == 1):
+          # Making first and last elem same to avoid discontinuities in every hyperframe's output
+          frame_cx_buffer[0] = frame_cx_buffer[-1]   
+          frame_cy_buffer[0] = frame_cy_buffer[-1]   
 
-      ############## LOADING .... PARAMS INTO BUFFER ##########
-      curveplanner_iterator_ += 1
-      if(curveplanner_iterator_ == 1):
-        # Making first and last elem same to avoid discontinuities in every hyperframe's output
-        frame_cx_buffer[0] = frame_cx_buffer[-1]   
-        frame_cy_buffer[0] = frame_cy_buffer[-1]   
-
-      else:
-      # Zero o/p if obj not detected       
-        if(objCX != -1):
-          frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
         else:
-          frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
+        # Zero o/p if obj not detected       
+          if(objCX != -1):
+            frame_cx_buffer[curveplanner_iterator_ -1 ] = (FRAME_CX - objCX)/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+          else:
+            frame_cx_buffer[curveplanner_iterator_ -1 ] = 0
 
-        if(objCY != -1 ):
-          frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-        else:
-          frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
+          if(objCY != -1 ):
+            frame_cy_buffer[curveplanner_iterator_ -1 ] = (FRAME_CY - objCY )/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+          else:
+            frame_cy_buffer[curveplanner_iterator_ -1 ] = 0
 
-
-      #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
-      
-      ######## Filtering the data MAD filter ################
-      # DONT COMMENT OUT STUFF YOU DONT KNOW # 
-      filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
-      filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[curveplanner_iterator_ -1]
-      #print(type(filterdataBufferYaw))
-      #print(len(filterdataBufferYaw))
-      #newVal = madFilter(filterdataBufferYaw) BUG here
-      #print("newVal is " + str(newVal))
-
-      ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
-      #frame_cx_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
-      '''
-      FILTEREDYAW = frame_cx_buffer[5]
-      filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
-      filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
-      frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
-      FILTEREDPITCH = frame_cy_buffer[5]
-      '''
-      
-      ############# GET THE CURVES HERE #################
-      if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
-        curveplanner_iterator_ = 0
-        coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
-        coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
-        #coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
-        #coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
-      
-        if(LOG_FILES == True):
-          for uniset_coeffs_x,uniset_coeffs_y in zip(coeffx_new,coeffy_new):  
-            nowTimeMillis = current_milli_time() - epochTimeMillis
-            logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
-            logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
-            logFile.write(str(logInfoStr))
-            logFileCoeffs.write(str(logCoeffStr))
-            logging.info(logInfoStr)
-            #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
-            #print(str(new_yawValue))
+        logging.info(" got frame x buffer as  " + str(frame_cx_buffer) + " got frame y buffer as  " + str(frame_cy_buffer) )
+        #logging.info(str(objA) + " " +str(objCX) + " " +str(objCY) + " " +str(frame_cx_buffer[5]) + " " +str(frame_cy_buffer[5]) )
         
-        ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
-        with processLock:
-          if INCLUDE_STM == True:
-            sendCoeffs(coeffx_new,coeffy_new)
-            counter_comms_update = 1
-        #logging.info("size of " + str(trajQ.qsize()))
-        #################################################################
+        ######## Filtering the data MAD filter ################
+        # DONT COMMENT OUT STUFF YOU DONT KNOW # 
+        filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
+        filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[curveplanner_iterator_ -1]
+        #print(type(filterdataBufferYaw))
+        #print(len(filterdataBufferYaw))
+        #newVal = madFilter(filterdataBufferYaw) BUG here
+        #print("newVal is " + str(newVal))
 
-        #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
-        #logging.info("size of commsQ" + str(trajQ.qsize()))
-        cv2.imshow("Process Frame", frame)
-        if cv2.waitKey(1) == ord("q"):
-          event.set()
-          cv2.destroyAllWindows()
+        ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
+        #frame_cx_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
+        '''
+        FILTEREDYAW = frame_cx_buffer[5]
+        filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
+        filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = frame_cx_buffer[5]
+        frame_cy_buffer[5] = madFilter(filterdataBufferPitch)
+        FILTEREDPITCH = frame_cy_buffer[5]
+        '''
+        
+        ############# GET THE CURVES HERE #################
+        if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
+          curveplanner_iterator_ = 0
+          coeffx_new = CPLN.getBsplineCoeffs(frame_cx_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
+          coeffy_new = CPLN.getBsplineCoeffs(frame_cy_buffer) # set of piecewise coeffs [[dcba0],[dcba1], ..]
+          #coeffx_new = spline6pt(frame_cx_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+          #coeffy_new = spline6pt(frame_cy_buffer) # 4 coeffs for piecewise curve using six pts as a support.
+        
           if(LOG_FILES == True):
-            logFile.close()
-            logFileCoeffs.close()
-          break
-        #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-        #logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+            for uniset_coeffs_x,uniset_coeffs_y in zip(coeffx_new,coeffy_new):  
+              nowTimeMillis = current_milli_time() - epochTimeMillis
+              # time , raw algo x, filtered x, 
+              #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,frame_cx_buffer[5],FILTEREDYAW,new_yawValue,frame_cy_buffer[5],FILTEREDPITCH,new_pitchValue )
+              # time , d ,c , b, a for (x)
+              logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(nowTimeMillis,uniset_coeffs_x[0],uniset_coeffs_x[1],uniset_coeffs_x[2],uniset_coeffs_x[3])
+              #logFile.write(str(logInfoStr))
+              logFileCoeffs.write(str(logCoeffStr))
+              #logging.info(logInfoStr)
+              #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
+              #print(str(new_yawValue))
+          
+          ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
+          with processLock:
+            if INCLUDE_STM == True:
+              sendCoeffs(coeffx_new,coeffy_new)
+              counter_comms_update = 1
+          #logging.info("size of " + str(trajQ.qsize()))
+          #################################################################
 
-      #cv2.destroyAllWindows()
-      #"""
+          #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
+          #logging.info("size of commsQ" + str(trajQ.qsize()))
+          cv2.imshow("Process Frame", frame)
+          if cv2.waitKey(1) == ord("q"):
+            event.set()
+            cv2.destroyAllWindows()
+            if(LOG_FILES == True):
+              logFile.close()
+              logFileCoeffs.close()
+            break
+          #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+          logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+
+        #cv2.destroyAllWindows()
+        #"""
 
 
 
@@ -417,8 +421,6 @@ if __name__ == '__main__':
 
 
   #ComArduino2.runTest(gimbal_coords_buffer)
-  
-
   #while (1):
   #  if cv2.waitKey(1) == ord("q"):
   #    event.set()
