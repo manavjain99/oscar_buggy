@@ -19,7 +19,7 @@
 #import gimbalcmd
 INCLUDE_STM = True
 LOG_FILES = True
-CAMERA_AVAIL = True
+CAMERA_AVAIL = False
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -74,6 +74,9 @@ THRES_PERCENT_CHANGE =0.10
 
 ########## PROCESS PARAMS #############
 # too less cant calc splines too high vmuch delay prop to PROC_FRAME_FREQ
+
+# CAN GO MAX UPTO 15 , Size limited to 3000 chars on the MCU 
+# For a value of 6 takes around 1000 chars ie ( n-1 or 5 set of piecewisecoeffsvals  )
 SPLINE_FRAME_SIZE = 6 
 ACK_MCU_MSG = '1'
 
@@ -241,6 +244,13 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   stcom.sendToArduino(Coeffs.encode('utf-8'))
   logging.info(len(Coeffs))
 
+def sendEOL():
+  """
+  Sends EOL ie '\\n' character to the Arduino board. 
+  """
+  myEOL = str('\n')
+  stcom.sendToArduino(myEOL.encode('utf-8'))
+
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
@@ -351,7 +361,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
               # time , raw algo x, filtered x, 
               #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,oframe_cy_buffer[5],FILTEREDYAW,new_yawValue,oframe_cp_buffer[5],FILTEREDPITCH,new_pitchValue )
               # time , d ,c , b, a for (x)
-              logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6},\t {7},\t {8},\t {9},\t {10},\t {11},\t {12},\t {13},\t {14},\t {15},\t {16},\t \n'.format(\
+              logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6},\t {7},\t {8},\t {9},\t {10},\t {11},\t {12},\t {13},\t {14},\t {15},\t {16}\t \n'.format(\
               nowTimeMillis,\
               coeffs_a[0],coeffs_a[1],coeffs_a[2],coeffs_a[3],\
               coeffs_r[0],coeffs_r[1],coeffs_r[2],coeffs_r[3],\
@@ -370,6 +380,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
               for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
                 sendCoeffs(coeffs_a,coeffs_r,coeffs_p,coeffs_y)
                 counter_comms_update = 1
+              sendEOL() 
           #logging.info("size of " + str(trajQ.qsize()))
           #################################################################
 
