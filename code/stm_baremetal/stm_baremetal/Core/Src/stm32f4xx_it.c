@@ -21,8 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "../Inc/global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,6 +44,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+int sent_index=0;
+int commBuff_index=0;
 
 /* USER CODE END PV */
 
@@ -58,14 +62,10 @@
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
-extern int commBuff_index;
-extern uint8_t bufferRx[5];
-extern char prompt;
+extern uint8_t bufferRx[RXBUFFERSIZE];
 extern UART_HandleTypeDef UartHandle;
 extern ITStatus UartReady ;
-extern char buffbuff[100];
-extern int sent_index;
-extern char commBuff[50];
+extern char commBuff[COMMSBUFFERSIZE];
 
 
 /* USER CODE END EV */
@@ -216,13 +216,13 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-  HAL_UART_Receive_IT(&huart2, &bufferRx[0], 1 );
+  HAL_UART_Receive_IT(&huart2, (uint8_t*)bufferRx, 1 );
    // write the bytes to our Command buffer
    commBuff[commBuff_index] = bufferRx[0];
    if (bufferRx[0] == '\r' || bufferRx[0] == '\n')
    {
        UartReady = SET;
-       HAL_UART_Transmit(&huart2, (uint8_t*)commBuff, 50, 100);
+       HAL_UART_Transmit(&huart2, (uint8_t*)commBuff, 500, 100);
        sent_index=commBuff_index;
        bufferRx[0] = '\0';
        commBuff_index = 0;
@@ -230,7 +230,7 @@ void USART2_IRQHandler(void)
    // use normal transmit (not transmit_IT) so we don't
    // get duplicates in the buffer
    // TODO - stop using this dirty hack...
-   HAL_UART_Transmit(&huart2, bufferRx, 5,100);
+   //HAL_UART_Transmit(&huart2, bufferRx, 5,100);
    commBuff_index++;
   /* USER CODE END USART2_IRQn 1 */
 }

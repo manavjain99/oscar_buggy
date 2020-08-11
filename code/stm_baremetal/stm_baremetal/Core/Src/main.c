@@ -25,6 +25,7 @@
 #include "../Inc/stm32f4xx_hal_conf.h"
 #include "../Inc/stm32f4xx_it.h"
 #include "../Inc/usart_utilities.h"
+#include "../Inc/global.h"
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -63,17 +64,15 @@ static void MX_USART2_UART_Init(void);
 
 UART_HandleTypeDef UartHandle;
 __IO ITStatus UartReady = RESET;
-char commBuff[50];
-char action[50];
 
-#define RXBUFFERSIZE    10
+
+
+
+char commBuff[COMMSBUFFERSIZE];
+
 uint8_t aRxBuffer[RXBUFFERSIZE];
+uint8_t bufferRx[RXBUFFERSIZE];
 
-char buffbuff[100];
-uint8_t bufferRx[5];
-char prompt[5] = "\r\n>>>";
-int commBuff_index=0;
-int sent_index=0;
 
 /*My code vars*/
 const char setupInitMsg[] = "<Arduino is ready>";
@@ -121,8 +120,6 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  sprintf(buffbuff, "This is me testing...\r\n>>>");
-  //HAL_UART_Transmit_IT(&huart2, (uint8_t*)buffbuff, 90);
   HAL_UART_Transmit_IT(&huart2, (uint8_t*)setupInitMsg, sizeof(setupInitMsg));
 
   while (1)
@@ -136,7 +133,7 @@ int main(void)
 	        /* do shit all... The Part When interrupt is not running  */
 		   	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		   	  //UU_PutString(USART2, &debugMsg[0]);
-		   	  printf("Hello World!\n");
+		   	 // printf("Hello World!\n");
 		   	     /* Insert a 100ms delay */
 		   	  HAL_Delay(100);
 
@@ -144,9 +141,9 @@ int main(void)
 	    }
 	   else {
 	        UartReady = RESET;
-	        sprintf(action, "\r\nComm: %s", commBuff);
-	        HAL_UART_Transmit(&huart2, (uint8_t*)action, 60, 100);
-	        HAL_UART_Transmit_IT(&huart2, (uint8_t*)prompt, 5);
+	        printf("command buffer is %s", commBuff);
+	        memset(commBuff,0,sizeof(commBuff));
+	        //HAL_UART_Transmit_IT(&huart2, (uint8_t*)prompt, 5);
 	    }
 
   }
