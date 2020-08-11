@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "code/tests"
+		},
+		{
+			"path": "code/mcu"
 		}
 	],
 	"settings": {

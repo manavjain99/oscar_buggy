@@ -6,3 +6,6 @@ Added UART TX
 
 Release v0.3.0 
 UART RX Interrupt
+
+Release v0.4.0 
+ITM printf working 
