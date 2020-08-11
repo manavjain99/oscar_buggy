@@ -27,7 +27,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Src/../Inc/stm32f4xx_hal_conf.h \
  ../Core/Src/../Inc/stm32f4xx_it.h ../Core/Src/../Inc/usart_utilities.h \
- ../Core/Src/../Inc/main.h
+ ../Core/Src/../Inc/main.h ../Core/Src/../Inc/global.h
 
 ../Core/Inc/main.h:
 
@@ -90,3 +90,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Src/../Inc/usart_utilities.h:
 
 ../Core/Src/../Inc/main.h:
+
+../Core/Src/../Inc/global.h:

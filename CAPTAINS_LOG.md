@@ -1236,3 +1236,22 @@ See verified images
 
 PS : THE disconiuities **may** get taken care of once MAD Filter comes into play. Need to fix that BUG. .. 
 
+11.08.2020 
+
+10.51 PM 
+Did quite a lot of stuff today.. 
+Tried installing cubeIDE on Manjaro turns out not a good ide there ... Instead installed python lib dependencies here on windows and now running stuff on this machine OS. Sad But no other options.. 
+But studff is working good news there 
+
+Did ITM init on MCU !! 
+It works for general debugging rnow. Did take care of Interrupts and Buffers , now able to send python messages on there .. Did a Manual UART send data and debugging 
+via CubeIDE . 
+
+bREAKS when debugging alongwith python probably coz you cant stop time , the inputs of python are real time. 
+
+Tried disabling breakpoints and running , didnt break hopefully its working well , 
+Highly unprobable though 
+
+Will be now parsing the data and printing the stuff on ITM later to see if the data is verified correctlty or not ...
+
+For now .. C me later .

@@ -23,6 +23,9 @@
 		},
 		{
 			"path": "code/mcu"
+		},
+		{
+			"path": "references"
 		}
 	],
 	"settings": {
