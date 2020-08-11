@@ -74,6 +74,11 @@ uint8_t bufferRx[5];
 char prompt[5] = "\r\n>>>";
 int commBuff_index=0;
 int sent_index=0;
+
+/*My code vars*/
+const char setupInitMsg[] = "<Arduino is ready>";
+
+
 /* USER CODE END 0 */
 
 /**
@@ -117,7 +122,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   sprintf(buffbuff, "This is me testing...\r\n>>>");
-  HAL_UART_Transmit_IT(&huart2, (uint8_t*)buffbuff, 90);
+  //HAL_UART_Transmit_IT(&huart2, (uint8_t*)buffbuff, 90);
+  HAL_UART_Transmit_IT(&huart2, (uint8_t*)setupInitMsg, sizeof(setupInitMsg));
+
   while (1)
   {
     /* USER CODE END WHILE */
@@ -129,6 +136,7 @@ int main(void)
 	        /* do shit all... The Part When interrupt is not running  */
 		   	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		   	  //UU_PutString(USART2, &debugMsg[0]);
+		   	  printf("Hello World!\n");
 		   	     /* Insert a 100ms delay */
 		   	  HAL_Delay(100);
 
