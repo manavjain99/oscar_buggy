@@ -17,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 LOG_FILES = True
 CAMERA_AVAIL = True
 
