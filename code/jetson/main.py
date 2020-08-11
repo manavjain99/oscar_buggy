@@ -239,7 +239,7 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   
   #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
   stcom.sendToArduino(Coeffs.encode('utf-8'))
-  logging.info(" Len of op sent is " + len(Coeffs))
+  logging.info(len(Coeffs))
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
@@ -345,8 +345,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           #coeff_pitch = spline6pt(oframe_cp_buffer) # 4 coeffs for piecewise curve using six pts as a support.
         
           if(LOG_FILES == True):
-            # Justifies the op to $$$$.$$$ nos where $ may be space or number.
-            limF = lambda a: (float("{:7.3f}".format(a)))
+            
             for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
               nowTimeMillis = current_milli_time() - epochTimeMillis
               # time , raw algo x, filtered x, 
@@ -354,10 +353,10 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
               # time , d ,c , b, a for (x)
               logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6},\t {7},\t {8},\t {9},\t {10},\t {11},\t {12},\t {13},\t {14},\t {15},\t {16},\t \n'.format(\
               nowTimeMillis,\
-              limF(coeffs_a[0]),limF(coeffs_a[1]),limF(coeffs_a[2]),limF(coeffs_a[3]),\
-              limF(coeffs_r[0]),limF(coeffs_r[1]),limF(coeffs_r[2]),limF(coeffs_r[3]),\
-              limF(coeffs_p[0]),limF(coeffs_p[1]),limF(coeffs_p[2]),limF(coeffs_p[3]),\
-              limF(coeffs_y[0]),limF(coeffs_y[1]),limF(coeffs_y[2]),limF(coeffs_y[3]),\
+              coeffs_a[0],coeffs_a[1],coeffs_a[2],coeffs_a[3],\
+              coeffs_r[0],coeffs_r[1],coeffs_r[2],coeffs_r[3],\
+              coeffs_p[0],coeffs_p[1],coeffs_p[2],coeffs_p[3],\
+              coeffs_y[0],coeffs_y[1],coeffs_y[2],coeffs_y[3],\
               )
               #logFile.write(str(logInfoStr))
               logFileCoeffs.write(str(logCoeffStr))
