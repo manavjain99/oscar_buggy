@@ -148,8 +148,9 @@ print
 print
 
 # NOTE the user must ensure that the serial port and baudrate are correct
-serPort = "/dev/ttyUSB0"
-baudRate = 921600
+#serPort = "/dev/ttyUSB0"
+serPort = "COM4"
+baudRate = 115200
 ser = serial.Serial(serPort, baudRate)
 print("Serial port " + serPort + " opened  Baudrate " + str(baudRate))
 
