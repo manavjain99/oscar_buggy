@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../Inc/global.h"
+#include <stdbool.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,7 +67,7 @@ extern uint8_t bufferRx[RXBUFFERSIZE];
 extern UART_HandleTypeDef UartHandle;
 extern ITStatus UartReady ;
 extern char commBuff[COMMSBUFFERSIZE];
-
+extern bool newData;
 
 /* USER CODE END EV */
 
@@ -226,6 +227,7 @@ void USART2_IRQHandler(void)
        sent_index=commBuff_index;
        bufferRx[0] = '\0';
        commBuff_index = 0;
+       newData = TRUE;  
    }
    // use normal transmit (not transmit_IT) so we don't
    // get duplicates in the buffer

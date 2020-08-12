@@ -26,6 +26,7 @@
 #include "../Inc/stm32f4xx_it.h"
 #include "../Inc/usart_utilities.h"
 #include "../Inc/global.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -46,7 +47,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
-
+bool newData = FALSE;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -130,16 +131,24 @@ int main(void)
 	   HAL_UART_Receive_IT(&huart2, &bufferRx[0], 5);
 	    // Magic pixie dust
 	   if (UartReady != SET) {
-	        /* do shit all... The Part When interrupt is not running  */
-		   	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		   	  //UU_PutString(USART2, &debugMsg[0]);
-		   	 // printf("Hello World!\n");
-		   	     /* Insert a 100ms delay */
-		   	  HAL_Delay(100);
-
-	        continue;
+      /* do shit all... The Part When UART interrupt is not triggered  */
+      //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      if(newData == TRUE){
+        //parseData(commBuff);
+        //regensplines
+        //interpolate splines 
+        // fire to gimbal 
+        newData = FALSE;
+      }
+      
+      
+      // Find sleep functionality later and replace this here ...
+      HAL_Delay(100000); // MS 
+      continue;
 	    }
 	   else {
+       // The part when UART was triggered. 
 	        UartReady = RESET;
 	        printf("command buffer is %s", commBuff);
 	        memset(commBuff,0,sizeof(commBuff));
