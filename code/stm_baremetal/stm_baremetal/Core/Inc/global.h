@@ -14,6 +14,7 @@
 // Each single curveunit is ~250 chars , sending atleast 5 ie 1250chars
 #define COMMSBUFFERSIZE 3000
 
-
+#define TRUE 1
+#define FALSE 0
 
 #endif /* INC_GLOBAL_H_ */
