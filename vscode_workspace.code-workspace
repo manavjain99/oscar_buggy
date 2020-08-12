@@ -48,7 +48,9 @@
 			"*.ipp": "cpp",
 			"cstddef": "cpp",
 			"ostream": "cpp",
-			"*.tpp": "cpp"
+			"*.tpp": "cpp",
+			"variant": "cpp",
+			"rope": "cpp"
 		}
 	}
 }

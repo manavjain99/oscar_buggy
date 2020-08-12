@@ -1255,3 +1255,38 @@ Highly unprobable though
 Will be now parsing the data and printing the stuff on ITM later to see if the data is verified correctlty or not ...
 
 For now .. C me later .
+
+
+12/8/2020 
+
+10.45 PM 
+
+Did I ever mention that windows was an absolute piece of trash in installing and running pyhton .. 
+I guess I did . 
+I did unit test my curve data parsing code today ( stable ( ** unittest ) )[thisfile](code/playground/curvestesting.cpp)
+It seems to be compiling on CubeIDE well . 
+see STMBAREMETAL. 
+I had to make a few minor changes to the data that is being sent.
+ie add a EOL to the string and insert spaces between every piecewise curves .
+see [main.py](code/jetson/main/.py) 
+```
+def sendEOL()
+  ... 
+def sendSPACE()
+  ...
+``` 
+
+Found that ```strtok``` doesnt work recursively USE INSTEAD ```strtok_r```. Spent a shit load of time there. 
+Eventually read the documentation part. I should start from the cpp reference first and then move to other shit on the WWW. 
+
+Coming back to windows being shit my [main.py](code/jetson/main/.py) doesnt work well . 
+So now thinking of using 2pcs one running on linux and other for using STMCubeIDE Windows... 
+Another Day SETUP ... 
+Fuck . 
+Okay doing it today .. Hopefully it works . 
+
+Provided the number of times and the no of ways I have re setup the environment , I should be crowned for that task itself only .. 
+
+Okay , Tomorrow I need to get this stuff tested hopefully INTERPOLATION TESTED AND VERIFIED 
+
+3-4 more days until I get the smooth motherf*king curves on Gimbal working. 

@@ -1,0 +1,2 @@
+curves.cpp:70:6:void parseData(byte*)	32	static
+curves.cpp:108:6:void parseCoeffs(byte*, int)	32	static

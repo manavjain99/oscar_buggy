@@ -27,14 +27,13 @@ using namespace std;
 
 #define MAXCURVES 15
 typedef char byte;
-typedef float float_t;
 struct curve
 {
   /* data */
-  float_t d;
-  float_t c;
-  float_t b;
-  float_t a;
+  int16_t d;
+  int16_t c;
+  int16_t b;
+  int16_t a;
 
 };
 
@@ -95,17 +94,15 @@ void parseData(byte * parseMsg){
     cout << "insidewhile" << endl;
 
     frameToken = strtok_r(NULL, (byte *)startMarker,&saveptr1);
-//    cout << "retryparse, token should be null is:" << frameToken << endl;
+    cout << "retryparse, token should be null is:" << frameToken << endl;
     if(frameToken == NULL){
         cout << "tokennullstart";
-        break;
     }
-
+    
     frameToken = strtok_r(NULL, (byte *)endMarker,&saveptr1);
-//    cout << "retryparse, token 2 is:" << frameToken << endl;
+    cout << "retryparse, token 2 is:" << frameToken << endl;
         if(frameToken == NULL){
         cout << "tokennullend";
-        break;
     }
     
     if(frameToken!=NULL){
@@ -142,7 +139,6 @@ void parseCoeffs(byte * frameMsg, int index){
   area.curves[index].b = atof(coeffsToken);
   coeffsToken = strtok_r(NULL,(byte*) delimiter, &saveptr2);
   area.curves[index].a = atof(coeffsToken);
-  cout << "Coeff area a token is:" << coeffsToken << endl;
   
   coeffsToken = strtok_r(NULL,(byte*) delimiter, &saveptr2);
   roll.curves[index].d = atof(coeffsToken);
@@ -176,13 +172,12 @@ void parseCoeffs(byte * frameMsg, int index){
 
 
 int main(){
-    char testMsg[] = " <0.0,	 0.0,	 0.0,	 3.990,	 0.0,	 0.0,	 0.0,	 0.0,	 -0.018865938725497182,	 0.0679173794117895,	 -0.6696188776226956,	 3.6917098445595853,	 -0.019224606762103857,	 0.06920858434357391,	 -0.03377792101544628,	 -18.6139896373057 > <	 0.0,	 0.0,	 0.0,	 90.0538,	 0.0,	 0.0,	 0.0,	 0.0,	 0.004232282831955581,	 1.1275702593849246e-17,	 0.03708340564080967,	 4.650259067357513,	 -0.04461830375383687,	 0.0,	 0.366495607837304,	 -3.691709844559585>";
+    char testMsg[] = " <0.0,	 0.0,	 0.0,	 3.990,	 0.0,	 0.0,	 0.0,	 0.0,	 -0.018865938725497182,	 0.0679173794117895,	 -0.6696188776226956,	 3.6917098445595853,	 -0.019224606762103857,	 0.06920858434357391,	 -0.03377792101544628,	 -18.6139896373057 > <	 0.0,	 0.0,	 0.0,	 0.0,	 0.0,	 0.0,	 0.0,	 0.0,	 0.004232282831955581,	 1.1275702593849246e-17,	 0.03708340564080967,	 4.650259067357513,	 -0.04461830375383687,	 0.0,	 0.366495607837304,	 -3.691709844559585>";
     
     parseData((byte*)testMsg);
-    cout << " \narea curves is :" << area.curves[0].a ; 
-    
     char hiMsg[] = " <hi>";
     char* hiptr = hiMsg;
     //parseHi(hiptr);
+    cout << "area curves is" << area.curves[0].a ; 
     return 0;
 }
