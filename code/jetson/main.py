@@ -17,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = True
+INCLUDE_STM = False
 LOG_FILES = True
 CAMERA_AVAIL = False
 
@@ -213,7 +213,8 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
   +">")
   #"""
-  Coeffs = str('<'\
+  # Yes the space helpsme parse it / dont remove. 
+  Coeffs = str(" <"\
 
   +str(coeffv[0])+','\
   +str(coeffv[1])+','\
@@ -233,10 +234,10 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   +str(coeffy[0])+','\
   +str(coeffy[1])+','\
   +str(coeffy[2])+','\
-  +str(coeffy[3])+','\
+  +str(coeffy[3])\
 
-  +'>')
-
+  +"> ")
+  # Yes the space helpsme parse it / dont remove. 
   #logging.info('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+',')
   #logging.info("<"+str(coeffx[1])+',')
   
@@ -250,6 +251,14 @@ def sendEOL():
   """
   myEOL = str('\n')
   stcom.sendToArduino(myEOL.encode('utf-8'))
+
+def sendSPACE():
+  """
+  Sends SPACE ie ' ' character to the Arduino board. easier for parsing.  
+  """
+  mySPACE = str(' ')
+  stcom.sendToArduino(mySPACE.encode('utf-8'))
+
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
@@ -377,6 +386,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
           with processLock:
             if INCLUDE_STM == True:
+              sendSPACE()
               for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
                 sendCoeffs(coeffs_a,coeffs_r,coeffs_p,coeffs_y)
                 counter_comms_update = 1
