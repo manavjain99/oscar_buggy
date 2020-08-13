@@ -8,8 +8,11 @@
 #ifndef INC_CURVES_H_
 #define INC_CURVES_H_
 
+
+
 #define MAXCURVES 15
 typedef char byte;
+typedef float float_t;
 struct curve
 {
   /* data */
@@ -27,7 +30,7 @@ struct Curves{
 
 
 void parseCoeffs(byte* , int );
-void parseData(byte* );
+void parseData(byte * );
 
 
 

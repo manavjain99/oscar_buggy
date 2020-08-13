@@ -22,13 +22,15 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "../Inc/stm32f4xx_hal_conf.h"
 #include "../Inc/stm32f4xx_it.h"
 #include "../Inc/usart_utilities.h"
 #include "../Inc/global.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
+#include "../Inc/curves.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -74,6 +76,7 @@ char commBuff[COMMSBUFFERSIZE];
 uint8_t aRxBuffer[RXBUFFERSIZE];
 uint8_t bufferRx[RXBUFFERSIZE];
 
+extern struct Curves area,roll,pitch,yaw;
 
 /*My code vars*/
 const char setupInitMsg[] = "<Arduino is ready>";
@@ -144,13 +147,16 @@ int main(void)
       
       
       // Find sleep functionality later and replace this here ...
-      HAL_Delay(100000); // MS 
+      HAL_Delay(100); // MS
       continue;
 	    }
 	   else {
        // The part when UART was triggered. 
 	        UartReady = RESET;
 	        printf("command buffer is %s", commBuff);
+	        memset(commBuff,32,21);
+	        parseData((byte* )commBuff);
+	        printf("area.curves[0].d = 99 should be :%f", area.curves[0].d);
 	        memset(commBuff,0,sizeof(commBuff));
 	        //HAL_UART_Transmit_IT(&huart2, (uint8_t*)prompt, 5);
 	    }

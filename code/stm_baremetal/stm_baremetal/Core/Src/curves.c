@@ -16,8 +16,10 @@
 /* USER CODE BEGIN Includes */
 #include "stm32f4xx_it.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <cmath>
+#include<math.h>
 #include "../Inc/global.h"
 #include "../Inc/curves.h"
 
@@ -27,7 +29,7 @@
 /* USER CODE BEGIN TD */
 
 
-Curves area,roll,pitch,yaw;
+struct Curves area,roll,pitch,yaw;
 //.test = 10;
 /* USER CODE END TD */
 
@@ -77,7 +79,7 @@ void parseData(byte * parseMsg){
   while (frameToken != NULL){
     /* code */
 
-
+	  ++frameIndex;
     frameToken = strtok_r(NULL, (byte *)startMarker,&saveptr1);
 
     if(frameToken == NULL){
@@ -97,7 +99,7 @@ void parseData(byte * parseMsg){
         parseCoeffs(frameToken,frameIndex);
     }
     
-    ++frameIndex;
+
   }
     
 }
