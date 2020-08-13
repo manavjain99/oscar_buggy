@@ -11,8 +11,6 @@
 
 
 #define MAXCURVES 15
-typedef char byte;
-typedef float float_t;
 struct curve
 {
   /* data */

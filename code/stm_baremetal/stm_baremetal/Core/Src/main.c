@@ -31,6 +31,8 @@
 #include "../Inc/usart_utilities.h"
 #include "../Inc/global.h"
 #include "../Inc/curves.h"
+#include "../Inc/gimbal_stuff.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,7 +51,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
-bool newData = FALSE;
+UART_HandleTypeDef huart6;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -58,6 +61,7 @@ bool newData = FALSE;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USART6_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -68,13 +72,12 @@ static void MX_USART2_UART_Init(void);
 UART_HandleTypeDef UartHandle;
 __IO ITStatus UartReady = RESET;
 
-
-
-
 char commBuff[COMMSBUFFERSIZE];
 
 uint8_t aRxBuffer[RXBUFFERSIZE];
 uint8_t bufferRx[RXBUFFERSIZE];
+
+bool newData = FALSE;
 
 extern struct Curves area,roll,pitch,yaw;
 
@@ -113,8 +116,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t debugMsg[] = "hi\n";
+  //uint8_t debugMsg[] = "hi\n";
 
   __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE); // flag receive
   __HAL_UART_ENABLE_IT(&huart2, UART_IT_TC); // flat Tx_IT
@@ -123,6 +127,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  init_gimbal();
 
   HAL_UART_Transmit_IT(&huart2, (uint8_t*)setupInitMsg, sizeof(setupInitMsg));
 
@@ -169,7 +175,6 @@ int main(void)
   * @brief System Clock Configuration
   * @retval None
   */
-
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -235,6 +240,39 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * @brief USART6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART6_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART6_Init 0 */
+
+  /* USER CODE END USART6_Init 0 */
+
+  /* USER CODE BEGIN USART6_Init 1 */
+
+  /* USER CODE END USART6_Init 1 */
+  huart6.Instance = USART6;
+  huart6.Init.BaudRate = 115200;
+  huart6.Init.WordLength = UART_WORDLENGTH_8B;
+  huart6.Init.StopBits = UART_STOPBITS_1;
+  huart6.Init.Parity = UART_PARITY_NONE;
+  huart6.Init.Mode = UART_MODE_TX_RX;
+  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART6_Init 2 */
+
+  /* USER CODE END USART6_Init 2 */
 
 }
 

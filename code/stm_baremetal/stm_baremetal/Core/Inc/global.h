@@ -21,4 +21,11 @@
 #define TRUE 1
 #define FALSE 0
 
+typedef char byte;
+typedef float float_t;
+
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart6;
+
+
 #endif /* INC_GLOBAL_H_ */

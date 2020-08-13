@@ -12,6 +12,6 @@
 #include "../../Libs/mavlink/include/mavlink_types.h"
 #include "../../Libs/mavlink/include/mavlink.h"
 
-
+void init_gimbal();
 
 #endif /* INC_GIMBAL_STUFF_H_ */
