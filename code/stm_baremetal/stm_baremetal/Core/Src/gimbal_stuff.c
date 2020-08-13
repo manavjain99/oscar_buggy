@@ -9,10 +9,32 @@
 #include "../Inc/main.h"
 #include "../Inc/global.h"
 #include "../Inc/gimbal_stuff.h"
+#include "../Inc/curves.h"
 
+/*SET PARAMETERS */
+#define CURVES_TO_CONSIDER 5
+#define MAX_HYPERFRAME_TIME 400UL /* MS, time before next UART interrupt */
+#define INTERPOLATION_PTS 8 
+
+
+
+/*DONT TOUCH THESE , UNLESS YOU KNOW WHAT YOU ARE DOING*/
 #define uart_gimbal huart6
+#define CURVES_TO_CONSIDER_INDEX (CURVES_TO_CONSIDER-1)
 
+/* GLobal Vars */
+uint16_t hyperframeTime = 0;
 
+/* Private Macros */
+#define getCurveVal(x,d,c,b,a) (d*pow(x,3) + c*pow(x,2) + b*pow(x,1) + a)
+
+/* Private Vars */
+static uint8_t curveIndex = 0;
+static uint16_t scheduledTime = 0;
+static float_t time1Curve = (INTERPOLATION_PTS!=0)?(MAX_HYPERFRAME_TIME/(float_t)(CURVES_TO_CONSIDER)):(0);
+static float_t curveAngleRoll = 0;
+static float_t curveAnglePitch = 0;
+static float_t curveAngleYaw = 0;
   union byteToFloat
   {
       struct
@@ -141,7 +163,7 @@
   }
 
 #ifdef READ_FROM_GIMBAL
-
+/*NOT MODIFIED , NOT COMPILABLE */
   void read_mavlink_storm32(){ 
     
     mavlink_message_t msg;
@@ -191,3 +213,22 @@ void init_gimbal(void){
   
 }
 
+void actuate_gimbal(void){
+  assert(INTERPOLATION_PTS!=0);
+  while(curveIndex <= CURVES_TO_CONSIDER_INDEX){
+    if(hyperframeTime >= scheduledTime){
+    float_t x = scheduledTime - curveIndex*time1Curve;
+    
+    curveAngleRoll = getCurveVal(x,roll.curves[curveIndex].d,roll.curves[curveIndex].c,roll.curves[curveIndex].b,roll.curves[curveIndex].a);
+    curveAnglePitch = getCurveVal(x,pitch.curves[curveIndex].d,pitch.curves[curveIndex].c,pitch.curves[curveIndex].b,pitch.curves[curveIndex].a);
+    curveAngleYaw = getCurveVal(x,yaw.curves[curveIndex].d,yaw.curves[curveIndex].c,yaw.curves[curveIndex].b,yaw.curves[curveIndex].a);
+    
+    setAngles(curveAngleRoll,curveAnglePitch,curveAngleYaw);
+    scheduledTime += time1Curve/((float)(INTERPOLATION_PTS));
+    }
+    if(scheduledTime >= (curveIndex+1)*(time1Curve)){
+      curveIndex++;
+    }
+  }
+  hyperframeTime = 0;
+}

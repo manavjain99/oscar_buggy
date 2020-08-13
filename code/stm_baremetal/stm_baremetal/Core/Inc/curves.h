@@ -25,7 +25,7 @@ struct Curves{
 	struct curve curves[MAXCURVES];
 };
 
-
+extern struct Curves area,roll,pitch,yaw;
 
 void parseCoeffs(byte* , int );
 void parseData(byte * );

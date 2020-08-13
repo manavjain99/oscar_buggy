@@ -109,7 +109,8 @@ Core/Src/gimbal_stuff.o: ../Core/Src/gimbal_stuff.c \
  ../Core/Src/../Inc/../../Libs/mavlink/include/common/./mavlink_msg_named_value_int.h \
  ../Core/Src/../Inc/../../Libs/mavlink/include/common/./mavlink_msg_statustext.h \
  ../Core/Src/../Inc/../../Libs/mavlink/include/common/./mavlink_msg_debug.h \
- ../Core/Src/../Inc/../../Libs/mavlink/include/protocol.h
+ ../Core/Src/../Inc/../../Libs/mavlink/include/protocol.h \
+ ../Core/Src/../Inc/curves.h
 
 ../Core/Src/../Inc/main.h:
 
@@ -334,3 +335,5 @@ Core/Src/gimbal_stuff.o: ../Core/Src/gimbal_stuff.c \
 ../Core/Src/../Inc/../../Libs/mavlink/include/common/./mavlink_msg_debug.h:
 
 ../Core/Src/../Inc/../../Libs/mavlink/include/protocol.h:
+
+../Core/Src/../Inc/curves.h:

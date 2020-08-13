@@ -195,6 +195,8 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+  /* A hyperframe is time between 2 consecutive UART interrrupts in this scenario */
+  hyperframeTime++;
 
   /* USER CODE END SysTick_IRQn 1 */
 }

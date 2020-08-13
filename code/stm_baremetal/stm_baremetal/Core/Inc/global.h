@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define RXBUFFERSIZE    500
 // Each single curveunit is ~250 chars , sending atleast 5 ie 1250chars
@@ -21,11 +22,14 @@
 #define TRUE 1
 #define FALSE 0
 
+#define AND &&
+#define OR ||
 typedef char byte;
 typedef float float_t;
 
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart6;
 
+extern uint16_t hyperframeTime;
 
 #endif /* INC_GLOBAL_H_ */
