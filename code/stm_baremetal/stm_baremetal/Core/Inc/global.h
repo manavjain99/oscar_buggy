@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #define RXBUFFERSIZE    500
 // Each single curveunit is ~250 chars , sending atleast 5 ie 1250chars
