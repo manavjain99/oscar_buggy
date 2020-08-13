@@ -26,6 +26,9 @@
 		},
 		{
 			"path": "references"
+		},
+		{
+			"path": "."
 		}
 	],
 	"settings": {
