@@ -13,3 +13,6 @@ ITM printf working
 
 Release v0.5.0 
 Data parsing and storing succeess.
+
+Release v0.6.0 
+Working gimbal init tested , ie sendAngles. 
