@@ -9,3 +9,7 @@ UART RX Interrupt
 
 Release v0.4.0 
 ITM printf working 
+
+
+Release v0.5.0 
+Data parsing and storing succeess.

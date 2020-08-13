@@ -9,6 +9,10 @@
 #define INC_GLOBAL_H_
 
 #include "main.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define RXBUFFERSIZE    500
 // Each single curveunit is ~250 chars , sending atleast 5 ie 1250chars

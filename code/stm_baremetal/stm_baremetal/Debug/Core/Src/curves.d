@@ -25,8 +25,8 @@ Core/Src/curves.o: ../Core/Src/curves.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/stm32f4xx_it.h ../Core/Src/../Inc/global.h \
- ../Core/Src/../Inc/main.h ../Core/Src/../Inc/curves.h
+ ../Core/Src/../Inc/global.h ../Core/Src/../Inc/main.h \
+ ../Core/Src/../Inc/curves.h
 
 ../Core/Inc/main.h:
 
@@ -81,8 +81,6 @@ Core/Src/curves.o: ../Core/Src/curves.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
-
-../Core/Inc/stm32f4xx_it.h:
 
 ../Core/Src/../Inc/global.h:
 
