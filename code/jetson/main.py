@@ -17,9 +17,9 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 LOG_FILES = True
-CAMERA_AVAIL = False
+CAMERA_AVAIL = True
 
 if __name__ == '__main__':
   import concurrent.futures
@@ -51,11 +51,17 @@ GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
 
 
 ####### CAMERA AND FRAMES PARAMS #########
-# 3, 2, 1 for ext webcam 0 for webcam
-VID_SRC = 0
+# 3, 2, 1 for ext webcam 0 for webcam use camtesting.py in tests directly 
+VID_SRC = 2
+#Laptop Webcam 
+#FRAME_CX = 480.0/2.0
+#FRAME_CY = 640.0/2.0
+
+#external Webcam 
 FRAME_CX = 480.0/2.0
 FRAME_CY = 640.0/2.0
-
+# Experimental 
+MULTIPLICATION_FACTOR = 1.5
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
 MAX_NO_FRAMES = 10000
@@ -64,8 +70,8 @@ MAX_NO_FRAMES = 10000
 PROC_FRAME_FREQ = 3
 
 # need not change these vars.
-MAX_DEL_YAW = FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
-MAX_DEL_PITCH = FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+MAX_DEL_YAW =   MULTIPLICATION_FACTOR*FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
+MAX_DEL_PITCH = MULTIPLICATION_FACTOR*FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
 ######### TRAJECTORYT GEN #########3
 CHANGE_YAW_THOLD = 2
@@ -213,28 +219,30 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   +cy4[1]+','+cy4[2]+','+cy4[3]+','+cy4[4]+','\
   +">")
   #"""
+  limF = lambda a: (float("{:7.3f}".format(a)))
+
   # Yes the space helpsme parse it / dont remove. 
   Coeffs = str(" <"\
 
-  +str(coeffv[0])+','\
-  +str(coeffv[1])+','\
-  +str(coeffv[2])+','\
-  +str(coeffv[3])+','\
+  +str(limF(coeffv[0]))+','\
+  +str(limF(coeffv[1]))+','\
+  +str(limF(coeffv[2]))+','\
+  +str(limF(coeffv[3]))+','\
 
-  +str(coeffw[0])+','\
-  +str(coeffw[1])+','\
-  +str(coeffw[2])+','\
-  +str(coeffw[3])+','\
+  +str(limF(coeffw[0]))+','\
+  +str(limF(coeffw[1]))+','\
+  +str(limF(coeffw[2]))+','\
+  +str(limF(coeffw[3]))+','\
 
-  +str(coeffx[0])+','\
-  +str(coeffx[1])+','\
-  +str(coeffx[2])+','\
-  +str(coeffx[3])+','\
+  +str(limF(coeffx[0]))+','\
+  +str(limF(coeffx[1]))+','\
+  +str(limF(coeffx[2]))+','\
+  +str(limF(coeffx[3]))+','\
 
-  +str(coeffy[0])+','\
-  +str(coeffy[1])+','\
-  +str(coeffy[2])+','\
-  +str(coeffy[3])\
+  +str(limF(coeffy[0]))+','\
+  +str(limF(coeffy[1]))+','\
+  +str(limF(coeffy[2]))+','\
+  +str(limF(coeffy[3]))\
 
   +"> ")
   # Yes the space helpsme parse it / dont remove. 
@@ -243,13 +251,13 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   
   #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
   stcom.sendToArduino(Coeffs.encode('utf-8'))
-  logging.info(len(Coeffs))
+  logging.info((Coeffs))
 
 def sendEOL():
   """
-  Sends EOL ie '\\n' character to the Arduino board. 
+  Sends EOL ie 'q' character to the Arduino board. 
   """
-  myEOL = str('\n')
+  myEOL = str('q')
   stcom.sendToArduino(myEOL.encode('utf-8'))
 
 def sendSPACE():
@@ -302,7 +310,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
     if not imgQ.empty():
       start_time_proc = time.time()
       frame = imgQ.get()
-      logging.info(" no of process frames "  + str(imgQ.qsize()))
+      #logging.info(" no of process frames "  + str(imgQ.qsize()))
       
       ## May edit to source != zero if default cam is set to 0
       if CAMERA_AVAIL == True:
@@ -398,6 +406,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
           #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
           #logging.info("size of commsQ" + str(trajQ.qsize()))
+          
           cv2.imshow("Process Frame", frame)
           if cv2.waitKey(1) == ord("q"):
             event.set()
@@ -406,6 +415,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
               logFile.close()
               logFileCoeffs.close()
             break
+          #"""
           #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
           logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
 

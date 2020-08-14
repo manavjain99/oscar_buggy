@@ -13,5 +13,6 @@
 #include "../../Libs/mavlink/include/mavlink.h"
 
 void init_gimbal();
+void actuate_gimbal();
 
 #endif /* INC_GIMBAL_STUFF_H_ */

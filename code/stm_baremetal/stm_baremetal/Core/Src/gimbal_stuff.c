@@ -14,7 +14,7 @@
 /*SET PARAMETERS */
 #define CURVES_TO_CONSIDER 5
 #define MAX_HYPERFRAME_TIME 400UL /* MS, time before next UART interrupt */
-#define INTERPOLATION_PTS 8 
+#define INTERPOLATION_PTS 2
 
 
 
@@ -23,7 +23,7 @@
 #define CURVES_TO_CONSIDER_INDEX (CURVES_TO_CONSIDER-1)
 
 /* GLobal Vars */
-uint16_t hyperframeTime = 0;
+uint32_t gimbalHyperframeTime = 0;
 
 /* Private Macros */
 #define getCurveVal(x,d,c,b,a) (d*pow(x,3) + c*pow(x,2) + b*pow(x,1) + a)
@@ -215,20 +215,32 @@ void init_gimbal(void){
 
 void actuate_gimbal(void){
   assert(INTERPOLATION_PTS!=0);
-  while(curveIndex <= CURVES_TO_CONSIDER_INDEX){
-    if(hyperframeTime >= scheduledTime){
-    float_t x = scheduledTime - curveIndex*time1Curve;
+  gimbalHyperframeTime = 0;
+  float_t x = 0;
+  curveIndex = 0;
+  // some statements are redundant .. clean later ..
+  while((curveIndex <= CURVES_TO_CONSIDER_INDEX) && (gimbalHyperframeTime <= MAX_HYPERFRAME_TIME)){
+    //ITM_Port32(0) = 3;
+
+    if(gimbalHyperframeTime >= scheduledTime){
     
     curveAngleRoll = getCurveVal(x,roll.curves[curveIndex].d,roll.curves[curveIndex].c,roll.curves[curveIndex].b,roll.curves[curveIndex].a);
     curveAnglePitch = getCurveVal(x,pitch.curves[curveIndex].d,pitch.curves[curveIndex].c,pitch.curves[curveIndex].b,pitch.curves[curveIndex].a);
     curveAngleYaw = getCurveVal(x,yaw.curves[curveIndex].d,yaw.curves[curveIndex].c,yaw.curves[curveIndex].b,yaw.curves[curveIndex].a);
     
     setAngles(curveAngleRoll,curveAnglePitch,curveAngleYaw);
-    scheduledTime += time1Curve/((float)(INTERPOLATION_PTS));
+    scheduledTime += time1Curve/((float_t)(INTERPOLATION_PTS));
+    x += 1/(float)(INTERPOLATION_PTS);
+    }
+    if(scheduledTime >= (CURVES_TO_CONSIDER_INDEX+1)*(time1Curve)){
+    	break;
     }
     if(scheduledTime >= (curveIndex+1)*(time1Curve)){
-      curveIndex++;
+    	curveIndex += (curveIndex==CURVES_TO_CONSIDER_INDEX)?(0):(1);
+    	x =0;
     }
+    //ITM_Port32(0) = 4;
   }
-  hyperframeTime = 0;
+  gimbalHyperframeTime = 0;
+  scheduledTime  = 0;
 }

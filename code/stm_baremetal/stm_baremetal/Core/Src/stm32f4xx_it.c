@@ -195,8 +195,8 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  /* A hyperframe is time between 2 consecutive UART interrrupts in this scenario */
-  hyperframeTime++;
+
+  gimbalHyperframeTime++;
 
   /* USER CODE END SysTick_IRQn 1 */
 }
@@ -221,10 +221,10 @@ void USART2_IRQHandler(void)
   HAL_UART_Receive_IT(&huart2, (uint8_t*)bufferRx, 1 );
    // write the bytes to our Command buffer
    commBuff[commBuff_index] = bufferRx[0];
-   if (bufferRx[0] == '\r' || bufferRx[0] == '\n')
+   if (bufferRx[0] == '\r' || bufferRx[0] == '\n' || bufferRx[0] == 'q')
    {
        UartReady = SET;
-       HAL_UART_Transmit(&huart2, (uint8_t*)commBuff, 500, 100);
+       HAL_UART_Transmit(&huart2, (uint8_t*)commBuff, sizeof(commBuff), 100);
        sent_index=commBuff_index;
        bufferRx[0] = '\0';
        commBuff_index = 0;

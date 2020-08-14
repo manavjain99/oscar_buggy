@@ -25,12 +25,14 @@
 
 #define AND &&
 #define OR ||
+
+#define ITM_Port32(n) (*((volatile unsigned long *)(0xE0000000+4*n)))
 typedef char byte;
 typedef float float_t;
-
+ 
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart6;
 
-extern uint16_t hyperframeTime;
+extern uint32_t gimbalHyperframeTime;
 
 #endif /* INC_GLOBAL_H_ */

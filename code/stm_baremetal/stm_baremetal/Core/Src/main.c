@@ -141,8 +141,11 @@ int main(void)
 	    // Magic pixie dust
 	   if (UartReady != SET) {
       /* do shit all... The Part When UART interrupt is not triggered  */
+       /* Turn the LED PIN OFF */
+       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, RESET);
+
       //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
       if(newData == TRUE){
         //parseData(commBuff);
         //regensplines
@@ -159,9 +162,12 @@ int main(void)
 	   else {
        // The part when UART was triggered. 
 	        UartReady = RESET;
+	        /* Turn the LED PIN ON */
+	        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, SET);
 	        printf("command buffer is %s", commBuff);
 	        memset(commBuff,32,21);
 	        parseData((byte* )commBuff);
+	        actuate_gimbal();
 	        printf("area.curves[0].d = 99 should be :%f", area.curves[0].d);
 	        memset(commBuff,0,sizeof(commBuff));
 	        //HAL_UART_Transmit_IT(&huart2, (uint8_t*)prompt, 5);
