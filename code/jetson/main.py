@@ -21,6 +21,8 @@ INCLUDE_STM = True
 LOG_FILES = True
 CAMERA_AVAIL = True
 
+FILTER_ANGLES = False
+
 if __name__ == '__main__':
   import concurrent.futures
   import logging
@@ -30,6 +32,7 @@ if __name__ == '__main__':
   import serial
   import time
   import cv2
+  import statistics 
   import greenBallTracker as GBT 
   import aruco_tracking as ART
   import curveplanner as CPLN
@@ -67,7 +70,7 @@ PIX_PER_DEG_VAR = 1.3
 MAX_NO_FRAMES = 10000
 
 # ie processing every nth frame.
-PROC_FRAME_FREQ = 3
+PROC_FRAME_FREQ = 10
 
 # need not change these vars.
 MAX_DEL_YAW =   MULTIPLICATION_FACTOR*FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
@@ -203,7 +206,7 @@ def sendParams(objArea, objCX, objCY):
   stcom.sendToArduino(params.encode('utf-8'))
   
 
-def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
+def appendCoeffs(Coeffs, coeffv, coeffw, coeffx, coeffy):
   """
   (list[], list[], list[], list[], list[], list[] size = 4each) -> NoneType
   description : Sends spline coeffcients to the MCU 
@@ -220,9 +223,9 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   +">")
   #"""
   limF = lambda a: (float("{:7.3f}".format(a)))
-
+  # ie the floats are $$$$.$$$ format.
   # Yes the space helpsme parse it / dont remove. 
-  Coeffs = str(" <"\
+  Coeffs += str(" "\
 
   +str(limF(coeffv[0]))+','\
   +str(limF(coeffv[1]))+','\
@@ -244,28 +247,31 @@ def sendCoeffs(coeffv, coeffw, coeffx, coeffy):
   +str(limF(coeffy[2]))+','\
   +str(limF(coeffy[3]))\
 
-  +"> ")
+  +" ; ")
+  return Coeffs
   # Yes the space helpsme parse it / dont remove. 
   #logging.info('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+',')
   #logging.info("<"+str(coeffx[1])+',')
   
   #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
-  stcom.sendToArduino(Coeffs.encode('utf-8'))
-  logging.info((Coeffs))
+  #stcom.sendToArduino(Coeffs.encode('utf-8'))
+  #logging.info((Coeffs))
 
-def sendEOL():
+def sendMsg(myMsg):
   """
-  Sends EOL ie 'q' character to the Arduino board. 
+  Sends EOL & the entire Msg ie 'q' character to the Arduino board. 
   """
-  myEOL = str('q')
-  stcom.sendToArduino(myEOL.encode('utf-8'))
+  myMsg += str('q')
+  logging.info((myMsg))
+  stcom.sendToArduino(myMsg.encode('utf-8'))
 
-def sendSPACE():
+def appendSPACE(initMsg):
   """
-  Sends SPACE ie ' ' character to the Arduino board. easier for parsing.  
+  Appends SPACE ie ' ' character to the Arduino board. easier for parsing.  
   """
-  mySPACE = str(' ')
-  stcom.sendToArduino(mySPACE.encode('utf-8'))
+  initMsg += str(' ')
+  return initMsg
+  #stcom.sendToArduino(mySPACE.encode('utf-8'))
 
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
@@ -344,22 +350,22 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         
         ######## Filtering the data MAD filter ################
         # DONT COMMENT OUT STUFF YOU DONT KNOW # 
-        filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
-        filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[ocyclic_index]
-        #print(type(filterdataBufferYaw))
-        #print(len(filterdataBufferYaw))
-        #newVal = madFilter(filterdataBufferYaw) BUG here
-        #print("newVal is " + str(newVal))
+        if FILTER_ANGLES == True:
+          filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
+          filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[ocyclic_index]
+  
+          filterdataBufferYaw[0:(FILTERBUFFERSIZE-1)] = filterdataBufferYaw[1:FILTERBUFFERSIZE]
+          filterdataBufferYaw[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[ocyclic_index]
+          #print(type(filterdataBufferYaw))
+          #print(len(filterdataBufferYaw))
+          #newVal = madFilter(filterdataBufferYaw)
+          #print("newVal is " + str(newVal))
 
-        ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
-        #oframe_cy_buffer[curveplanner_iterator_-1] = madFilter(filterdataBufferYaw)
-        '''
-        FILTEREDYAW = oframe_cy_buffer[5]
-        filterdataBufferPitch[0:(FILTERBUFFERSIZE-1)] = filterdataBufferPitch[1:FILTERBUFFERSIZE]
-        filterdataBufferPitch[(FILTERBUFFERSIZE-1)] = oframe_cy_buffer[5]
-        oframe_cp_buffer[5] = madFilter(filterdataBufferPitch)
-        FILTEREDPITCH = oframe_cp_buffer[5]
-        '''
+          ###### THIS PART IS WHERE FILTERING HAPPENS ############## 
+          UNFILTEREDYAW = oframe_cy_buffer[ocyclic_index]
+          UNFILTEREDPITCH = oframe_cp_buffer[ocyclic_index]
+          oframe_cy_buffer[ocyclic_index] = madFilter(filterdataBufferYaw)
+          oframe_cp_buffer[ocyclic_index] = madFilter(filterdataBufferPitch)
         
         ############# GET THE CURVES HERE #################
         if (curveplanner_iterator_ == SPLINE_FRAME_SIZE):
@@ -377,8 +383,14 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
 
             for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
               nowTimeMillis = current_milli_time() - epochTimeMillis
-              # time , raw algo x, filtered x, 
-              #logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6}\t \n'.format(nowTimeMillis,oframe_cy_buffer[5],FILTEREDYAW,new_yawValue,oframe_cp_buffer[5],FILTEREDPITCH,new_pitchValue )
+              # time , raw algo pitch, filtered pitch, raw algo yaw, filtered yaw,
+              if FILTER_ANGLES == True:
+                logInfoStr = '{0},\t {1},\t {2},\t {3},\t {4},\t \n'.format(\
+                nowTimeMillis,\
+                UNFILTEREDPITCH,oframe_cp_buffer[ocyclic_index],\
+                UNFILTEREDYAW  ,oframe_cy_buffer[ocyclic_index] )
+                logFile.write(str(logInfoStr))
+
               # time , d ,c , b, a for (x)
               logCoeffStr = '{0},\t {1},\t {2},\t {3},\t {4},\t {5},\t {6},\t {7},\t {8},\t {9},\t {10},\t {11},\t {12},\t {13},\t {14},\t {15},\t {16}\t \n'.format(\
               nowTimeMillis,\
@@ -387,8 +399,9 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
               limF(coeffs_p[0]),limF(coeffs_p[1]),limF(coeffs_p[2]),limF(coeffs_p[3]),\
               limF(coeffs_y[0]),limF(coeffs_y[1]),limF(coeffs_y[2]),limF(coeffs_y[3])\
               )
-              #logFile.write(str(logInfoStr))
+
               logFileCoeffs.write(str(logCoeffStr))
+              
               #logging.info(logInfoStr)
               #logFile.write(str(nowTime) +", " +  str(new_yawValue) + ", " + str(new_pitchValue)+'\n')
               #print(str(new_yawValue))
@@ -396,29 +409,30 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           ########### CRITICAL SECTION SENDING VALS UART AND QUEUES #########
           with processLock:
             if INCLUDE_STM == True:
-              sendSPACE()
+              paramsMsg = str(" ")
+              paramsMsg = appendSPACE(paramsMsg)
               for coeffs_a,coeffs_r,coeffs_p,coeffs_y in zip(coeff_area, coeff_roll, coeff_pitch, coeff_yaw):  
-                sendCoeffs(coeffs_a,coeffs_r,coeffs_p,coeffs_y)
+                paramsMsg = appendCoeffs(paramsMsg,coeffs_a,coeffs_r,coeffs_p,coeffs_y)
                 counter_comms_update = 1
-              sendEOL() 
+              sendMsg(paramsMsg) 
           #logging.info("size of " + str(trajQ.qsize()))
           #################################################################
 
           #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
           #logging.info("size of commsQ" + str(trajQ.qsize()))
           
-          cv2.imshow("Process Frame", frame)
-          if cv2.waitKey(1) == ord("q"):
-            event.set()
-            cv2.destroyAllWindows()
-            if(LOG_FILES == True):
-              logFile.close()
-              logFileCoeffs.close()
-            break
-          #"""
-          #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-          logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-
+        cv2.imshow("Process Frame", frame)
+        if cv2.waitKey(1) == ord("q"):
+          event.set()
+          cv2.destroyAllWindows()
+          if(LOG_FILES == True):
+            logFile.close()
+            logFileCoeffs.close()
+          break
+        #"""
+        #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+        logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
+        
         #cv2.destroyAllWindows()
         #"""
 
