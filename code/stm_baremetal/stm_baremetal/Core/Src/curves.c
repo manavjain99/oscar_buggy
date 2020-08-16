@@ -42,6 +42,8 @@ struct Curves area,roll,pitch,yaw;
 static const byte  startMarker[] = "<";
 static const byte  endMarker[] = ">";
 static const byte  delimiter[] =",";
+static const byte  semicolonDelim[] =";";
+static bool parse_entered_once = FALSE;
 static byte* saveptr1; 
 static byte* saveptr2; 
 /* USER CODE END PV */
@@ -60,42 +62,21 @@ static byte* saveptr2;
 /* USER CODE BEGIN EV */
 /* USER CODE END EV */
 
-/**
-  * @brief This function handles Hard fault interrupt.
-  */
+
 void parseData(byte * parseMsg){
-  byte* frameToken = strtok_r(parseMsg,(byte *)startMarker,&saveptr1);
-  frameToken = strtok_r(NULL,(byte *)endMarker,&saveptr1); // Now it points to the first frame.
-
+  saveptr1 = NULL;  
+  saveptr2 = NULL; 
   int frameIndex = 0;
-  byte* frameTokenCopy = frameToken;
-  parseCoeffs(frameTokenCopy,frameIndex);
+  byte* frameToken = strtok_r(parseMsg,(byte *)semicolonDelim,&saveptr1);
+    
+  parseCoeffs(frameToken,frameIndex);
   while (frameToken != NULL){
-    /* code */
-
-	  ++frameIndex;
-    frameToken = strtok_r(NULL, (byte *)startMarker,&saveptr1);
-
-    if(frameToken == NULL){
-
-        break;
-    }
-
-    frameToken = strtok_r(NULL, (byte *)endMarker,&saveptr1);
-
-        if(frameToken == NULL){
-
-        break;
-    }
-    
+    ++frameIndex;
+	  frameToken = strtok_r(NULL, (byte *)semicolonDelim,&saveptr1);
     if(frameToken!=NULL){
-
-        parseCoeffs(frameToken,frameIndex);
+      parseCoeffs(frameToken,frameIndex);
     }
-    
-
   }
-    
 }
 
 /**
