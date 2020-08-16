@@ -91,7 +91,7 @@ if __name__ == '__main__':
   print(pose)
   print(Cx)
   print(Cy)
-  cap = cv.VideoCapture(2)
+  cap = cv.VideoCapture(0)
 
   while(True):
       # Capture frame-by-frame
