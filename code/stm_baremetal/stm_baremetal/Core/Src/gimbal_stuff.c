@@ -21,6 +21,7 @@
 /*DONT TOUCH THESE , UNLESS YOU KNOW WHAT YOU ARE DOING*/
 #define uart_gimbal huart6
 #define CURVES_TO_CONSIDER_INDEX (CURVES_TO_CONSIDER-1)
+#define MAX_FIRES (CURVES_TO_CONSIDER*INTERPOLATION_PTS)
 
 /* GLobal Vars */
 uint32_t gimbalHyperframeTime = 0;
@@ -29,12 +30,15 @@ uint32_t gimbalHyperframeTime = 0;
 #define getCurveVal(x,d,c,b,a) (d*pow(x,3) + c*pow(x,2) + b*pow(x,1) + a)
 
 /* Private Vars */
-static uint8_t curveIndex = 0;
-static uint16_t scheduledTime = 0;
+static int8_t curveIndex = -1; // LET IT BE -1 
+static uint16_t firingTime = 0;
 static float_t time1Curve = (INTERPOLATION_PTS!=0)?(MAX_HYPERFRAME_TIME/(float_t)(CURVES_TO_CONSIDER)):(0);
 static float_t curveAngleRoll = 0;
 static float_t curveAnglePitch = 0;
 static float_t curveAngleYaw = 0;
+static float_t curveX = 0;
+static  uint8_t no_of_fires = MAX_FIRES;
+
   union byteToFloat
   {
       struct
@@ -213,34 +217,70 @@ void init_gimbal(void){
   
 }
 
+void getFiringTime(void){
+  //no_of_fires & MAX_HYPERFRAME_TIME
+  firingTime = (MAX_FIRES % no_of_fires)*(MAX_HYPERFRAME_TIME/(float)MAX_FIRES);
+}
+
+void getFiringVals(void){
+   // Goes from 0 to INTERPOLATION_PTS - 1
+   float_t cyclicVar = (no_of_fires) % INTERPOLATION_PTS; 
+   float_t x = cyclicVar/(float_t)(INTERPOLATION_PTS);
+   if( (int8_t)(cyclicVar) == 0 ){
+     curveIndex++;
+   }
+    curveAngleRoll = getCurveVal(x,roll.curves[curveIndex].d,roll.curves[curveIndex].c,roll.curves[curveIndex].b,roll.curves[curveIndex].a);
+    curveAnglePitch = getCurveVal(x,pitch.curves[curveIndex].d,pitch.curves[curveIndex].c,pitch.curves[curveIndex].b,pitch.curves[curveIndex].a);
+    curveAngleYaw = getCurveVal(x,yaw.curves[curveIndex].d,yaw.curves[curveIndex].c,yaw.curves[curveIndex].b,yaw.curves[curveIndex].a);
+   
+}
+void actuate_gimbal(void){
+  gimbalHyperframeTime = 0;
+  firingTime = 0;
+  no_of_fires = CURVES_TO_CONSIDER*INTERPOLATION_PTS;
+  curveIndex = -1;
+   
+  while(no_of_fires){
+    getFiringTime();
+    getFiringVals();
+    // Wait until it is time to fire. 
+    while(  (gimbalHyperframeTime <= firingTime)  && (gimbalHyperframeTime <= MAX_HYPERFRAME_TIME));
+    setAngles(curveAngleRoll,curveAnglePitch,curveAngleYaw);
+    printf("Roll:%f ,Pitch:%f, Yaw:%f \n", curveAngleRoll, curveAnglePitch, curveAngleYaw );
+    no_of_fires--;
+  }
+}
+
+/*
 void actuate_gimbal(void){
   assert(INTERPOLATION_PTS!=0);
   gimbalHyperframeTime = 0;
   float_t x = 0;
   curveIndex = 0;
-  // some statements are redundant .. clean later ..
-  while((curveIndex <= CURVES_TO_CONSIDER_INDEX) && (gimbalHyperframeTime <= MAX_HYPERFRAME_TIME)){
+  firingTime  = 0;
+
+  while(gimbalHyperframeTime <= MAX_HYPERFRAME_TIME){
     //ITM_Port32(0) = 3;
 
-    if(gimbalHyperframeTime >= scheduledTime){
+    if(gimbalHyperframeTime >= firingTime){
     
     curveAngleRoll = getCurveVal(x,roll.curves[curveIndex].d,roll.curves[curveIndex].c,roll.curves[curveIndex].b,roll.curves[curveIndex].a);
     curveAnglePitch = getCurveVal(x,pitch.curves[curveIndex].d,pitch.curves[curveIndex].c,pitch.curves[curveIndex].b,pitch.curves[curveIndex].a);
     curveAngleYaw = getCurveVal(x,yaw.curves[curveIndex].d,yaw.curves[curveIndex].c,yaw.curves[curveIndex].b,yaw.curves[curveIndex].a);
     
+    printf("\nCoeffs dcba yaw are: %f, %f, %f, %f", yaw.curves[curveIndex].d, yaw.curves[curveIndex].c, yaw.curves[curveIndex].b, yaw.curves[curveIndex].a);
     setAngles(curveAngleRoll,curveAnglePitch,curveAngleYaw);
-    scheduledTime += time1Curve/((float_t)(INTERPOLATION_PTS));
+    //printf("Roll:%f ,Pitch:%f, Yaw:%f \n", curveAngleRoll, curveAnglePitch, curveAngleYaw );
+    firingTime += time1Curve/((float_t)(INTERPOLATION_PTS));
     x += 1/(float)(INTERPOLATION_PTS);
     }
-    if(scheduledTime >= (CURVES_TO_CONSIDER_INDEX+1)*(time1Curve)){
-    	break;
-    }
-    if(scheduledTime >= (curveIndex+1)*(time1Curve)){
-    	curveIndex += (curveIndex==CURVES_TO_CONSIDER_INDEX)?(0):(1);
+    if(firingTime >= (curveIndex+1)*(time1Curve)){
+    	curveIndex += (1);
     	x =0;
     }
     //ITM_Port32(0) = 4;
   }
   gimbalHyperframeTime = 0;
-  scheduledTime  = 0;
+  firingTime  = 0;
 }
+*/
