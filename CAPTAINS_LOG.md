@@ -1290,3 +1290,37 @@ Provided the number of times and the no of ways I have re setup the environment 
 Okay , Tomorrow I need to get this stuff tested hopefully INTERPOLATION TESTED AND VERIFIED 
 
 3-4 more days until I get the smooth motherf*king curves on Gimbal working. 
+
+
+22/08/2020 
+
+Phew Its been a long time ( feels long though .. )
+
+So far update 
+I had managed to get the V1.0.0 running some days ago .. 
+Go and see the git log/commit dont remember when exactly 
+
+The motion was relatively smooth, didnt bounce overintegrate or some stuff like that , moved well, 
+needed calibration, still ... 
+
+Waiting for getting the GoPro, till then Im seeing if I can fix this current code. 
+
+Removing broken windows first. 
+
+My BrokenWindows are 
+1. FIXING THE READ ME for V1.0.0
+2. Releasing V1.0.0 and undoing any temp changes I made RNow.
+3. Looking when do we add a new RELEASE VERSION ? After how many patches etc  ... umm maybe when I feel a benchmark moment then I will Release a new version till then keep stuff in the commits itself only ... ?
+Or better yet do I make a branch for every new release version .
+4. Main loop depending on the Opencv to exit, using keyboard interrupt. 
+5. Getting data and log info to the GUI to get info about my stats and where what stuff is GIONG WRONG  !! 
+
+These many tasks I will revolve around before I get the goPro and start testing stuff on that . 
+
+
+7.20 PM 
+Wrote a Not so nicely formatted README.md 
+Enoughto get workin
+
+
+ 
