@@ -17,8 +17,8 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = True
-LOG_FILES = True
+INCLUDE_STM = False
+LOG_FILES = False
 CAMERA_AVAIL = True
 
 FILTER_ANGLES = False
@@ -33,6 +33,7 @@ if __name__ == '__main__':
   import time
   import cv2
   import statistics 
+  import signal
   import greenBallTracker as GBT 
   import aruco_tracking as ART
   import curveplanner as CPLN
@@ -92,6 +93,7 @@ ACK_MCU_MSG = '1'
 ######## THREADS AND OTHER VALUES ########
 imageQ = queue.Queue(maxsize=10000)
 commQ = queue.Queue(maxsize=30000)
+GlobalEvent = threading.Event()
 
 """ WRITE YOUR FUNCTIONS HERE """
 
@@ -418,25 +420,16 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
           #logging.info("size of " + str(trajQ.qsize()))
           #################################################################
 
-          #################### DEBUGGING PART TO BE REMOVED AT DEPLOYMENT ########
-          #logging.info("size of commsQ" + str(trajQ.qsize()))
-          
-        cv2.imshow("Process Frame", frame)
-        if cv2.waitKey(1) == ord("q"):
-          event.set()
-          cv2.destroyAllWindows()
-          if(LOG_FILES == True):
-            logFile.close()
-            logFileCoeffs.close()
-          break
-        #"""
+        #logging.info("size of commsQ" + str(trajQ.qsize()))
         #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
         logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
         
-        #cv2.destroyAllWindows()
-        #"""
 
 
+def keyboardInterruptHandler(signal, frame):
+  GlobalEvent.set()
+  print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
+  exit(0)
 
 
 """ START YOUR CODE HERE """
@@ -446,8 +439,8 @@ if __name__ == '__main__':
   
   print
   print
-  event = threading.Event()
-    
+  signal.signal(signal.SIGINT, keyboardInterruptHandler)
+  
   format = "%(asctime)s: %(message)s"
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
@@ -459,22 +452,25 @@ if __name__ == '__main__':
   #proc_th = threading.Thread(target = process_thread())
   #proc_th.start()
   #grab_th.start()
-
+  try: 
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-  if CAMERA_AVAIL == True:
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-      executor.submit(process_thread, event)
-      executor.submit(cam_grabber_thread, event)
+    if CAMERA_AVAIL == True:
+      with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        executor.submit(process_thread, GlobalEvent)
+        executor.submit(cam_grabber_thread, GlobalEvent)
 
-  if CAMERA_AVAIL == False:
-    print("please press q before video ends or quit from task manager")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-      executor.submit(process_thread, event)
-      executor.submit(video_grabber_thread, event)
+    if CAMERA_AVAIL == False:
+      print("please press q before video ends or quit from task manager")
+      with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        executor.submit(process_thread, GlobalEvent)
+        executor.submit(video_grabber_thread, GlobalEvent)
 
+  except KeyboardInterrupt:
+    GlobalEvent.set()
+    print(" Try except ")
   # useless cause of threadpoolExec  
   time.sleep(7)
-  event.set()
+  GlobalEvent.set()
   #  executor.submit(f2)
   
   #time.sleep(5.0)
