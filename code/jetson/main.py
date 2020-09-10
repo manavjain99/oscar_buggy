@@ -17,7 +17,7 @@
 """
 
 #import gimbalcmd
-INCLUDE_STM = False
+INCLUDE_STM = True
 LOG_FILES = False
 CAMERA_AVAIL = True
 
@@ -101,8 +101,6 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 epochTimeMillis = current_milli_time()
 
 
-
-
 def madFilter(dataArr, threshold =3):
   """
   (list),(float) -> (float)
@@ -121,8 +119,6 @@ def madFilter(dataArr, threshold =3):
     return medianVal
   else :
     return dataArr[-1]
-
-  
 
 def cam_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     """
@@ -156,11 +152,10 @@ def cam_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
           
         else: 
           frame_counter = frame_counter + 1
-        #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
+        logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
         
     cap.stop()
     cap.release()
-
 
 def video_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
     
@@ -194,10 +189,6 @@ def video_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
   cap.release()
   cv2.destroyAllWindows()
 
-
-#def show_frame(frame, event):
-#  while not event.is_set():
-
 def sendParams(objArea, objCX, objCY):
   """
   (double, int, int) ->NoneType
@@ -206,7 +197,6 @@ def sendParams(objArea, objCX, objCY):
   """ 
   params = ("<"+str(objArea)+', '+str(objCX)+', '+str(objCY)+">")
   stcom.sendToArduino(params.encode('utf-8'))
-  
 
 def appendCoeffs(Coeffs, coeffv, coeffw, coeffx, coeffy):
   """
@@ -257,7 +247,7 @@ def appendCoeffs(Coeffs, coeffv, coeffw, coeffx, coeffy):
   
   #Coeffs = str('<'+str(coeffx[1])+','+str(coeffx[2])+','+str(coeffx[3])+','+str(coeffx[4]) )
   #stcom.sendToArduino(Coeffs.encode('utf-8'))
-  #logging.info((Coeffs))
+  #lo.......................................................................................................................................gging.info((Coeffs))
 
 def sendMsg(myMsg):
   """
@@ -274,7 +264,6 @@ def appendSPACE(initMsg):
   initMsg += str(' ')
   return initMsg
   #stcom.sendToArduino(mySPACE.encode('utf-8'))
-
 
 def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
   """
@@ -329,7 +318,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       #####  choose your tracking algo  here ##############
       
       objA, objR, objCX, objCY = ART.trackArucoMarker(frame)
-      logging.info(" got params as " + str(objA) + " " + str(objR) +" " + str(objCX) + " " + str(objCY))
+      #logging.info(" got params as " + str(objA) + " " + str(objR) +" " + str(objCX) + " " + str(objCY))
       ############## LOADING ....*VALID* PARAMS INTO BUFFER ##########
       if( objA != -1):
         curveplanner_iterator_ += 1
@@ -423,8 +412,6 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
         #logging.info("size of commsQ" + str(trajQ.qsize()))
         #logging.info("runtime process : " + str( (time.time() - start_time_proc))) # FPS = 1 / time to process loop
         logging.info("FPS process : " + str(1.0 / (time.time() - start_time_proc))) # FPS = 1 / time to process loop
-        
-
 
 def keyboardInterruptHandler(signal, frame):
   GlobalEvent.set()
@@ -444,68 +431,22 @@ if __name__ == '__main__':
   format = "%(asctime)s: %(message)s"
   logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
+  print("press ctrl+c twice to exit. ")
   if INCLUDE_STM == True:
     logging.info("Waiting for arduino.")
     stcom.waitForArduino()
     logging.info("Arduino ready.")
-  #grab_th = threading.Thread(target = grabber_thread())
-  #proc_th = threading.Thread(target = process_thread())
-  #proc_th.start()
-  #grab_th.start()
-  try: 
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-    if CAMERA_AVAIL == True:
-      with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        executor.submit(process_thread, GlobalEvent)
-        executor.submit(cam_grabber_thread, GlobalEvent)
+  if CAMERA_AVAIL == True:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+      executor.submit(process_thread, GlobalEvent)
+      executor.submit(cam_grabber_thread, GlobalEvent)
 
-    if CAMERA_AVAIL == False:
-      print("please press q before video ends or quit from task manager")
-      with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        executor.submit(process_thread, GlobalEvent)
-        executor.submit(video_grabber_thread, GlobalEvent)
-
-  except KeyboardInterrupt:
-    GlobalEvent.set()
-    print(" Try except ")
-  # useless cause of threadpoolExec  
-  time.sleep(7)
-  GlobalEvent.set()
-  #  executor.submit(f2)
-  
-  #time.sleep(5.0)
-  #event.set()
-  # waits until I receive a message Arduino ready from arduino setup part.
-  # Obcomp should be ready first follwed by the duino.
-  #print("waiting for arduino response.")
-  #ComArduino2.waitForArduino()
-  #print("stm read successfully. LED should be blinking.")
-  
-  # creating an empty buffer list.
-  #gimbal_coords_buffer = []
-
-
-  #gimbal_coords_buffer.append("<100,200,0.2>")
-  #gimbal_coords_buffer.append("<101,200,0.2>")
-  #gimbal_coords_buffer.append("<102,200,0.2>")
-  #gimbal_coords_buffer.append("<103,200,0.2>")
-  #gimbal_coords_buffer.append("<104,200,0.2>")
-
-
-  #ComArduino2.runTest(gimbal_coords_buffer)
-  #while (1):
-  #  if cv2.waitKey(1) == ord("q"):
-  #    event.set()
-  #    cv2.destroyAllWindows()
-  #      ball_tracking.live_tracking()
-        #key = cv2.waitKey(1) & 0xFF
-        #if key == ord("q"):
-        #      break
-        #ball_tracking.vs.stop()
-        #cv2.destroyAllWindows()
-  #import doctest
-  #doctest.testmod()
-  
+  if CAMERA_AVAIL == False:
+    print("please press q before video ends or quit from task manager")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+      executor.submit(process_thread, GlobalEvent)
+      executor.submit(video_grabber_thread, GlobalEvent) 
   
   
   
