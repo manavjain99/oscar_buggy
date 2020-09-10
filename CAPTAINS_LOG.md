@@ -1313,7 +1313,7 @@ My BrokenWindows are
 3. Looking when do we add a new RELEASE VERSION ? After how many patches etc  ... umm maybe when I feel a benchmark moment then I will Release a new version till then keep stuff in the commits itself only ... ?
 Or better yet do I make a branch for every new release version .
 4. Main loop depending on the Opencv to exit, using keyboard interrupt. 
-5. Getting data and log info to the GUI to get info about my stats and where what stuff is GIONG WRONG  !! 
+5. Getting data and log info to the GUI to get info about my stats and where what stuff is GOING WRONG  !! 
 
 These many tasks I will revolve around before I get the goPro and start testing stuff on that . 
 
@@ -1323,4 +1323,44 @@ Wrote a Not so nicely formatted README.md
 Enoughto get workin
 
 
- 
+9.00 PM 
+Release v1.0.0 UPLOADED, Keyboard interrupt added. 
+
+25.08.2020 
+3.15 PM 
+
+Thinking FOR ETC Easier to change .. ? Will be now Sending Starting calib data to the MCU too .. 
+
+What params am i changing / do I need to tune ? 
+1. FPS frame recieve . decides the hyperframe time for the MCU!! 
+2. FRAME SIZE OF IMAGE RECEIVED !! Affects the Angle / spline .
+3. No of splines per sending of data. The MCU needs to know this. 
+4. 
+
+Where am i repeating myself ? 
+MCU Needs to have data of how many curves and how much time does it need ? ie hyperframe time !! 
+
+
+30.08.2020
+
+Starting calibration yeah, 
+
+8.09.2020 
+
+3.46 PM 
+
+Finally got hands on a GoPro, ( well not a goPro , but a action cam MiActionCamera 4K, https://xiaomi-mi.com/action-cameras/xiaomi-mijia-4k-action-camera-black/)
+
+Testing goPro opencv stuff. 
+Micam wiFi doesnt work on Micam app. 
+Trying to run with the opencv API ? 
+PS> I cant connect the camera on Windows, I'l need to go to using linux for that, which means boot a linux for that. 
+Manjaro Failed Successfully 
+The BOOT, Now either ubuntu 20.20 / elementary OS / Kubuntu ...  
+Retrying manjaro one last time else ubuntu 20.20 
+
+RTSP : realtime server protocol for various cams 
+https://www.ispyconnect.com/man.aspx?n=xiaomi
+
+
+
