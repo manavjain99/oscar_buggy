@@ -117,6 +117,13 @@ pip install -r requirements.txt
 
 inside code in oscar. Should get stuff up and running.
 
+### Incase you decide to use the goPro camera, you can directly stream it
+
+Install FFmpeg 
+```
+sudo snap install ffmpeg
+```
+For debian derivatives, for more info checkout [this](https://github.com/KonradIT/gopro-py-api/tree/master/examples/opencv_gopro) unofficial documentation. 
 
 
 ## Installation

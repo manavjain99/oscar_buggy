@@ -1363,4 +1363,18 @@ RTSP : realtime server protocol for various cams
 https://www.ispyconnect.com/man.aspx?n=xiaomi
 
 
+16/09/2020
+11.30 PM
+Yesterday I finally rented a goPro for a month, which means i need to wrap up my project within this month ie I have 30 days to wrap things up. 
 
+Today I got most of the stuff needed to build the buggy and cam and the system, I have the small buggy , basic RC car , shitty motors and power , will probably need to beef it up but before that I would need to run stuff on it , push it to ists limits and avoid wating time .
+I also have got my old raspberry Pi and will try to implement stuff on it. 
+
+Coz now I am running on a deadline, 
+
+I have just now managed to get the goPro Streaming working see files [gopro_play](code/playground/gopro_play.py) ( this is standalone) and see [gopro_keepalive](code/playground/gopro_keepalive.py) and [gopro](code/playground/gopro.py) for the opencv version , you need to run the keep alive stuff running in a separate terminal and gopro.py running in a separate terminal. 
+
+If you do that and have a fairly nice goPRo you may be able to stream. 
+Incase of difficulties please see  [this unofficial documentation.](https://github.com/KonradIT/gopro-py-api/blob/master) 
+
+rnow I am charging the gPro and unittesting the buggy seeing if stuff works out on it. 
