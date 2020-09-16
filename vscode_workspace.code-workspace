@@ -56,6 +56,6 @@
 			"rope": "cpp"
 		},
 		"files.autoSave": "afterDelay",
-		"python.pythonPath": "/run/media/param/sWorkspace/oscar/code/env-oscar/bin/python"
+		"python.pythonPath": "/home/pallavi/Workspace/oscar_buggy/code/env-oscar/bin/python3"
 	}
 }
