@@ -5,3 +5,4 @@ code/jetson/yolov3/yolov3_opencv/.idea
 code/jetson/yolov3/yolov3_opencv/yolov3.weights
 code/env-oscar
 code/jetson/__pycache__
+code/pilotdash/__pycache__
