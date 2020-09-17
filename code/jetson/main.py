@@ -16,14 +16,11 @@
  date modified:  Mon 27 Apr 18:11:03 IST 2020
 """
 
-#import gimbalcmd
-INCLUDE_STM = True
-LOG_FILES = False
-CAMERA_AVAIL = True
-
-FILTER_ANGLES = False
+INCLUDE_STM = False
+LOG_FILES = True
 
 if __name__ == '__main__':
+  import numpy as np
   import concurrent.futures
   import logging
   import queue
@@ -34,19 +31,26 @@ if __name__ == '__main__':
   import cv2
   import statistics 
   import signal
+
+  from scipy.interpolate import CubicSpline
+  from enum import Enum 
+  
   import greenBallTracker as GBT 
   import aruco_tracking as ART
   import curveplanner as CPLN
-  #import matplotlibLive as MPLive
+  
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
-  import numpy as np
-  from scipy.interpolate import CubicSpline
-
-
+  
 """ WRITE YOUR VARIABLES HERE """
 
-NO_OF_PTS = 3
+class INPUT_FEED(Enum):
+  VIDEO_FILE, GOPRO_STREAM, WEBCAM = range(3)
+
+# Choose among the Three VIDEO_FILE, GOPRO_STREAM, WEBCAM 
+IP_FEED = INPUT_FEED.VIDEO_FILE
+
+
 ####### EXTERNAL FILES ##########
 #VIDEO_SOURCE = "ball_tracking_example.mp4"
 VIDEO_SOURCE = "../tests/aruco.mp4"
@@ -64,31 +68,28 @@ VID_SRC = 2
 #external Webcam 
 FRAME_CX = 480.0/2.0
 FRAME_CY = 640.0/2.0
-# Experimental 
+
+# Pixels to Degree conversion . 
 MULTIPLICATION_FACTOR = 1.5
 PIX_PER_DEG = 18.0
 PIX_PER_DEG_VAR = 1.3
+
+# Max queue size 
 MAX_NO_FRAMES = 10000
 
-# ie processing every nth frame.
+# ie processing every nth frame, depending on the Input FPS you may want to tweak this settings. 
 PROC_FRAME_FREQ = 10
 
 # need not change these vars.
 MAX_DEL_YAW =   MULTIPLICATION_FACTOR*FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 MAX_DEL_PITCH = MULTIPLICATION_FACTOR*FRAME_CY/(PIX_PER_DEG+PIX_PER_DEG_VAR)
 
-######### TRAJECTORYT GEN #########3
-CHANGE_YAW_THOLD = 2
-CHANGE_PITCH_THOLD = 2
-THRES_PERCENT_CHANGE =0.10
-
 ########## PROCESS PARAMS #############
-# too less cant calc splines too high vmuch delay prop to PROC_FRAME_FREQ
-
-# CAN GO MAX UPTO 15 , Size limited to 3000 chars on the MCU 
-# For a value of 6 takes around 1000 chars ie ( n-1 or 5 set of piecewisecoeffsvals  )
+# Avoid changing this change the number of process frames frequency instead.  
 SPLINE_FRAME_SIZE = 6 
-ACK_MCU_MSG = '1'
+
+# mad Filter rejects outliers, may need tuning from feed to feed. 
+FILTER_ANGLES = False
 
 ######## THREADS AND OTHER VALUES ########
 imageQ = queue.Queue(maxsize=10000)
@@ -310,7 +311,7 @@ def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
       #logging.info(" no of process frames "  + str(imgQ.qsize()))
       
       ## May edit to source != zero if default cam is set to 0
-      if CAMERA_AVAIL == True:
+      if IP_FEED == INPUT_FEED.WEBCAM:
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
@@ -437,17 +438,12 @@ if __name__ == '__main__':
     stcom.waitForArduino()
     logging.info("Arduino ready.")
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-  if CAMERA_AVAIL == True:
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-      executor.submit(process_thread, GlobalEvent)
+  
+  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    executor.submit(process_thread, GlobalEvent)
+    if IP_FEED == INPUT_FEED.WEBCAM:
       executor.submit(cam_grabber_thread, GlobalEvent)
-
-  if CAMERA_AVAIL == False:
-    print("please press q before video ends or quit from task manager")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-      executor.submit(process_thread, GlobalEvent)
-      executor.submit(video_grabber_thread, GlobalEvent) 
-  
-  
+    elif IP_FEED == INPUT_FEED.VIDEO_FILE:
+      executor.submit(video_grabber_thread, GlobalEvent)   
   
 """ END OF FILE """
