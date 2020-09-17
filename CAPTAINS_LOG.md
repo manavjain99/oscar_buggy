@@ -1378,3 +1378,28 @@ If you do that and have a fairly nice goPRo you may be able to stream.
 Incase of difficulties please see  [this unofficial documentation.](https://github.com/KonradIT/gopro-py-api/blob/master) 
 
 rnow I am charging the gPro and unittesting the buggy seeing if stuff works out on it. 
+
+11.37 PM 
+
+To unit test the buggy I'll need to 
+check both motors 
+For that Ill need motor drivers, ( atleast 1 rear motors working ), I'll be also needing power source, 
+
+Things I need to do . 
+s1. Get a power source upto 5v , to test the rear motor.
+s2. Get a motor driver to see if its working or not. 
+s3. How much payload can it handle , would you need to vhange it ? 
+s4. same for front motor !! Can it take the weight 
+Try using motor driver , does it move with the wt !! 
+If not you'll need to use the servo motor , 
+
+17/09/2020
+
+11.52 PM 
+
+Now Integrating gopro stuff with rest of the code. Oh also btw that small buggy couldn't fit all of my components, I did test both motors but just with the motor driver , the buggys space got full, thought of adding layers but It would require 4 layers with -1 layer ( ie under the base battery compartment )
+And it would be very unstable and wiring would be a nightmare. 
+
+s1. Add keep alive to jetson, 
+s2. integrate gopro.py testing stuff in a separate thread. 
+
