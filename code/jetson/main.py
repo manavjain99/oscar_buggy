@@ -60,12 +60,12 @@ GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
 
 ####### CAMERA AND FRAMES PARAMS #########
 # 3, 2, 1 for ext webcam 0 for webcam use camtesting.py in tests directly 
-VID_SRC = 2
+WEBCAM_INDEX = 2
 #Laptop Webcam 
 #FRAME_CX = 480.0/2.0
 #FRAME_CY = 640.0/2.0
 
-#external Webcam 
+# external Webcam 
 FRAME_CX = 480.0/2.0
 FRAME_CY = 640.0/2.0
 
@@ -121,74 +121,42 @@ def madFilter(dataArr, threshold =3):
   else :
     return dataArr[-1]
 
-def cam_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
-    """
-    (int, queue) -> NoneType
-    Description : Grabs the image and puts it into the imageQ buffer.
-    """
-    cap = cv2.VideoCapture(source)
-    time.sleep(3.0)
-    grabberLock = threading.Lock()
-    imgQ_size = imgQ.qsize()
-    frame_counter = 1
-    
-    while not event.is_set():
-        
-        start_time = time.time() # start time of the loop
-        
-        imgQ_size = imgQ.qsize()
-        #logging.info(" no of frames"  + str(imgQ_size))
-        
-        grabbed, frame = cap.read()
-        
-        # sending every nth frame to process.
-        if(frame_counter == PROC_FRAME_FREQ):
-        # to make sure the buffer does not lag as real time as possible.
-          if(imgQ_size < MAX_NO_FRAMES):
-            with grabberLock:
-              pass
-              imgQ.put(frame)
-          frame_counter = 1
-          #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-          
-        else: 
-          frame_counter = frame_counter + 1
-        logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-        
-    cap.stop()
-    cap.release()
+def frame_grabber_thread(event, imgQ = imageQ):
+  """
+  (event, queue) -> NoneType
+  Description : Grabs the image from respective sources and puts it into the imageQ buffer.
+  """
+  if IP_FEED == INPUT_FEED.VIDEO_FILE :
+    cap = cv2.VideoCapture(VIDEO_SOURCE)
+  elif IP_FEED == INPUT_FEED.WEBCAM :
+    cap = cv2.VideoCapture(WEBCAM_INDEX)
+  elif IP_FEED == INPUT_FEED.GOPRO_STREAM :
+    cap = cv2.VideoCapture("udp://127.0.0.1:10000")
 
-def video_grabber_thread(event, source = VID_SRC, imgQ = imageQ):
-    
-  cap = cv2.VideoCapture(VIDEO_SOURCE)
-  time.sleep(3.0)
+  time.sleep(1.0)
   grabberLock = threading.Lock()
   imgQ_size = imgQ.qsize()
   frame_counter = 1
+  
   while(cap.isOpened() and (not event.is_set())):
     start_time = time.time() # start time of the loop
-
     imgQ_size = imgQ.qsize()
     #logging.info(" no of frames"  + str(imgQ_size))
     ret, frame = cap.read()
+  
     if(frame_counter == PROC_FRAME_FREQ):
-    # to make sure the buffer does not lag as real time as possible.
+    # to make sure the buffer does not lag, as real time as possible.
       if(imgQ_size < MAX_NO_FRAMES):
         with grabberLock:
           pass
           imgQ.put(frame)
       frame_counter = 1
-      logging.info("FPS video grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-        
+      logging.info("inst FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
     else: 
-      frame_counter = frame_counter + 1
-    time.sleep(0.01)  # to avoid this thread taking all control of CPU
+      frame_counter += 1
+    if IP_FEED == INPUT_FEED.VIDEO_FILE:
+      time.sleep(0.01)  # to avoid this thread taking all control of CPU
 
-    #logging.info("FPS frame grab: " + str(1.0 / (time.time() - start_time))) # FPS = 1 / time to process loop
-    
-  cap.stop()
-  cap.release()
-  cv2.destroyAllWindows()
 
 def sendParams(objArea, objCX, objCY):
   """
@@ -266,7 +234,7 @@ def appendSPACE(initMsg):
   return initMsg
   #stcom.sendToArduino(mySPACE.encode('utf-8'))
 
-def process_thread(event, source = VID_SRC, trajQ = commQ, imgQ = imageQ):
+def process_thread(event, source = WEBCAM_INDEX, trajQ = commQ, imgQ = imageQ):
   """
   @brief : pops imgQ process img and calc gimb trajectory and sets the event.
   """
@@ -419,7 +387,6 @@ def keyboardInterruptHandler(signal, frame):
   print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
   exit(0)
 
-
 """ START YOUR CODE HERE """
 
 if __name__ == '__main__':
@@ -441,9 +408,6 @@ if __name__ == '__main__':
   
   with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(process_thread, GlobalEvent)
-    if IP_FEED == INPUT_FEED.WEBCAM:
-      executor.submit(cam_grabber_thread, GlobalEvent)
-    elif IP_FEED == INPUT_FEED.VIDEO_FILE:
-      executor.submit(video_grabber_thread, GlobalEvent)   
+    executor.submit(frame_grabber_thread, GlobalEvent)   
   
 """ END OF FILE """
