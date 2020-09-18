@@ -33,9 +33,9 @@ parameters =  cv.aruco.DetectorParameters_create()
 
 def trackArucoMarker(frame):
   """
-  (image) -> (float,float,float)
+  (image) -> (float,float,float,float)
   Description: 
-  Return area, cx,cy and checks if correct marker or not.
+  Return area, theta ,cx, cy  and checks if correct marker or not.
   #>>>
   
   """
@@ -43,7 +43,7 @@ def trackArucoMarker(frame):
   objCenterX =-1
   objCenterY =-1
   objArea   = -1
-
+  objRotation = -1
 
   markerCorners, markerIds, rejectedCandidates = cv.aruco.detectMarkers(frame, dictionary, parameters=parameters)
 
@@ -55,8 +55,8 @@ def trackArucoMarker(frame):
         objCenterY = (markerCorners[0][i][0][1]+markerCorners[0][i][1][1]+markerCorners[0][i][2][1]+markerCorners[0][i][3][1])/4.0
         objArea = (markerCorners[0][i][0][0] - markerCorners[0][i][1][0])*(markerCorners[0][i][0][1] - markerCorners[0][i][3][1])
         objArea = abs(objArea)
-    
-  return objArea, objCenterX, objCenterY
+        objRotation = 0
+  return objArea, objRotation, objCenterX, objCenterY
 #def ...:
 #  """
 #  () -> ()
@@ -86,20 +86,20 @@ if __name__ == '__main__':
   cv.waitKey(0)
   cv.destroyAllWindows()
 
-  Area, Cx, Cy = trackArucoMarker(frame)
+  Area, pose ,Cx, Cy = trackArucoMarker(frame)
   print(Area)
+  print(pose)
   print(Cx)
   print(Cy)
-
-  cap = cv.VideoCapture(2)
+  cap = cv.VideoCapture(0)
 
   while(True):
       # Capture frame-by-frame
       ret, frame = cap.read()
 
       # Our operations on the frame come here
-      Area, Cx, Cy = trackArucoMarker(frame)
-      print(  str(Area) +str(Cx) + str(Cy) )
+      Area, pose ,Cx, Cy = trackArucoMarker(frame)
+      print(  str(Area) + str(pose) +str(Cx) + str(Cy) )
 
       # Display the resulting frame
       cv.imshow('frame',frame)

@@ -34,6 +34,13 @@ KERNEL - x86_64 Linux 5.6.15-1-MANJARO
 
 ### Software Setup
 ---
+
+
+If you decide to use PLATFORM IO do the following things else scroll down for STM32Cube Instructions. 
+
+#### PlatformIO Installation 
+---
+
 Install PlatformIO VSCODE ( a workspace file is provided, you should see the extensions buttons and all ... if not navigate to /code/gimbal_control(ie the MCU code) there then try again )
 
 You may get the error while uploading.
@@ -43,11 +50,11 @@ Error: libusb_open() failed with LIBUSB_ERROR_ACCESS
 
 try the following things 
 ### For Windows
----
+
 Install [this software](https://zadig.akeo.ie/).     
 
 ### For linux
----
+
 Quick and dirty fix.  
 Run       
 ```
@@ -91,10 +98,32 @@ sudo gpasswd -a youruser uucp
 
 And RESTART YOUR DEVICE IN ALL CASES.               
 
+
+### STMCubeIDE Installation 
+----
+
+Please use windows the Linux versions suck , ( as of writing ), didnt find much issues during installation, u are in windows world lookup (although highly unlikely any issues) !! 
+
 ### Other Software Requirements 
 ---
-Python Libs - Non exhaustive list ( will be making a bash script to test avail libs make )        
-OpenCV 4.3.0 At least.     
+Python Libs - 
+I have written the entire code in a [Python Virtual Environment](https://realpython.com/python-virtual-environments-a-primer/)
+Upto u to install In the sys or USE venv 
+Either way 
+Run 
+``` 
+pip install -r requirements.txt
+```
+
+inside code in oscar. Should get stuff up and running.
+
+### Incase you decide to use the goPro camera, you can directly stream it
+
+Install FFmpeg 
+```
+sudo snap install ffmpeg
+```
+For debian derivatives, for more info checkout [this](https://github.com/KonradIT/gopro-py-api/tree/master/examples/opencv_gopro) unofficial documentation. 
 
 
 ## Installation
@@ -125,6 +154,18 @@ UART STLINK/DEBUGGER RX ( PA9  )
 
 Simple USB to TTL Adapter ( as of now ).
 
+Set the appropriate port in [comArduino2.py](code/jetson/ComArduino2.py) at the end of file.
+Windows 
+---
+Open device manager. 
+Linux 
+---
+```
+ls /dev/tty*
+```
+
+the port index you get tttyUSBX  
+
 **Gmbal Installation**
 
 Gimbal inversion using [Olliw's GUI ](http://www.olliw.eu/2013/storm32bgc/) ( Ver 0.96).      
@@ -132,7 +173,31 @@ Gimbal inversion using [Olliw's GUI ](http://www.olliw.eu/2013/storm32bgc/) ( Ve
 
 **Camera Installation** 
 
-Plug and play USB as of now.
+
+See 
+Type 
+```
+ls /dev/video*
+```
+
+You will get /dev/videox
+try removing webcam 
+run command         
+plug cam    
+run command    
+
+Get the ```x``` val 
+
+Nav to code/tests/camtesting.py
+
+Set camera source index as ```x```
+And run . Your cam should fire and you should be able to see the output feed. 
+
+```
+python3 camtesting.py
+```
+
+The new index will be the index of Webcam to be added cam Source to [main.py](code/jetson/main.py).     
 
 **Buggy installation**
 
@@ -140,20 +205,18 @@ Nil as of now.
 
 **Onboard Computer and GUI installation**
 
-Nil as of now.
-
-
-```
-Give the example
-```
-
-And repeat
+Nav to /code/pilotdash 
 
 ```
-until finished
+python3 plottingFromFile.py
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+This gives me raw and filtered(if any) trajectory of the last motion.
+
+```
+python3 splinePlot.py
+```
+This gives me interpolated curves for the coeffs in [splineCoeffs.txt](code/pilotdash/splineCoeffs.txt)
 
 ## Running the tests
 
@@ -221,8 +284,6 @@ Hit reset again just to be sure.
 ### Testing Buggy and MCU 
 ---
 yet to be implemented.
-
-
 
 
 ## Built With

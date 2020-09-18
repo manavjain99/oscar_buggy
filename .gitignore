@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 references/robo_thoughts_linkedin/AI-on-Jetson-Nano
 references/computer-vision
 code/jetson/yolov3/yolov3_opencv/venv
 code/jetson/yolov3/yolov3_opencv/.idea
+code/jetson/yolov3/yolov3_opencv/yolov3.weights
+code/env-oscar
+code/jetson/__pycache__
+code/pilotdash/__pycache__
+=======
+references/robo_thoughts_linkedin/AI-on-Jetson-Nano
+references/computer-vision
+code/jetson/yolov3/yolov3_opencv/venv
+code/jetson/yolov3/yolov3_opencv/.idea
+code/jetson/yolov3/yolov3_opencv/yolov3.weights
+code/env-oscar
+code/jetson/__pycache__
+code/pilotdash/__pycache__
+>>>>>>> upstream/master

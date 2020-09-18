@@ -1042,7 +1042,364 @@ Now finally PORTING all the codes to fit MBED apis
 
 Heres a list of all the files I need to edit        
 
-gimbalstuff          
+gimbalstuff.cpp       
 main.cpp        
 uart.cpp         
+
+29.07.2020 
+
+9.20 PM 
+I have ordered a new STM nucleo board as a backup, 
+Juggling on Windows betn VSCODE and MBED srudio, 
+Starting porting of CODES . 
+
+Starting with 1 . 
+uart.cpp
+then gimbal then main 
+
+11 pm 
+
+Partially ported wrote gimbal and uart 
+
+30.7.2020      
+10.47 PM       
+Seems some compiler bugs in mbed c/cpp compatibily  
+[ERROR] Warning: L3912W: Option 'legacyalign' is deprecated.     
+
+3/8/2020 
+12.35 AM 
+
+Ported compilable code for MBED , had a discussion was asked to use baremetal , above my paygrade honesstly .. 
+
+Continuing debugging on mbed doesnt show any outputs ps this is the [current main file](code/stm_mbed/main.cpp)
+
+4.8.2020 
+1.57 AM 
+
+Found that only one Buffered serial works on MBED code 
+ie if I use multiple Serial ports the code just doesnt run 
+On MCU gives no errors on compiler ,  [current main file](code/mbed_testing/main.cpp) Commit : uart debugcon . 
+
+
+2.58 PM 
+
+Yeah the same issue as above, cant use multiple uarts on this 
+
+4.37 PM 
+
+Added MIT License 
+
+11.11 PM 
+ Blinky code baremetal added 
+
+
+6.8.2020      
+12.25 AM          
+
+Today I did v 0.2.0 for baremetal ie blinky code and UART TX
+
+
+6.8.2020 
+
+12.45 PM 
+finisheed v0.3.0 ie receiving Chars through interrupts. 
+
+Now testing the feasability of splines 
+
+7.8.2020 
+6.10 PM 
+Regenrated splines using coeffs see files 
+splineplot.py splinetest.py splineCoeffs.txt see ![this photo](sshots/splinesPythonCoeffsRegenerated.png). 
+
+
+7.42 PM 
+The previous really fucked up output btw :) ( *picture that laughing emoji here* )
+
+![F](sshots/F.png)
+
+Whats happening here ?     
+Each **F** is a curve for each set of splines that are being sent to the MCU ( the update 1 pt keep 5 pt buffer , turns out the splines that way arent continious. Let me see if things work out different using this properer piecewise coeffs provided in [this curveplanner file](jetson/curveplanner.py) )
+
+In this file I am doing a little different things , erm ...  a diffferent python function to get the splines lemme see if things are continious if any .. if not adjust first and last values maybe .. ?
+
+
+1.06 AM      
+So heres the following scenario      
+the piecewise curves are not continious ![seethisimg](sshots/notcontsplines.png)
+
+The Piecewise splines are gotten from this [link](https://stackoverflow.com/questions/13384859/coefficients-of-spline-interpolation-in-scipy)
+
+More particularly this [imgcode](sshots/stackoverflowSplines.png)
+
+Turns out that code is deprecated hence I went to undeprecate it and came to the following code in code/jetson/curveplanner.py
+
+Now during this codes unittesting I gave a set of sample vals shown in green in the graph , and was happy to get the pieceeise splines but they arent continious .
+
+So now I am left With the Following things 
+Assuming that my piewise splines are correct and are always this fucked up    . 
+I can go ahead and use the tck or spline parameters from [here](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splrep.html#scipy.interpolate.splrep)
+
+**SideNote**
+TCK stands for T - knots ( points through which splines passes )
+C - coeffs ( these are 1 coeffs per knot )
+K - degree of the curve in question. 
+What basically i was doing is converting these tck vals using some other python lib into piecewise splines. 
+**SideNoteEnd**
+
+And decode those params using [this](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html#scipy.interpolate.splev)
+
+ie make / regen spline from this python lib ( but this is depreacated ) which brings me 
+
+to regenrate splines by using this [method](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html#scipy.interpolate.BSpline)
+
+This tells the exact relation of tck vals of a spline to an output val of x in mathematcal terms. 
+ ie 
+ for reference these are the values ... in this ![img](sshots/bsplinescipy.png)
+
+ This is the clean way of how python makes smooth curves ... 
+
+The ISSUE / OPTIONS 
+
+1. See the above code and try to rewrite the bsplines maths or search online cpp versions of this above maths ... ( was not recommended earlier )   
+2. go ahead with the piecewise splines for this much varying / variability 
+3. Let the  math part be done by some c lib and rather send direct cx,cy, area to the MCU and let it ( the library) interpolate the points for me ( done already above (readup). ). 
+
+8.8.2020  
+11.24 AM  
+
+Plotting the Bspline curve along with peicewise curve here 
+
+EDIT : Found a nice claener way of implementing Bsplines on the [scipy website itself](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html#scipy.interpolate.BSpline) 
+see this ![image](sshots/bsplinesimplemath.png)
+
+12.16 PM 
+
+Heres the ![BFTHING](sshots/allin1splines.png)
+
+I have regen the Bspline curves usign the same tck data as for the piecewise curves , it has its own way of implementing stuff yeah its based on general maths and may/should follow the convention , ie it follows the formulas listed above in the docx. 
+
+They have given a simple math implementation if I were to do it in CPP.   But the assumption that knots are passing pts seems to be gone NULL and VOID heres the snippent from spline plot which is plotiing the stuff 
+
+```
+  y2 = [0, 3, 1, 2, 3, 5, 8, 13, 17, 24]
+  x2 = np.linspace(0, 1, 10)
+
+  y3 = [1,7,3,4,10,2]
+  x3 = list(range(1,7))
+  tck = splrep(x2, y2)
+  print( " len of knots is " + str(len(tck[0])))
+  print( " len of coeffs is " + str(len(tck[1])))
+  print( " degree of Bspline is " + str((tck[2])))
+
+  Bspl = BSpline(tck[0],tck[1],tck[2])
+  By2 = Bspl(x2)
+  print( " len of bspline is " + str(len(By2)))
+  print("  knots / nodes are " + str(tck[0]))
+  plt.plot(x2, y2,'o', label=" Y output passed")
+  knotx =list(range(0,len(tck[0])))
+  knotx[:] = (x/len(tck[0]) for x in knotx)
+  plt.plot(knotx , tck[0], 'gs', label="Nodes or knots")
+  plt.plot(x2, By2, label="Bspline curve ")
+
+```
+you can find this [here](code/pilotdash/splineplot.py) in somecommit made 
+
+9.8.2020 
+7.45 PM     
+
+THe splineplot was wrongly written verified it mathematically by writing correct code. 
+
+this is the oldaruco output a lot of things to go wrong to but mostly thanks to the 6 spline idea where creating a new spline from using 5 old pts and assuming stuff will turn out to be correct. 
+
+Now writing / implementing main.py the other way ie 
+![t](sshots/oldarucocorrectplot.png).
+
+10.8.2020 
+5.35 PM
+ 
+FINALLLY FUCK !!  A GAZILLION TIMES F
+Got the spline smooth continious output see ![this](sshots/aintsheabeauty.png) 
+
+ I had to make the time redundant in plotting coz it logs data instanteneously so that was one of the reasons why the graphs above were such a big mess. 
+
+ The time I have now indexed separately, ie from 0 to len -1 
+
+ Thats why such a graph. 
+
+9.30 PM 
+
+Finally got nice graphs, integrated main and spline plot pipeline for jetson set including Pitch and Yaw also wrote splineplot to fit the new csv file. 
+
+See verified images 
+![pitch](sshots/arucovideoPitch.png)
+![yaw](sshots/arucovideoYaw.png)
+
+PS : THE disconiuities **may** get taken care of once MAD Filter comes into play. Need to fix that BUG. .. 
+
+11.08.2020 
+
+10.51 PM 
+Did quite a lot of stuff today.. 
+Tried installing cubeIDE on Manjaro turns out not a good ide there ... Instead installed python lib dependencies here on windows and now running stuff on this machine OS. Sad But no other options.. 
+But studff is working good news there 
+
+Did ITM init on MCU !! 
+It works for general debugging rnow. Did take care of Interrupts and Buffers , now able to send python messages on there .. Did a Manual UART send data and debugging 
+via CubeIDE . 
+
+bREAKS when debugging alongwith python probably coz you cant stop time , the inputs of python are real time. 
+
+Tried disabling breakpoints and running , didnt break hopefully its working well , 
+Highly unprobable though 
+
+Will be now parsing the data and printing the stuff on ITM later to see if the data is verified correctlty or not ...
+
+For now .. C me later .
+
+
+12/8/2020 
+
+10.45 PM 
+
+Did I ever mention that windows was an absolute piece of trash in installing and running pyhton .. 
+I guess I did . 
+I did unit test my curve data parsing code today ( stable ( ** unittest ) )[thisfile](code/playground/curvestesting.cpp)
+It seems to be compiling on CubeIDE well . 
+see STMBAREMETAL. 
+I had to make a few minor changes to the data that is being sent.
+ie add a EOL to the string and insert spaces between every piecewise curves .
+see [main.py](code/jetson/main/.py) 
+```
+def sendEOL()
+  ... 
+def sendSPACE()
+  ...
+``` 
+
+Found that ```strtok``` doesnt work recursively USE INSTEAD ```strtok_r```. Spent a shit load of time there. 
+Eventually read the documentation part. I should start from the cpp reference first and then move to other shit on the WWW. 
+
+Coming back to windows being shit my [main.py](code/jetson/main/.py) doesnt work well . 
+So now thinking of using 2pcs one running on linux and other for using STMCubeIDE Windows... 
+Another Day SETUP ... 
+Fuck . 
+Okay doing it today .. Hopefully it works . 
+
+Provided the number of times and the no of ways I have re setup the environment , I should be crowned for that task itself only .. 
+
+Okay , Tomorrow I need to get this stuff tested hopefully INTERPOLATION TESTED AND VERIFIED 
+
+3-4 more days until I get the smooth motherf*king curves on Gimbal working. 
+
+
+22/08/2020 
+
+Phew Its been a long time ( feels long though .. )
+
+So far update 
+I had managed to get the V1.0.0 running some days ago .. 
+Go and see the git log/commit dont remember when exactly 
+
+The motion was relatively smooth, didnt bounce overintegrate or some stuff like that , moved well, 
+needed calibration, still ... 
+
+Waiting for getting the GoPro, till then Im seeing if I can fix this current code. 
+
+Removing broken windows first. 
+
+My BrokenWindows are 
+1. FIXING THE READ ME for V1.0.0
+2. Releasing V1.0.0 and undoing any temp changes I made RNow.
+3. Looking when do we add a new RELEASE VERSION ? After how many patches etc  ... umm maybe when I feel a benchmark moment then I will Release a new version till then keep stuff in the commits itself only ... ?
+Or better yet do I make a branch for every new release version .
+4. Main loop depending on the Opencv to exit, using keyboard interrupt. 
+5. Getting data and log info to the GUI to get info about my stats and where what stuff is GOING WRONG  !! 
+
+These many tasks I will revolve around before I get the goPro and start testing stuff on that . 
+
+
+7.20 PM 
+Wrote a Not so nicely formatted README.md 
+Enoughto get workin
+
+
+9.00 PM 
+Release v1.0.0 UPLOADED, Keyboard interrupt added. 
+
+25.08.2020 
+3.15 PM 
+
+Thinking FOR ETC Easier to change .. ? Will be now Sending Starting calib data to the MCU too .. 
+
+What params am i changing / do I need to tune ? 
+1. FPS frame recieve . decides the hyperframe time for the MCU!! 
+2. FRAME SIZE OF IMAGE RECEIVED !! Affects the Angle / spline .
+3. No of splines per sending of data. The MCU needs to know this. 
+4. 
+
+Where am i repeating myself ? 
+MCU Needs to have data of how many curves and how much time does it need ? ie hyperframe time !! 
+
+
+30.08.2020
+
+Starting calibration yeah, 
+
+8.09.2020 
+
+3.46 PM 
+
+Finally got hands on a GoPro, ( well not a goPro , but a action cam MiActionCamera 4K, https://xiaomi-mi.com/action-cameras/xiaomi-mijia-4k-action-camera-black/)
+
+Testing goPro opencv stuff. 
+Micam wiFi doesnt work on Micam app. 
+Trying to run with the opencv API ? 
+PS> I cant connect the camera on Windows, I'l need to go to using linux for that, which means boot a linux for that. 
+Manjaro Failed Successfully 
+The BOOT, Now either ubuntu 20.20 / elementary OS / Kubuntu ...  
+Retrying manjaro one last time else ubuntu 20.20 
+
+RTSP : realtime server protocol for various cams 
+https://www.ispyconnect.com/man.aspx?n=xiaomi
+
+
+16/09/2020
+11.30 PM
+Yesterday I finally rented a goPro for a month, which means i need to wrap up my project within this month ie I have 30 days to wrap things up. 
+
+Today I got most of the stuff needed to build the buggy and cam and the system, I have the small buggy , basic RC car , shitty motors and power , will probably need to beef it up but before that I would need to run stuff on it , push it to ists limits and avoid wating time .
+I also have got my old raspberry Pi and will try to implement stuff on it. 
+
+Coz now I am running on a deadline, 
+
+I have just now managed to get the goPro Streaming working see files [gopro_play](code/playground/gopro_play.py) ( this is standalone) and see [gopro_keepalive](code/playground/gopro_keepalive.py) and [gopro](code/playground/gopro.py) for the opencv version , you need to run the keep alive stuff running in a separate terminal and gopro.py running in a separate terminal. 
+
+If you do that and have a fairly nice goPRo you may be able to stream. 
+Incase of difficulties please see  [this unofficial documentation.](https://github.com/KonradIT/gopro-py-api/blob/master) 
+
+rnow I am charging the gPro and unittesting the buggy seeing if stuff works out on it. 
+
+11.37 PM 
+
+To unit test the buggy I'll need to 
+check both motors 
+For that Ill need motor drivers, ( atleast 1 rear motors working ), I'll be also needing power source, 
+
+Things I need to do . 
+s1. Get a power source upto 5v , to test the rear motor.
+s2. Get a motor driver to see if its working or not. 
+s3. How much payload can it handle , would you need to vhange it ? 
+s4. same for front motor !! Can it take the weight 
+Try using motor driver , does it move with the wt !! 
+If not you'll need to use the servo motor , 
+
+17/09/2020
+
+11.52 PM 
+
+Now Integrating gopro stuff with rest of the code. Oh also btw that small buggy couldn't fit all of my components, I did test both motors but just with the motor driver , the buggys space got full, thought of adding layers but It would require 4 layers with -1 layer ( ie under the base battery compartment )
+And it would be very unstable and wiring would be a nightmare. 
+
+s1. Add keep alive to jetson, 
+s2. integrate gopro.py testing stuff in a separate thread. 
 

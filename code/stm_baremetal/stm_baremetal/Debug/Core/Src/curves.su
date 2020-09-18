@@ -1,0 +1,2 @@
+curves.c:66:6:parseData	24	static
+curves.c:85:6:parseCoeffs	32	static

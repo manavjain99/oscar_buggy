@@ -1,25 +1,34 @@
 {
 	"folders": [
 		{
+			"path": "code/stm_baremetal"
+		},
+		{
 			"path": "code/jetson"
 		},
 		{
 			"path": "code/pilotdash"
 		},
 		{
-			"path": "code/mcu"
+			"path": "code/playground"
 		},
 		{
 			"path": "code"
 		},
 		{
-			"path": "."
+			"path": "sshots"
+		},
+		{
+			"path": "code/tests"
+		},
+		{
+			"path": "code/mcu"
 		},
 		{
 			"path": "references"
 		},
 		{
-			"path": "code/playground"
+			"path": "."
 		}
 	],
 	"settings": {
@@ -35,7 +44,18 @@
 			"vector": "cpp",
 			"string_view": "cpp",
 			"initializer_list": "cpp",
-			"cmath": "cpp"
-		}
+			"cmath": "cpp",
+			"condition_variable": "cpp",
+			"future": "cpp",
+			"mutex": "cpp",
+			"*.ipp": "cpp",
+			"cstddef": "cpp",
+			"ostream": "cpp",
+			"*.tpp": "cpp",
+			"variant": "cpp",
+			"rope": "cpp"
+		},
+		"files.autoSave": "afterDelay",
+		"python.pythonPath": "/home/pallavi/Workspace/oscar_buggy/code/env-oscar/bin/python3"
 	}
 }
