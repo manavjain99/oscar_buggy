@@ -387,11 +387,7 @@ def keyboardInterruptHandler(signal, frame):
   print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
   exit(0)
 
-""" START YOUR CODE HERE """
-
-if __name__ == '__main__':
-  pass
-  
+def main():
   print
   print
   signal.signal(signal.SIGINT, keyboardInterruptHandler)
@@ -409,5 +405,13 @@ if __name__ == '__main__':
   with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(process_thread, GlobalEvent)
     executor.submit(frame_grabber_thread, GlobalEvent)   
-  
+
+
+
+""" START YOUR CODE HERE """
+
+if __name__ == '__main__':
+  pass
+  main()  
+    
 """ END OF FILE """
