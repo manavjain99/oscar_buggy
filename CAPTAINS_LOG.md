@@ -1403,3 +1403,33 @@ And it would be very unstable and wiring would be a nightmare.
 s1. Add keep alive to jetson, 
 s2. integrate gopro.py testing stuff in a separate thread. 
 
+18 Sept '20 
+
+9.47 PM 
+
+Cleaned code ( main.py ), made it a bit DRY , cleaned parts for multiple sources and wrote them all in 1 def, also wrote a separate def for main and called the main def in ```__main__:```
+
+Also BTW tested goPro spline inputs and that baby's working great, heres her first pictures. 
+
+[!Pitch](sshots/goPropitch.png)
+
+[!Yaw](sshots/goProYaw.png)
+
+Also this system is running on Elementary OS, manjaro had some login issues tried , a lot , ... 
+But Arch's gonna be Arch , they released a new version, installing simulataneously 
+
+19/09/2020
+
+7.41 PM 
+
+Done calibrating goPro with the gimbal , pro tip, The gimbal was designed to be used inverted so It is better to figure the calibration inverting the gimbal, that way the lens comes on the center of mass and balances the pitch , you olny need weitghts to balance the roll of the gimbal . Smort . 
+
+Also Parallery Reinstalled Manjaro but will be completing this project on Moms Laptop Elementary for the sake of quick ness. 
+
+Now I have recoreded the output of the gimbal but coz its inverted its turning L & R inverted. Up and down inverted . 
+
+To Do : 
+
+1. Invert the output feed, 
+2. test if I can get from 2 srcs simultaneously ? 
+

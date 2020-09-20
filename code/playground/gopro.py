@@ -11,6 +11,7 @@ while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
     # Display the resulting frame
+    frame =  cv2.rotate(frame, cv2.ROTATE_180)
     cv2.imshow("GoPro OpenCV", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
