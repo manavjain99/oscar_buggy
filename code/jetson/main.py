@@ -16,7 +16,7 @@
  date modified:  Mon 27 Apr 18:11:03 IST 2020
 """
 
-INCLUDE_STM = False
+INCLUDE_STM = True
 LOG_FILES = True
 
 if __name__ == '__main__':
@@ -48,7 +48,7 @@ class INPUT_FEED(Enum):
   VIDEO_FILE, GOPRO_STREAM, WEBCAM = range(3)
 
 # Choose among the Three VIDEO_FILE, GOPRO_STREAM, WEBCAM 
-IP_FEED = INPUT_FEED.VIDEO_FILE
+IP_FEED = INPUT_FEED.GOPRO_STREAM
 
 
 ####### EXTERNAL FILES ##########
@@ -78,7 +78,7 @@ PIX_PER_DEG_VAR = 1.3
 MAX_NO_FRAMES = 10000
 
 # ie processing every nth frame, depending on the Input FPS you may want to tweak this settings. 
-PROC_FRAME_FREQ = 10
+PROC_FRAME_FREQ = 3
 
 # need not change these vars.
 MAX_DEL_YAW =   MULTIPLICATION_FACTOR*FRAME_CX/(PIX_PER_DEG+PIX_PER_DEG_VAR)
@@ -282,6 +282,9 @@ def process_thread(event, source = WEBCAM_INDEX, trajQ = commQ, imgQ = imageQ):
       if IP_FEED == INPUT_FEED.WEBCAM:
         if (source != -1):
           frame =  cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
+      if IP_FEED == INPUT_FEED.GOPRO_STREAM:
+        frame =  cv2.rotate(frame, cv2.ROTATE_180)
 
 
       #####  choose your tracking algo  here ##############
