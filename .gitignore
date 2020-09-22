@@ -7,3 +7,6 @@ code/env-oscar
 code/jetson/__pycache__
 code/pilotdash/__pycache__
 code/pilotdash/__pycache__/Polynomial.cpython-38.pyc
+code/jetson/__pycache__/aruco_tracking.cpython-38.pyc
+code/jetson/__pycache__/ComArduino2.cpython-38.pyc
+code/jetson/__pycache__/greenBallTracker.cpython-38.pyc
