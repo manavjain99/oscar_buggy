@@ -1411,9 +1411,9 @@ Cleaned code ( main.py ), made it a bit DRY , cleaned parts for multiple sources
 
 Also BTW tested goPro spline inputs and that baby's working great, heres her first pictures. 
 
-[!Pitch](sshots/goPropitch.png)
+![Pitch](sshots/goPropitch.png)
 
-[!Yaw](sshots/goProYaw.png)
+![Yaw](sshots/goProYaw.png)
 
 Also this system is running on Elementary OS, manjaro had some login issues tried , a lot , ... 
 But Arch's gonna be Arch , they released a new version, installing simulataneously 
@@ -1433,3 +1433,19 @@ To Do :
 1. Invert the output feed, 
 2. test if I can get from 2 srcs simultaneously ? 
 
+22/9/2020       
+
+1.36 PM      
+
+2 Days ago i got the buggy , tweaked it ADDDED motor drivers to it, and unitested the hardware. 
+
+also integrated the goPro and got a recording out of it , as said earlier, it has a [shaky effect](sshots/gimbalshaky.mp4), somehow managed to balance it but not for olong ,
+
+How'd I balance it ? 
+The gimbal is mostly used hanging down from support but I am assembling up on the support , so I went back to the original config , and I balanced it that way ie hanging and then kept back on its feet, saw a google / yt videos the big lens goes in the center alinged with the ROLL motor .
+
+Rnow also tested PWM LED glowing on STM Baremetal Now writing code for Motor Controling.
+
+4.14 PM 
+
+Wrote the MOTORS PID CONTROL TESTING CODE, WILL NOW BE VERYFYIN/ THINKING ABOUT HOW TO INTEGRATE THE Curves and splines code on this ... 
