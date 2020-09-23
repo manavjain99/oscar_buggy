@@ -1,5 +1,4 @@
-Core/Src/gimbal_stuff.o: ../Core/Src/gimbal_stuff.c \
- ../Core/Src/../Inc/main.h \
+Core/Src/buggy.o: ../Core/Src/buggy.c ../Core/Src/../Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -29,7 +28,7 @@ Core/Src/gimbal_stuff.o: ../Core/Src/gimbal_stuff.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Src/../Inc/global.h ../Core/Src/../Inc/main.h \
- ../Core/Src/../Inc/gimbal_stuff.h \
+ ../Core/Src/../Inc/buggy.h ../Core/Src/../Inc/gimbal_stuff.h \
  ../Core/Src/../Inc/../../Libs/mavlink/include/mavlink_types.h \
  ../Core/Src/../Inc/../../Libs/mavlink/include/mavlink.h \
  ../Core/Src/../Inc/../../Libs/mavlink/include/common/common.h \
@@ -175,6 +174,8 @@ Core/Src/gimbal_stuff.o: ../Core/Src/gimbal_stuff.c \
 ../Core/Src/../Inc/global.h:
 
 ../Core/Src/../Inc/main.h:
+
+../Core/Src/../Inc/buggy.h:
 
 ../Core/Src/../Inc/gimbal_stuff.h:
 
