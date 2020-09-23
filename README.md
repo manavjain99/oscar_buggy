@@ -140,22 +140,22 @@ A step by step series of examples that tell you how to get a development env run
 ![MCU Pinout](other/nucleo_f411re_right.png)        
 
 
-UART Gimbal TX ( PA 12 )      
-UART Gimbal RX ( PA 11 )      
+UART Gimbal TX ( PA 12 )  ( ORANGE WIRE )           
+UART Gimbal RX ( PA 11 )  ( YELLOW WIRE )           
 
-UART OBCOMP TX ( PA 3 )     
-UART OBCOMP RX ( PA 2 )     
+UART OBCOMP TX ( PA 3 )   
+UART OBCOMP RX ( PA 2 )   
 
 UART STLINK/DEBUGGER TX ( PA10 )     
 UART STLINK/DEBUGGER RX ( PA9  )     
 
-LONGITUDINAL(F/B) MOTOR INPUT PWM - PC 9 
-LONGITUDINAL(F/B) MOTOR DIr IP 1  - PB 1
-LONGITUDINAL(F/B) MOTOR DIr IP 2  - PB 15 
+LONGITUDINAL(F/B) MOTOR INPUT PWM - PC 9  ( Purple/Violet Wire )                     
+LONGITUDINAL(F/B) MOTOR DIr IP 1  - PB 1  ( Blue Wire )                          
+LONGITUDINAL(F/B) MOTOR DIr IP 2  - PB 15 ( Green Wire )                           
 
-LATERAL(L/R) MOTOR INPUT PWM - PB 8 
-LATERAL(L/R) MOTOR DIr IP 1  - PB 14 
-LATERAL(L/R) MOTOR DIr IP 2  - PB 13 
+LATERAL(L/R) MOTOR INPUT PWM - PB 8                 
+LATERAL(L/R) MOTOR DIr IP 1  - PB 14               
+LATERAL(L/R) MOTOR DIr IP 2  - PB 13                 
 
 
 **Onboard Computer Connections**
