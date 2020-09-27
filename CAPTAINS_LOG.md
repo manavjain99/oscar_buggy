@@ -1449,3 +1449,21 @@ Rnow also tested PWM LED glowing on STM Baremetal Now writing code for Motor Con
 4.14 PM 
 
 Wrote the MOTORS PID CONTROL TESTING CODE, WILL NOW BE VERYFYIN/ THINKING ABOUT HOW TO INTEGRATE THE Curves and splines code on this ... 
+
+25/9/2020      
+
+12.18 AM    
+
+Deciding what to do with the radio , I am currently looking for Input capture Modes of the STM32, 
+Found refernces see [this.](https://controllerstech.com/pwm-input-using-input-capture-in-stm32/)
+
+28 Sept '20    
+ 
+12.58 AM 
+
+
+Was trying to get the setup running on the SD CARD , turns out the SD CARD is read only , for some reason its become a read only sdcard, I cant change it , write it , do anything except what was on it originally. The initial config, spent the day trying to find out whats wrong switching betn diff oses and diff methods of writing to SDCARD, all of which failed , DUMB ME !! Could have thought that its being write protect after the first failure , tomorrow will be getting a new SDCARD for this OS. 
+
+Hopefully my cheap card reader didnt spoil it, but good news it works , ie theres a workable operating system on the SDCARD, maybe Ill later use it. 
+
+
