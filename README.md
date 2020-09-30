@@ -139,7 +139,6 @@ A step by step series of examples that tell you how to get a development env run
 
 ![MCU Pinout](other/nucleo_f411re_right.png)        
 
-
 UART Gimbal TX ( PA 12 )  ( ORANGE WIRE )           
 UART Gimbal RX ( PA 11 )  ( YELLOW WIRE )           
 
@@ -156,6 +155,8 @@ LONGITUDINAL(F/B) MOTOR DIr IP 2  - PB 15 ( Green Wire )
 LATERAL(L/R) MOTOR INPUT PWM - PB 8                 
 LATERAL(L/R) MOTOR DIr IP 1  - PB 14               
 LATERAL(L/R) MOTOR DIr IP 2  - PB 13                 
+
+![Raspberry Pi Pinout](sshots/rpiPinout.png)
 
 
 **Onboard Computer Connections**

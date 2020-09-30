@@ -1467,3 +1467,20 @@ Was trying to get the setup running on the SD CARD , turns out the SD CARD is re
 Hopefully my cheap card reader didnt spoil it, but good news it works , ie theres a workable operating system on the SDCARD, maybe Ill later use it. 
 
 
+30 Sept '20 
+
+9.30 PM 
+
+
+A little update on what I've been doing for the past few days, I managed to get the setup working on the Rpi, Atleast the spline generation and gopro part. Havent yet tested the sending of UART to MCU, I also made a few mecanical mods to the gimbal so that it could balance the gopro. see these
+![1](sshots/rpiVNC.png)
+![2](sshots/rpiVNCGoPro.png)
+![3](sshots/rpiVNCGOPROPitch.png)
+![4](sshots/rpiVncGoProYaw.png)
+
+Not the jugaad toothpick, clay and magnets. I brought new screws and Vias ( Its not called vias but something with starting with V, lets just call it vias for the sake )![notVias](sshots/notVias.jpeg)
+
+Since only one  vias was available per screw I had to get a set of 20 screws , I got a range of them , Vbig vias like truck screws big ( got individually (around 5,6 ) ), small medm sized ( a set with screws (around 15-20) ), small small vias (around 150 of these).              
+The unfinal mods looks something like ![this](sshots/gimbalModsWts.jpeg) and ![this](sshots/gimbalModsWtsBottomView.jpeg) and had to  dispose of its velcro strap and had to buy a new velcrow strips. 
+
+Rnow Im trying testing the reeiver and the TX to see which channels should I use. 
