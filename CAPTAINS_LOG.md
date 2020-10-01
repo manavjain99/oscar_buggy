@@ -1484,3 +1484,26 @@ Since only one  vias was available per screw I had to get a set of 20 screws , I
 The unfinal mods looks something like ![this](sshots/gimbalModsWts.jpeg) and ![this](sshots/gimbalModsWtsBottomView.jpeg) and had to  dispose of its velcro strap and had to buy a new velcrow strips. 
 
 Rnow Im trying testing the reeiver and the TX to see which channels should I use. 
+
+Still a little shaky IDK what to do , ig i'll have to flash the firmware for a lower D value ? I guess so ... 
+
+1st October 2020    
+8.15 PM 
+
+ Still busy balancing the gimbal , I  finally today changed the firmware and increased the damping constant of the pitch motor. 
+
+
+My gimbals working fine , it seems working well, so NEXT STEPS ? 
+INTEGRATE / PUT IT ALL TOGETHER !! 
+S1. Check if my current setup is working correctly before moving ahead. 
+1. If I can track the object on the Buggy Without any issues. ( Possibnle issues , insufficient power for both gimbal Rpi/FAN and the MCU !!! Soln , Get a bigger buck module or add 2 buck modulees in parallel. )
+Since I will need to buy 1 buck module anyway , I'm getting a bigger one. 
+
+2. Do i need to integrate the radio inputs explicitly !! 
+
+DO    
+Test -> Validate -> Update -> Test ...  
+and NOT        
+Update -> Update -> Update -> Test -> ... 
+
+
