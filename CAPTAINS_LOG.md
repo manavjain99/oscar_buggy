@@ -1507,3 +1507,55 @@ and NOT
 Update -> Update -> Update -> Test -> ... 
 
 
+2nd Oct '20 
+
+7.52 AM 
+
+Its early in the morning and the araldite seems to have done its job, the power GPB seems to be firm, on the buggy, 
+
+Now a major ISSUE, the Rpi isnt booting up, ( the entire setup on buggy, ofc )
+1. When I connected the Pi it did boot up but showed the thunder sign, ie low power , couldn't finish boot. 
+2. Tried again but fucked up by powering via USB and the rest periferals got powered of the buggy via Rpi through, 5v pin. [Although it shows it can source upto 0.5Amps.](https://www.circuits.dk/everything-about-raspberry-gpio/)
+3. Third time I booted from buggy power setup, I guess it showed me blinking green LED lights. Didnt count how many times they were blinking [later found the corrletaion between lights and status. ](https://www.makeuseof.com/tag/raspberry-pi-wont-boot-fix/)
+
+Yep the SDCard is damaged. Now Reflashing it all again ... SED. 
+
+
+6.05 PM 
+
+
+Reflashed the sdcard with the middle image ie neither terminal version nor the full fleeged version, no virtual env , isntallied opencv from 
+https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/
+and 
+https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/
+
+The test cases seem to be working on the rpiVNC, 
+see ![thisimg.](sshots/retryRpi.png)
+
+So now I need to disable my this wifi connection and put the only wifi of gopro on Rpi. 
+
+But before that I need to verify if the STM comms are working well .
+
+3 Oct '2020 
+
+6.13 PM 
+
+Stuff momentarily worked well , the entire buggys been assembled 
+```
+udp://:8554: Input/output error
+```
+
+This is the bottle neck now trying to remove these errors. 
+Googled errors 
+I installed ffmpeg ,
+```
+[mpegts @ 0x21db1d0] Could not find codec parameters for stream 2 (Unknown: none ([128][0][0][0] / 0x0080)): unknown codec
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+[mpegts @ 0x21db1d0] Could not find codec parameters for stream 3 (Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp): unspecified sample rate
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+Input #0, mpegts, from 'udp://:8554':
+```
+
+see this file for ![errors](sshots/goproErrors.png)
+
+wILL be later looking into mom's laptops elementary OS, where this stuff worked correctly for long period of time. 
