@@ -134,7 +134,9 @@ A step by step series of examples that tell you how to get a development env run
 
 ![Reconnecting STLINK](other/brokenSTLINKPart.jpg)      
 [Refence / More Details](https://electronics.stackexchange.com/questions/167414/how-to-reconnect-nucleo-to-st-link-part)      
-       
+
+ 
+
 **Periferals**
 
 ![MCU Pinout](other/nucleo_f411re_right.png)        
@@ -155,6 +157,8 @@ LONGITUDINAL(F/B) MOTOR DIr IP 2  - PB 15 ( Green Wire )
 LATERAL(L/R) MOTOR INPUT PWM - PB 8                 
 LATERAL(L/R) MOTOR DIr IP 1  - PB 14               
 LATERAL(L/R) MOTOR DIr IP 2  - PB 13                 
+
+& Just for reference the ![left pinout](other/nucleo_f411re_left.png)
 
 ![Raspberry Pi Pinout](sshots/rpiPinout.png)
 
