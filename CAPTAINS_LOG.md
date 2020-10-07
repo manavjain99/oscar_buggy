@@ -1559,3 +1559,60 @@ Input #0, mpegts, from 'udp://:8554':
 see this file for ![errors](sshots/goproErrors.png)
 
 wILL be later looking into mom's laptops elementary OS, where this stuff worked correctly for long period of time. 
+
+
+7th Oct '20
+
+12.17 PM 
+
+AS i Said stuff worked well on elementary(ASUS Laptop ) IDK ehat is the ISSUE on Manjaro( Lenovo )/Rpi. 
+I'll later put the sepcxs of the laptops here .. 
+Ethernet/Wifi CARD issues ??
+On elemetary I just did a pull request and install from the requirements.txt 
+Stuff worked well until the end of the program. 
+see ![this](sshots/allGoodElem.png)
+
+Around ~10k+ frames were working well. 
+What I'll try is get a new requirements  file from elementary and see if it works on Rpi, cutting back from other laptop and working on ASUS. 
+
+Also stupid Git issues , shows  10k++ modified files when changing OSes ( ie switching back and forth betn Windows and Linux )
+
+Heres my  asus Wireless Card info 
+
+```
+02:00.0 Network controller: Qualcomm Atheros QCA9565 / AR9565 Wireless Network Adapter (rev 01)
+```
+ and the screenfetch/neofetch 
+
+ ```
+       eeeeeeeeeeeeeeeeeeeeeee         ----------------------------------------------- 
+    eeeee  eeeeeeeeeeee   eeeee       OS: elementary OS 5.1.7 Hera x86_64 
+  eeee   eeeee       eee     eeee     Host: VivoBook 15_ASUS Laptop X507UAR 1.0 
+ eeee   eeee          eee     eeee    Kernel: 4.15.0-117-generic 
+eee    eee            eee       eee   Uptime: 12 mins 
+eee   eee            eee        eee   Packages: 2095 
+ee    eee           eeee       eeee   Shell: bash 4.4.20 
+ee    eee         eeeee      eeeeee   Resolution: 1920x1080 
+ee    eee       eeeee      eeeee ee   DE: Pantheon 
+eee   eeee   eeeeee      eeeee  eee   WM: Mutter(Gala) 
+eee    eeeeeeeeee     eeeeee    eee   Terminal: io.elementary.t 
+ eeeeeeeeeeeeeeeeeeeeeeee    eeeee    CPU: Intel i5-8250U (8) @ 3.400GHz 
+  eeeeeeee eeeeeeeeeeee      eeee     GPU: Intel UHD Graphics 620 
+    eeeee                 eeeee       Memory: 2947MiB / 7858MiB 
+      eeeeeee         eeeeeee 
+         eeeeeeeeeeeeeeeee                                    
+ 
+```
+
+Does it matter thogh ? 
+
+
+3.02 PM 
+
+
+Seems the SD CARD OF MY Rpi got damaged , again , reflashed the entire setup. 
+now I'm just creting a bash script that'll sipposedly install all the requirements back on the Rpi again. 
+
+6.22 PM 
+
+Creating a package to wget on my Rpi. 
