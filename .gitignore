@@ -10,6 +10,7 @@ code/pilotdash/__pycache__/Polynomial.cpython-38.pyc
 code/jetson/__pycache__/aruco_tracking.cpython-38.pyc
 code/jetson/__pycache__/ComArduino2.cpython-38.pyc
 code/jetson/__pycache__/greenBallTracker.cpython-38.pyc
+code/stm_baremetal/.metadata/*
 code/stm_baremetal/.metadata/.log
 code/stm_baremetal/.metadata/version.ini
 code/stm_baremetal/.metadata/.plugins/org.eclipse.cdt.core/pwmInputCapture.1601891639461.pdom
@@ -51,3 +52,11 @@ code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.ecl
 code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.workbench.prefs
 code/stm_baremetal/.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
 code/stm_baremetal/.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
+code/stm_baremetal/.metadata/.plugins/org.eclipse.cdt.ui/dialog_settings.xml
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.projects/pwmInputCapture/.markers
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.projects/pwmInputCapture/.indexes/bf/c4/history.index
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.root/1.tree
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/history.version
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.version
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/com.st.stm32cube.common.preferences.prefs
+code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.editors.prefs
