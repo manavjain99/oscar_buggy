@@ -1616,3 +1616,48 @@ now I'm just creting a bash script that'll sipposedly install all the requiremen
 6.22 PM 
 
 Creating a package to wget on my Rpi. 
+
+8th Oct '20
+
+12.20 PM 
+
+So I finally got stuff running on Rpi , back to where I was last time. 
+I have now simply run the gopro_keepalive script
+
+After around 2k frames it gives me the following msg 
+```
+Circular buffer overrun. To avoid, increase fifo_size URLoption. To survive in such case, use overrun_nonfataloption
+```
+I think this is the main cause ... 
+Which is being caused by these stuffs .. see Image of Rpi erros above . 
+
+```
+ = 26 q=14.0 size=   12785kB time=00:01:18.38 bitrate=1336.2kbitsframe= 2337 fps= 26 q=12.9 size=   12853kB time=00:01:18.81 bitrate=1335.9kbitsframe= 2351 fps= 26 q=12.8 size=   12926kB time=00:01:19.26 bitrate=1335.8kbitsframe= 2365 fps= 26 q=13.8 size=   13001kB time=00:01:19.74 bitrate=1335.5kbitsframe= 2379 fps= 26 q=12.4 size=   13084kB time=00:01:20.20 bitrate=1336.3kbits[udp @ 0x912960] Circular buffer overrun. To avoid, increase fifo_size URL option. To survive in such case, use overrun_nonfatal option
+frame= 2392 fps= 26 q=13.2 size=   13153kB time=00:01:20.63 bit
+
+ error while decoding MB 22 29, bytestream -5
+
+cabac decode of qscale diff failed at 21 28
+```
+
+Finally the program ends with this 
+
+```
+@ 0x9c7e30] error while decoding MB 43 23, bytestream -5
+[h264 @ 0x9c7e30] concealing 377 DC, 377 AC, 377 MV errors in P frame
+udp://:8554: Input/output error
+    Last message repeated 4 times
+frame= 2964 fps= 26 q=13.0 Lsize=   16242kB time=00:01:39.52 bitrate=1336.9kbits/s speed=0.865x    
+video:9852kB audio:4651kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 11.995548%
+^CTraceback (most recent call last):
+  File "gopro_keepalive.py", line 4, in <module>
+    gopro.stream("udp://127.0.0.1:10000")
+  File "/home/pi/workspace/code/env-oscar/lib/python3.7/site-packages/goprocam/GoProCamera.py", line 1177, in stream
+    self.KeepAlive()
+  File "/home/pi/workspace/code/env-oscar/lib/python3.7/site-packages/goprocam/GoProCamera.py", line 61, in KeepAlive
+    time.sleep(2500/1000)
+KeyboardInterrupt
+```
+
+Hopefully I'll debug this tomorrow. 
+Bis Bald.. 
