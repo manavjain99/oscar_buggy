@@ -1661,3 +1661,72 @@ KeyboardInterrupt
 
 Hopefully I'll debug this tomorrow. 
 Bis Bald.. 
+
+8th Oct '20
+
+2.15 PM 
+
+This is my log of gopro_keepalive.py
+
+```
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[mpegts @ 0x69b1d0] Could not find codec parameters for stream 2 (Unknown: none ([128][0][0][0] / 0x0080)): unknown codec
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+[mpegts @ 0x69b1d0] Could not find codec parameters for stream 3 (Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp): unspecified sample rate
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+Input #0, mpegts, from 'udp://:8554':
+  Duration: N/A, start: 1.685333, bitrate: N/A
+  Program 1 
+    Stream #0:0[0x1011]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuvj420p(pc, bt709, progressive), 848x480 [SAR 1:1 DAR 53:30], 29.97 fps, 29.97 tbr, 90k tbn, 59.94 tbc
+    Stream #0:1[0x1100]: Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 193 kb/s
+    Stream #0:2[0x200]: Unknown: none ([128][0][0][0] / 0x0080)
+    Stream #0:3[0x201]: Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp
+Please use -b:a or -b:v, -b is ambiguous
+```
+
+
+Here I found a nice link explaining a little bit of whats happening undere the hood 
+
+https://stackoverflow.com/questions/50063707/ffmpeg-rtsp-error-while-decoding-mb
+
+I also lookened into the source code of gopro_cam and found these stuff a little bit useful. [Stream Settings](https://github.com/KonradIT/gopro-py-api/blob/03aa8e80703370caee1fbe5fa64c2053607ae206/goprocam/GoProCamera.py#L1248 )
+and this link relating to [stream](https://github.com/KonradIT/gopro-py-api/blob/03aa8e80703370caee1fbe5fa64c2053607ae206/goprocam/GoProCamera.py#L1220). 
+It basically tells packets are dropping cause .... IDK why I tried lowering the quality to min and so for the bitrate. 
+
+Because Im streaming both VNC and gopro on goPros wifi , I guess this may be one of the issue. Maybe I'll try if I can SSH via gopros wifi to run the same commands. 
+
