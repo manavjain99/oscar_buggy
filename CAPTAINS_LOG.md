@@ -1403,3 +1403,330 @@ And it would be very unstable and wiring would be a nightmare.
 s1. Add keep alive to jetson, 
 s2. integrate gopro.py testing stuff in a separate thread. 
 
+18 Sept '20 
+
+9.47 PM 
+
+Cleaned code ( main.py ), made it a bit DRY , cleaned parts for multiple sources and wrote them all in 1 def, also wrote a separate def for main and called the main def in ```__main__:```
+
+Also BTW tested goPro spline inputs and that baby's working great, heres her first pictures. 
+
+![Pitch](sshots/goPropitch.png)
+
+![Yaw](sshots/goProYaw.png)
+
+Also this system is running on Elementary OS, manjaro had some login issues tried , a lot , ... 
+But Arch's gonna be Arch , they released a new version, installing simulataneously 
+
+19/09/2020
+
+7.41 PM 
+
+Done calibrating goPro with the gimbal , pro tip, The gimbal was designed to be used inverted so It is better to figure the calibration inverting the gimbal, that way the lens comes on the center of mass and balances the pitch , you olny need weitghts to balance the roll of the gimbal . Smort . 
+
+Also Parallery Reinstalled Manjaro but will be completing this project on Moms Laptop Elementary for the sake of quick ness. 
+
+Now I have recoreded the output of the gimbal but coz its inverted its turning L & R inverted. Up and down inverted . 
+
+To Do : 
+
+1. Invert the output feed, 
+2. test if I can get from 2 srcs simultaneously ? 
+
+22/9/2020       
+
+1.36 PM      
+
+2 Days ago i got the buggy , tweaked it ADDDED motor drivers to it, and unitested the hardware. 
+
+also integrated the goPro and got a recording out of it , as said earlier, it has a [shaky effect](sshots/gimbalshaky.mp4), somehow managed to balance it but not for olong ,
+
+How'd I balance it ? 
+The gimbal is mostly used hanging down from support but I am assembling up on the support , so I went back to the original config , and I balanced it that way ie hanging and then kept back on its feet, saw a google / yt videos the big lens goes in the center alinged with the ROLL motor .
+
+Rnow also tested PWM LED glowing on STM Baremetal Now writing code for Motor Controling.
+
+4.14 PM 
+
+Wrote the MOTORS PID CONTROL TESTING CODE, WILL NOW BE VERYFYIN/ THINKING ABOUT HOW TO INTEGRATE THE Curves and splines code on this ... 
+
+25/9/2020      
+
+12.18 AM    
+
+Deciding what to do with the radio , I am currently looking for Input capture Modes of the STM32, 
+Found refernces see [this.](https://controllerstech.com/pwm-input-using-input-capture-in-stm32/)
+
+28 Sept '20    
+ 
+12.58 AM 
+
+
+Was trying to get the setup running on the SD CARD , turns out the SD CARD is read only , for some reason its become a read only sdcard, I cant change it , write it , do anything except what was on it originally. The initial config, spent the day trying to find out whats wrong switching betn diff oses and diff methods of writing to SDCARD, all of which failed , DUMB ME !! Could have thought that its being write protect after the first failure , tomorrow will be getting a new SDCARD for this OS. 
+
+Hopefully my cheap card reader didnt spoil it, but good news it works , ie theres a workable operating system on the SDCARD, maybe Ill later use it. 
+
+
+30 Sept '20 
+
+9.30 PM 
+
+
+A little update on what I've been doing for the past few days, I managed to get the setup working on the Rpi, Atleast the spline generation and gopro part. Havent yet tested the sending of UART to MCU, I also made a few mecanical mods to the gimbal so that it could balance the gopro. see these
+![1](sshots/rpiVNC.png)
+![2](sshots/rpiVNCGoPro.png)
+![3](sshots/rpiVNCGOPROPitch.png)
+![4](sshots/rpiVncGoProYaw.png)
+
+Not the jugaad toothpick, clay and magnets. I brought new screws and Vias ( Its not called vias but something with starting with V, lets just call it vias for the sake )![notVias](sshots/notVias.jpeg)
+
+Since only one  vias was available per screw I had to get a set of 20 screws , I got a range of them , Vbig vias like truck screws big ( got individually (around 5,6 ) ), small medm sized ( a set with screws (around 15-20) ), small small vias (around 150 of these).              
+The unfinal mods looks something like ![this](sshots/gimbalModsWts.jpeg) and ![this](sshots/gimbalModsWtsBottomView.jpeg) and had to  dispose of its velcro strap and had to buy a new velcrow strips. 
+
+Rnow Im trying testing the reeiver and the TX to see which channels should I use. 
+
+Still a little shaky IDK what to do , ig i'll have to flash the firmware for a lower D value ? I guess so ... 
+
+1st October 2020    
+8.15 PM 
+
+ Still busy balancing the gimbal , I  finally today changed the firmware and increased the damping constant of the pitch motor. 
+
+
+My gimbals working fine , it seems working well, so NEXT STEPS ? 
+INTEGRATE / PUT IT ALL TOGETHER !! 
+S1. Check if my current setup is working correctly before moving ahead. 
+1. If I can track the object on the Buggy Without any issues. ( Possibnle issues , insufficient power for both gimbal Rpi/FAN and the MCU !!! Soln , Get a bigger buck module or add 2 buck modulees in parallel. )
+Since I will need to buy 1 buck module anyway , I'm getting a bigger one. 
+
+2. Do i need to integrate the radio inputs explicitly !! 
+
+DO    
+Test -> Validate -> Update -> Test ...  
+and NOT        
+Update -> Update -> Update -> Test -> ... 
+
+
+2nd Oct '20 
+
+7.52 AM 
+
+Its early in the morning and the araldite seems to have done its job, the power GPB seems to be firm, on the buggy, 
+
+Now a major ISSUE, the Rpi isnt booting up, ( the entire setup on buggy, ofc )
+1. When I connected the Pi it did boot up but showed the thunder sign, ie low power , couldn't finish boot. 
+2. Tried again but fucked up by powering via USB and the rest periferals got powered of the buggy via Rpi through, 5v pin. [Although it shows it can source upto 0.5Amps.](https://www.circuits.dk/everything-about-raspberry-gpio/)
+3. Third time I booted from buggy power setup, I guess it showed me blinking green LED lights. Didnt count how many times they were blinking [later found the corrletaion between lights and status. ](https://www.makeuseof.com/tag/raspberry-pi-wont-boot-fix/)
+
+Yep the SDCard is damaged. Now Reflashing it all again ... SED. 
+
+
+6.05 PM 
+
+
+Reflashed the sdcard with the middle image ie neither terminal version nor the full fleeged version, no virtual env , isntallied opencv from 
+https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/
+and 
+https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/
+
+The test cases seem to be working on the rpiVNC, 
+see ![thisimg.](sshots/retryRpi.png)
+
+So now I need to disable my this wifi connection and put the only wifi of gopro on Rpi. 
+
+But before that I need to verify if the STM comms are working well .
+
+3 Oct '2020 
+
+6.13 PM 
+
+Stuff momentarily worked well , the entire buggys been assembled 
+```
+udp://:8554: Input/output error
+```
+
+This is the bottle neck now trying to remove these errors. 
+Googled errors 
+I installed ffmpeg ,
+```
+[mpegts @ 0x21db1d0] Could not find codec parameters for stream 2 (Unknown: none ([128][0][0][0] / 0x0080)): unknown codec
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+[mpegts @ 0x21db1d0] Could not find codec parameters for stream 3 (Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp): unspecified sample rate
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+Input #0, mpegts, from 'udp://:8554':
+```
+
+see this file for ![errors](sshots/goproErrors.png)
+
+wILL be later looking into mom's laptops elementary OS, where this stuff worked correctly for long period of time. 
+
+
+7th Oct '20
+
+12.17 PM 
+
+AS i Said stuff worked well on elementary(ASUS Laptop ) IDK ehat is the ISSUE on Manjaro( Lenovo )/Rpi. 
+I'll later put the sepcxs of the laptops here .. 
+Ethernet/Wifi CARD issues ??
+On elemetary I just did a pull request and install from the requirements.txt 
+Stuff worked well until the end of the program. 
+see ![this](sshots/allGoodElem.png)
+
+Around ~10k+ frames were working well. 
+What I'll try is get a new requirements  file from elementary and see if it works on Rpi, cutting back from other laptop and working on ASUS. 
+
+Also stupid Git issues , shows  10k++ modified files when changing OSes ( ie switching back and forth betn Windows and Linux )
+
+Heres my  asus Wireless Card info 
+
+```
+02:00.0 Network controller: Qualcomm Atheros QCA9565 / AR9565 Wireless Network Adapter (rev 01)
+```
+ and the screenfetch/neofetch 
+
+ ```
+       eeeeeeeeeeeeeeeeeeeeeee         ----------------------------------------------- 
+    eeeee  eeeeeeeeeeee   eeeee       OS: elementary OS 5.1.7 Hera x86_64 
+  eeee   eeeee       eee     eeee     Host: VivoBook 15_ASUS Laptop X507UAR 1.0 
+ eeee   eeee          eee     eeee    Kernel: 4.15.0-117-generic 
+eee    eee            eee       eee   Uptime: 12 mins 
+eee   eee            eee        eee   Packages: 2095 
+ee    eee           eeee       eeee   Shell: bash 4.4.20 
+ee    eee         eeeee      eeeeee   Resolution: 1920x1080 
+ee    eee       eeeee      eeeee ee   DE: Pantheon 
+eee   eeee   eeeeee      eeeee  eee   WM: Mutter(Gala) 
+eee    eeeeeeeeee     eeeeee    eee   Terminal: io.elementary.t 
+ eeeeeeeeeeeeeeeeeeeeeeee    eeeee    CPU: Intel i5-8250U (8) @ 3.400GHz 
+  eeeeeeee eeeeeeeeeeee      eeee     GPU: Intel UHD Graphics 620 
+    eeeee                 eeeee       Memory: 2947MiB / 7858MiB 
+      eeeeeee         eeeeeee 
+         eeeeeeeeeeeeeeeee                                    
+ 
+```
+
+Does it matter thogh ? 
+
+
+3.02 PM 
+
+
+Seems the SD CARD OF MY Rpi got damaged , again , reflashed the entire setup. 
+now I'm just creting a bash script that'll sipposedly install all the requirements back on the Rpi again. 
+
+6.22 PM 
+
+Creating a package to wget on my Rpi. 
+
+8th Oct '20
+
+12.20 PM 
+
+So I finally got stuff running on Rpi , back to where I was last time. 
+I have now simply run the gopro_keepalive script
+
+After around 2k frames it gives me the following msg 
+```
+Circular buffer overrun. To avoid, increase fifo_size URLoption. To survive in such case, use overrun_nonfataloption
+```
+I think this is the main cause ... 
+Which is being caused by these stuffs .. see Image of Rpi erros above . 
+
+```
+ = 26 q=14.0 size=   12785kB time=00:01:18.38 bitrate=1336.2kbitsframe= 2337 fps= 26 q=12.9 size=   12853kB time=00:01:18.81 bitrate=1335.9kbitsframe= 2351 fps= 26 q=12.8 size=   12926kB time=00:01:19.26 bitrate=1335.8kbitsframe= 2365 fps= 26 q=13.8 size=   13001kB time=00:01:19.74 bitrate=1335.5kbitsframe= 2379 fps= 26 q=12.4 size=   13084kB time=00:01:20.20 bitrate=1336.3kbits[udp @ 0x912960] Circular buffer overrun. To avoid, increase fifo_size URL option. To survive in such case, use overrun_nonfatal option
+frame= 2392 fps= 26 q=13.2 size=   13153kB time=00:01:20.63 bit
+
+ error while decoding MB 22 29, bytestream -5
+
+cabac decode of qscale diff failed at 21 28
+```
+
+Finally the program ends with this 
+
+```
+@ 0x9c7e30] error while decoding MB 43 23, bytestream -5
+[h264 @ 0x9c7e30] concealing 377 DC, 377 AC, 377 MV errors in P frame
+udp://:8554: Input/output error
+    Last message repeated 4 times
+frame= 2964 fps= 26 q=13.0 Lsize=   16242kB time=00:01:39.52 bitrate=1336.9kbits/s speed=0.865x    
+video:9852kB audio:4651kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 11.995548%
+^CTraceback (most recent call last):
+  File "gopro_keepalive.py", line 4, in <module>
+    gopro.stream("udp://127.0.0.1:10000")
+  File "/home/pi/workspace/code/env-oscar/lib/python3.7/site-packages/goprocam/GoProCamera.py", line 1177, in stream
+    self.KeepAlive()
+  File "/home/pi/workspace/code/env-oscar/lib/python3.7/site-packages/goprocam/GoProCamera.py", line 61, in KeepAlive
+    time.sleep(2500/1000)
+KeyboardInterrupt
+```
+
+Hopefully I'll debug this tomorrow. 
+Bis Bald.. 
+
+8th Oct '20
+
+2.15 PM 
+
+This is my log of gopro_keepalive.py
+
+```
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[h264 @ 0x6b0180] non-existing PPS 0 referenced
+    Last message repeated 1 times
+[h264 @ 0x6b0180] decode_slice_header error
+[h264 @ 0x6b0180] no frame!
+[mpegts @ 0x69b1d0] Could not find codec parameters for stream 2 (Unknown: none ([128][0][0][0] / 0x0080)): unknown codec
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+[mpegts @ 0x69b1d0] Could not find codec parameters for stream 3 (Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp): unspecified sample rate
+Consider increasing the value for the 'analyzeduration' and 'probesize' options
+Input #0, mpegts, from 'udp://:8554':
+  Duration: N/A, start: 1.685333, bitrate: N/A
+  Program 1 
+    Stream #0:0[0x1011]: Video: h264 (Main) ([27][0][0][0] / 0x001B), yuvj420p(pc, bt709, progressive), 848x480 [SAR 1:1 DAR 53:30], 29.97 fps, 29.97 tbr, 90k tbn, 59.94 tbc
+    Stream #0:1[0x1100]: Audio: aac (LC) ([15][0][0][0] / 0x000F), 48000 Hz, stereo, fltp, 193 kb/s
+    Stream #0:2[0x200]: Unknown: none ([128][0][0][0] / 0x0080)
+    Stream #0:3[0x201]: Audio: ac3 ([129][0][0][0] / 0x0081), 0 channels, fltp
+Please use -b:a or -b:v, -b is ambiguous
+```
+
+
+Here I found a nice link explaining a little bit of whats happening undere the hood 
+
+https://stackoverflow.com/questions/50063707/ffmpeg-rtsp-error-while-decoding-mb
+
+I also lookened into the source code of gopro_cam and found these stuff a little bit useful. [Stream Settings](https://github.com/KonradIT/gopro-py-api/blob/03aa8e80703370caee1fbe5fa64c2053607ae206/goprocam/GoProCamera.py#L1248 )
+and this link relating to [stream](https://github.com/KonradIT/gopro-py-api/blob/03aa8e80703370caee1fbe5fa64c2053607ae206/goprocam/GoProCamera.py#L1220). 
+It basically tells packets are dropping cause .... IDK why I tried lowering the quality to min and so for the bitrate. 
+
+Because Im streaming both VNC and gopro on goPros wifi , I guess this may be one of the issue. Maybe I'll try if I can SSH via gopros wifi to run the same commands. 
+

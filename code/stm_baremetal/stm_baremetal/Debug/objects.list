@@ -1,3 +1,4 @@
+"Core/Src/buggy.o"
 "Core/Src/curves.o"
 "Core/Src/gimbal_stuff.o"
 "Core/Src/main.o"

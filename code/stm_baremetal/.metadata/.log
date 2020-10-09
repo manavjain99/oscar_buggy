@@ -693,3 +693,21 @@ Caused by: java.io.IOException: error=2, No such file or directory
 	at java.lang.ProcessImpl.start(ProcessImpl.java:134)
 	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
 	... 5 more
+!SESSION 2020-10-05 15:22:07.100 -----------------------------------------------
+eclipse.buildId=Version 1.4.0
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_IN
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2020-10-05 15:22:35.572
+!MESSAGE Log4j initialized with config file D:\oscar_buggy\code\stm_baremetal\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2020-10-05 15:22:52.507
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2020-10-05 15:22:52.957
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2020-10-05 15:24:08.262
+!MESSAGE Indexed 'pwmInputCapture' (21 sources, 98 headers) in 7.87 sec: 7,536 declarations; 34,501 references; 2 unresolved inclusions; 29 syntax errors; 147 unresolved names (0.35%)
