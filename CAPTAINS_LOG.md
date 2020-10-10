@@ -1730,3 +1730,24 @@ It basically tells packets are dropping cause .... IDK why I tried lowering the 
 
 Because Im streaming both VNC and gopro on goPros wifi , I guess this may be one of the issue. Maybe I'll try if I can SSH via gopros wifi to run the same commands. 
 
+
+11.07 PM 
+
+Okay so I have most likely some FFMPEG issues, for a start its recommended to compile from source.. 
+
+Found a helpful ( very helpful link from the official docs ). [here](https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi)
+
+9th Oct '20 
+
+5.20 PM 
+
+AAH, fuck it. Gopro hero7 onwards [it doesnt stream via IP](https://community.gopro.com/t5/Cameras/HERO-7-Black-Vlc-Wifi/m-p/359236#/M101027)
+
+Which means this [ FFMPEG streaming method wont work ](https://community.h7.org/topic/577/gopro-live-streaming/2)
+
+10th Oct '20
+
+12.50 PM 
+
+still gathering insight into [ffmpeg webcam streaming](https://trac.ffmpeg.org/wiki/Capture/Webcam). 
+Works well 
