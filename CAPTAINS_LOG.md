@@ -1751,3 +1751,102 @@ Which means this [ FFMPEG streaming method wont work ](https://community.h7.org/
 
 still gathering insight into [ffmpeg webcam streaming](https://trac.ffmpeg.org/wiki/Capture/Webcam). 
 Works well 
+
+
+10.22 PM 
+
+Gave [this guys post](https://sonnati.wordpress.com/2011/07/11/ffmpeg-the-swiss-army-knife-of-internet-streaming-part-i/) a good read. 
+
+Taught basics of FFMPEG to streamings , 
+
+Currently I am simulating a video file sending to a UDP server as my gopro, and then seeing if this stream works well on Rpi, instead of actually connecting via gopro. 
+
+
+To stream a video file to a udp address ( ie a gopro simulation, on PC  )     : 
+
+```
+ffmpeg -re -i input_video.mp4 -an -c copy -f mpegts udp://127.0.0.1:5000
+```
+
+```
+-an # this disables audio 
+-c copy # send the video as is  W/o any encodings 
+```
+
+And on the receiveing end ( ie Rpi )
+
+```
+ffmpeg -i udp://127.0.0.1:5000 -c copy -f mpegts output_video.mp4
+```
+OR VLC with address 
+udp://@ip:port
+
+Video transmitted successfully, but the issues is that there arent any video VLC / other codecs installed on Rpi , so I used a opencv script to see if the video with `data` existed in the video. 
+
+Now trying to see ways to pipe the output of ffmpeg to opencv 
+
+If thats done I can simply bypass the gopro API.
+
+11.56 PM 
+
+So now that I can stream stuff over ffmpeg , I needed to see if I can stream output to opencv 
+
+I found [this link](https://stackoverflow.com/questions/50916903/how-to-process-vlc-udp-stream-over-opencv), which led me to this link [explaining opencv and ffmpeg](https://stackoverflow.com/questions/47112642/permanent-fix-for-opencv-videocapture/47116576#47116576)
+
+Which said :
+
+To find out if OpenCV was built with FFMPEG support, in terminal enter:
+```
+python -c "import cv2; print(cv2.getBuildInformation())" | grep -i ffmpeg
+```
+
+Which gave me 
+
+```
+FFMPEG:                      YES
+```
+
+Which turned out lucky , if not Id have to do a source installation.. 
+Although not sure of Raspberry Pi, 
+
+@TODO: I need to add this into readme , ie check if opencv built with FFMPEG. 
+
+See the script [opencvStream.py](code/tests/opencvStream.py). 
+
+
+11th Oct '2020
+ 
+12.06 AM 
+
+Time seems to be passing slow , a lot slower 
+
+Now testing if gopro streaming works for me.... 
+
+The command for ffmpeg from gopro should be similar ,, The address was 
+
+```udp://:8554``` , which idk what means , perhaphs localhost or routrer 
+Ill be testing this Address 
+
+if fails     
+
+`udp://10.5.5.9:8554`
+
+if fails 
+
+`udp://localhost:8554`    
+
+
+I dont need to do all this BS I can simply stream directly from the camera to opencv, but that'll stream audio stuff as well so passing  this as a filter thus degrading video quality ? 
+
+``` 
+ffmpeg -f mpegts -i udp://10.5.5.9:8554 -an -c copy -f mpegts udp://127.0.0.1:5000
+```
+
+it ends with 
+```
+[mpegts @ 0x555c253ea780] Could not detect TS packet size, defaulting to non-FEC/DVHS
+udp://10.5.5.9:8554: could not find codec parameters
+```
+Errors on manjaro , maybe would work well with rasp ? / Ubuntu 
+
+later ... 
