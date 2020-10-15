@@ -48,9 +48,12 @@ yes Y | python3 get-pip.py
 yes Y | rm -rf ~/.cache/pip
 
 # making pip and python versions , as pip3 & python3 
-echo 'alias python=python3' >> ~/.bashrc
-echo 'alias pip=pip3' >> ~/.bashrc
-echo 'export PATH=$PATH:/home/pi/.local/bin' >> ~/.bashrc
+echo 'text' | sudo tee -a ~/.bashrc
+echo 'alias python=python3' | sudo tee -a ~/.bashrc
+echo 'alias pip=pip3' | sudo tee -a ~/.bashrc
+echo 'export PATH=$PATH:/home/pi/.local/bin' | sudo tee -a ~/.bashrc
+
+
 
 source ~/.bashrc
 
