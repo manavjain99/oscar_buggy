@@ -1850,3 +1850,429 @@ udp://10.5.5.9:8554: could not find codec parameters
 Errors on manjaro , maybe would work well with rasp ? / Ubuntu 
 
 later ... 
+
+12 Oct '20 
+
+1.45 PM
+
+```
+ffmpeg -f mpegts -i udp://127.0.0.1:8554  -c copy -f mpegts output.mkv
+```
+
+To store to a video file. 
+
+3.27 PM 
+
+So the stuff works on ubuntu env , 
+
+this is the ffmpeg version ( ubuntu )
+
+```
+ffmpeg version 3.4.8-0ubuntu0.2 Copyright (c) 2000-2020 the FFmpeg developers
+  built with gcc 7 (Ubuntu 7.5.0-3ubuntu1~18.04)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.2 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared
+  libavutil      55. 78.100 / 55. 78.100
+  libavcodec     57.107.100 / 57.107.100
+  libavformat    57. 83.100 / 57. 83.100
+  libavdevice    57. 10.100 / 57. 10.100
+  libavfilter     6.107.100 /  6.107.100
+  libavresample   3.  7.  0 /  3.  7.  0
+  libswscale      4.  8.100 /  4.  8.100
+  libswresample   2.  9.100 /  2.  9.100
+  libpostproc    54.  7.100 / 54.  7.100
+  ```
+
+  will later MELD to see the diffs 
+
+the one on manjaro is 
+
+```
+ffmpeg version n4.3.1 Copyright (c) 2000-2020 the FFmpeg developers
+  built with gcc 10.1.0 (GCC)
+  configuration: --prefix=/usr --disable-debug --disable-static --disable-stripping --enable-avisynth --enable-fontconfig --enable-gmp --enable-gnutls --enable-gpl --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libdav1d --enable-libdrm --enable-libfreetype --enable-libfribidi --enable-libgsm --enable-libiec61883 --enable-libjack --enable-libmfx --enable-libmodplug --enable-libmp3lame --enable-libopencore_amrnb --enable-libopencore_amrwb --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librav1e --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libv4l2 --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxcb --enable-libxml2 --enable-libxvid --enable-nvdec --enable-nvenc --enable-omx --enable-shared --enable-version3
+  libavutil      56. 51.100 / 56. 51.100
+  libavcodec     58. 91.100 / 58. 91.100
+  libavformat    58. 45.100 / 58. 45.100
+  libavdevice    58. 10.100 / 58. 10.100
+  libavfilter     7. 85.100 /  7. 85.100
+  libswscale      5.  7.100 /  5.  7.100
+  libswresample   3.  7.100 /  3.  7.100
+  libpostproc    55.  7.100 / 55.  7.100
+  ```
+
+Also found a few addtional details 
+
+Such as 
+
+1. Sending [keep alive packets to gopro.](https://github.com/KonradIT/gopro-py-api/blob/03aa8e80703370caee1fbe5fa64c2053607ae206/goprocam/GoProCamera.py#L83) 
+
+That worked ... 
+
+Mostly I think frames start to drop as battery of gopro starts falling down. 
+
+
+Trying stuff on Rpi......
+
+This shows up in Rpi 
+
+`WARNING: library configuration mismatch`
+
+
+10.44 PM 
+
+
+I am installing from source on Rpi , 
+
+But cross compiling it. .
+
+Coz mostly it will run into some cache errors etc which I dont want 
+
+I found a cross compiler for Rpi develpoed by some people .. 
+Hopefully this works for ffmpeg 
+
+I could have gone with ffmpeg binaries built by people but found them old ~ 4 year old 
+
+REcheccking though 
+
+Okay wasted plenty time to setup cross compiler 
+
+but anyways found 3 year old binaries from [ffmpeg wiki](https://trac.ffmpeg.org/wiki/CompilationGuide) which led me to this [repo](https://github.com/sitkevij/ffmpeg/tree/master/ffmpeg-3.4.1-resin-rpi-raspbian), If this doesant work then source compilation. 
+
+ohh BTW the toolchain for cross compiling on Rpi I installed from 
+[this stacoverflow post](https://stackoverflow.com/questions/19162072/how-to-install-the-raspberry-pi-cross-compiler-on-my-linux-host-machine/58559140#58559140).
+
+
+IDK wtf happened 
+
+```
+pi@raspberrypi:~/Downloads $ ./get-docker.sh 
+# Executing docker install script, commit: 26ff363bcf3b3f5a00498ac43694bf1c7d9ce16c
++ sudo -E sh -c apt-get update -qq >/dev/null
++ sudo -E sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null
++ sudo -E sh -c curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add -qq - >/dev/null
+Warning: apt-key output should not be parsed (stdout is not a terminal)
+gpg: Note: trustdb not writable
+sort: fflush failed: 'standard output': Read-only file system
+sort: write error
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/empty.gpg': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/trustdb.gpg': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.orig.keylst': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.orig.gpg': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/S.gpg-agent': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/private-keys-v1.d': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/gpg.1.sh': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/gpgoutput.log': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/keyringfile.keylst': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/S.gpg-agent.ssh': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/S.gpg-agent.extra': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.gpg~': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/gpg.0.sh': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/S.gpg-agent.browser': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.kbx': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.gpg': Read-only file system
+rm: cannot remove '/tmp/apt-key-gpghome.59V39rkdro/pubring.diff': Read-only file system
+pi@raspberrypi:~/Downloads $ cd ..
+pi@raspberrypi:~ $ ls 
+-bash: /bin/ls: Input/output error
+pi@raspberrypi:~ $ cd 
+pi@raspberrypi:~ $ cd ~/
+pi@raspberrypi:~ $ ls 
+-bash: /bin/ls: Input/output error
+pi@raspberrypi:~ $ cd ~
+pi@raspberrypi:~ $ ls 
+```
+home seems to be gone . and the rest of the files as well. 
+
+Highly unlikely stuff will come back on reboot , if not these were the last logs. 
+
+```
+-bash: /bin/ls: Input/output error
+pi@raspberrypi:~ $ reboot
+-bash: reboot: command not found
+pi@raspberrypi:~ $ shutdown 
+-bash: shutdown: command not found
+pi@raspberrypi:~ $ shutdown 
+```
+
+Press F for respect.  * pulls the plug *
+
+Its alive 
+
+bhenchod.. 
+Not again 
+
+```
+ssh -X pi@10.42.0.104
+ssh: connect to host 10.42.0.104 port 22: No route to host
+```
+
+I need to again connect a monitor remove ssh keys , do setup again from this [stackoverflowblog](https://stackoverflow.com/questions/42305373/raspberry-pi-connection-closed-ssh).
+
+ . * I probably have infinite patience to do this * FUCK U RPI. 
+
+I'll also need to remove the stuff from my pc from 
+```
+ ~/.ssh/known_hosts
+```
+for that respective IP address.
+
+
+
+so the flow is -> fix ssh rpi & laptop -> download/install docker on Rpi -> install ffmpeg -> run to see if gopro runs w/o errors ->  run main,py viola. 
+
+
+11.26 PM 
+
+
+I'll just skip ssh
+Direclty do stuff from monitor.
+
+
+
+13th Oct '20 
+
+7.53 PM 
+
+
+SO yesterday raspberry went corrupt again, I bought a new sdcard( sandisk 32gb 98mbps r/w,  earlier (some chine kdm 16gb, idk r/w ) ) and put [ubuntuMate](https://ubuntu-mate.org/ports/raspberry-pi/) on it. 
+
+Ran the installation script i wrote earlier , installed the contents until the opencv part .. (see [requirementsRpi.txt](code/requirementsRpi.txt) & [rpiSetup.bash](code/scripts/rpiSetup.bash))
+
+No opencv binaries are available for this 
+
+Which means source installation 2 options 
+
+1. Cross compilation 
+2. compile on Rpi 
+
+I chose option 2 coz option 1 was painful enough yesterday ( althogh it worked , but unsure of ubuntuMate compatibility, another toolchain of course)
+
+Currently increasing swap of Rpi to make sure it succeeeds and hopefully rpi doesnt burn off. 
+*fingers crossed* 
+
+Current temp with 12v fan and heatsink is 40deg celcius. 
+
+To insrall swap refered these links [1](https://ubuntu-mate.community/t/swap-space-in-raspberrypi-armhf-image/19549)
+and [2](https://askubuntu.com/questions/178712/how-to-increase-swap-space).
+
+and viola 
+```
+
+root@pi-desktop:/home/pi# grep 'Swap' /proc/meminfo
+SwapCached:            0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+root@pi-desktop:/home/pi# sudo mkswap /swapfile
+mkswap: /swapfile: insecure permissions 0644, 0600 suggested.
+Setting up swapspace version 1, size = 4 GiB (4294963200 bytes)
+no label, UUID=14720d67-8113-41e3-9414-55bcc81a6a97
+root@pi-desktop:/home/pi# sudo swapon /swapfile
+swapon: /swapfile: insecure permissions 0644, 0600 suggested.
+root@pi-desktop:/home/pi# grep 'Swap' /proc/meminfo
+SwapCached:            0 kB
+SwapTotal:       4194300 kB
+SwapFree:        4194300 kB
+root@pi-desktop:/home/pi# 
+```
+
+Although I need  to know how to uindo this before proceeding coz people say sdcards burn out , in this conditions after lonfgerp periods of time. 
+
+>Beware that if the system needs to swap a lot (if low on memory a lot), this could wear out the SSD’s limited write cycles. The advantage as you’ve proved with an SSD is that they’re very fast at read/writing like RAM, so performance won’t suffer that much then a mechanical HDD and the SD card.
+
+>When the system needs to swap on systems with bottlenecked I/O (i.e. the SD card), that’s where swap probably is a bad idea.
+
+   
+If I dont edit fstab    
+It remains only for that boot duration. 
+
+Restored flash back 
+```
+root@pi-desktop:/home/pi# grep Swap /proc/meminfo
+SwapCached:            0 kB
+SwapTotal:            36 kB
+SwapFree:             36 kB
+root@pi-desktop:/home/pi# 
+```
+
+11.47 PM 
+
+
+Aaah fuk me 
+
+So i made swap 0 that made a new set of problems for me. 
+
+People wrote 0 swap is good . 
+
+Loda, Not keeping 3gb but .5 gb 
+
+
+14 th OCt 2020 
+
+
+6.18 PM 
+
+So ubuntu mate is not good, some pip wheels issue, dont even bother looking it up , it was pretty uply and still unresolved on various git issues.. 
+
+I spent the morining trying to fix it 
+
+Didnt workwell , thought of changing python version, which I did ... 
+
+Still the issue wasnt resolved . it was a pip issue so that didnt help .. 
+I tried using virtual envs , but turns out that even that isntallation failed. 
+Coz wheels was a dependency for that. the python version was 3.8.5 and pip was 20.x.x, swap was high , another issue was low swap,
+
+Then I insalled another python version on the system and changed the alias to 3.7.9 , still got the same issue, 
+
+there was something --feature=2020-october-dependecy issue , which said pip was changing dependecies were managed ... looked plenty of forums and git commands ... 
+
+Tried a monkey on keyboard approaach with every possible solution ( a very smart monkey, of course )
+
+Didnt wwork out ...
+
+So flashed raspian 
+
+Got opencv running and here we go with ffmpeg issues again . 
+
+FUCK ME , like litreally fuck me 
+
+Why am i even doing this bs spent over 20+hrs in the past 2 dayds just to get this setup running... 
+
+And its still fucking faiuling , luckylty a smarter me in the past had written a script to install isetup for rasppioan that saved me some trouble , but I am back where I started , worse opencvs functions dont seem to work. 
+
+Even the aruco.mp4 test isnt working and I need to return the fucking go pro within 2 days.......
+
+RNOW the output of opencv is 
+```
+(env-oscar) pi@raspberrypi:~/code/jetson $ python3 main.py 
+press ctrl+c twice to exit. 
+18:17:06: Process thread init success
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x68e00c40] moov atom not found
+VIDIOC_REQBUFS: Inappropriate ioctl for device
+^[[B^CKeyboardInterrupt (ID: 2) has been caught. Cleaning up...
+^CKeyboardInterrupt (ID: 2) has been caught. Cleaning up...
+```
+this tells me to go and fix ffmpeg... 
+
+FUCK u & fuck everything in this universe ... 
+
+I have spent more time setting up the environment for this project than I have worked on this project .. 
+
+First that bloody motherfucker stm and its IDES and now this son of a bitch python and Rpi & ffmpeg of course, not to mention switching between 2 laptops & 4 oses and the fucking git issues in syncing all of them, coz some some stuff works on one laptop and some hardware like (ethernet ports) on other laptops and proper device stm drivers on other. 
+
+And thats just setting up the envirnment for the project to run. 
+
+Aah fuck give me a oscar for this ( wtf, a pun ? not funny ).
+
+kill me.
+
+6.43 PM 
+
+Okay maybe theres some hope 
+
+Remember I diabled git LFS coz , github was ( is ) a greedy asshole and wanted my money coz I used way too much storage and had to remove and disable lfs files 
+
+So i sent the lfs file details as mp4 and thats triggerin this issue. 
+
+So I dont have the video on my device, and not on the cloud. (yeah fuck u too github , I'll be moving to gitlab or bitbucket next time motherfucker.)
+
+So I guess the other laptop might, just might have the testing video. I'll ssh to rpi and see if it works, mostly it eill and then source installation of this ffmpeg sucker via cross compilattion., 
+
+YUSSS and this bitch opencv runs on Rpi. 
+
+Now that ffmpeg bitchs baari .. 
+
+So back where i started it all , reached to the point till ffmpeg fucks up..
+
+Now I want to make mods to the point where I stream to opencv from ffmpeg from my manual hack. 
+
+
+9.30 PM 
+
+Testing my manual gorpo hack....
+
+IDK about that ffmpegs prev msg / WARNING ABT incorrect config 
+
+*Fingers crossed*
+
+HAHA BIG F 
+
+VVV BIG F    
+Not that my doesn't run , you'll be not surprised it runs well. I wrote it, the issue is it runs  , which taught me something very basic 
+
+I had been missing from the start, a little seeming insignifacnt screw's feature in the big bell clock. 
+
+Any guesses ? 
+
+You didn't guess it, It's latency, in case if you did, well whatever ...  
+
+> it doesnt matter how good or how bad is my video quality if I dont get it at the right instant of time.
+
+
+Now that I ve fixed everything... Did I fix ffmpeg WARNING and build from src on rpi , no!! Fuck it . 
+
+But it sounds so nice ,   
+*so*   
+>*Now that I've fixed everything*  
+>I have come to realise that this world is full of fucked up things, it doesn't matter what you do, this project isn't gonna complete the way I want it. So here's is where I'm parting ways with my overpriced rented gopro and just gonna use what it was built for. For adventure. ( what did you think )
+
+
+I'll be attaching the gimbal on the buggy, connect gopro to the borroweed flysky and use the buggys original tx to control it. 
+
+I'll transfer / upload the video later here .. ( fuck you github lfs )
+
+Im thinking of testing tommorw morning connecting the buggy and running it on the streets here.
+
+
+11.56 PM 
+
+Bye 
+
+15th Oct '20
+
+8.15 PM 
+
+
+So theres a preset called ultrafast preset that gets me latency down to 2secs. Its said that ffmpeg induces its own latency so it could be 1 sec, but its good enough for live. 
+
+The ffmpeg command is : 
+
+```
+ffmpeg -f mpegts -i udp://10.5.5.9:8554  -an -map 0:v  -c:v libx264 -preset ultrafast -fflags nobuffer  -f mpegts -r 29.97 udp:127.0.0.1:10000
+```
+
+One more issue I have is that my keep alive doesnt work. Its the same from [here.](https://github.com/KonradIT/gopro-py-api/blob/0249e073c725c1fe62d7a945fd0dcf9778b0c422/goprocam/GoProCamera.py#L76)
+
+11.35 PM 
+
+Yeah I fugred it out few hrs early that there was more to the picture than keep alive , there ewas some thing called wake up.. 
+See the link prev, a line above Ig. 
+
+I did try to copy that wake up gopro code ... but turns out too much spaaghtetti. So a dirty , v dirty hack I did is , run the gorpo keepAlive, let it wake gopro and then kill the code and run my ffmpeg settings code and keep alive part .
+
+That does the trick the most easily , but its a dirty, very dirty trick.
+
+11.59 PM 
+
+Also since I need to return the gopro tomorrorw/today (0000hrs rn), I tested the buggy out in the garden drove it for 15 Mins , I thought the footage would look great , but it doesn't , it's dark at night. 
+
+Tomorrow mid morning I'll do one last test drive before leaving to return it. 
+
+I could have uplaoded the video but BAD LFS & BAD github want s my money, which I value more than you seeing the footage. 
+
+So there goes it... I'll also probably return the FLYSKY RX/TX incase they need it( & I said I wanted it for ~15 days).
+
+I only managed to reserach the interrupt code for stm. I don't think I managed to get the code and workflow running, besides that board isn't supported on this laptop(lenovo IDEAPAD 320), idont the fuck know why. 
+Reinstalled STM32IDE 2wice in 2 diff profiles , and the drivers , still no luck.
+
+I need that mom's ASUS laptop to flash this other STM I got as a backup. I'll be mostly parting ways here. 
+
+Plenty of chores to do & plenty of fuck u college work to do as well. (countdown , idk a few days people say, thats how unware I am , hence see you some time later ...  )
+
+If I get time later , ( unlikely ) , I'll continue on the integration part of radio. 
+
+See you later , maybe not ? 
+
+GOODBYE 
+
+
+
