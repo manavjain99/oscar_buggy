@@ -160,17 +160,52 @@ LATERAL(L/R) MOTOR DIr IP 2  - PB 13
 
 & Just for reference the ![left pinout](other/nucleo_f411re_left.png)
 
-![Raspberry Pi Pinout](sshots/rpiPinout.png)
 
 
 **Onboard Computer Connections**
 
+![Raspberry Pi Pinout](sshots/rpiPinout.png)
+
+Connecting Wifi to gopro and setting respective proirities ... 
+```
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
+And put this with your respective wifi ssid and pwd. ( note only works for raspian os, you may also wanna put this hierarchial order to choose which wifi to connect 1st )
+
+
+```
+network={
+        ssid="MyWiFi"
+        psk="MyPassword"
+        key_mgmt=WPA-PSK
+}
+```
+
+you can run 
+```
+sudo iw dev wlan0 scan | grep SSID
+```
+to see which SSIDs are available on Rpi network. 
+
+and run 
+
+```
+ iw wlan0 link
+```
+
+to see which wifi youre connected to.
+
+
+**Serial Comms :**    
 Simple USB to TTL Adapter ( as of now ).
 
 Set the appropriate port in [comArduino2.py](code/jetson/ComArduino2.py) at the end of file.
+
 Windows 
 ---
-Open device manager. 
+
+Open device manager, see com port. 
+
 Linux 
 ---
 ```
@@ -179,7 +214,14 @@ ls /dev/tty*
 
 the port index you get tttyUSBX  
 
-**Gmbal Installation**
+**Gimbal Installation**
+![storm32BGO](sshots/storm32BGO.jpg)
+
+* RC2-1 : pitch 
+* RC2-2 : roll 
+* RC2-3 : yaw 
+
+Connect UART accordingly to the STM.
 
 Gimbal inversion using [Olliw's GUI ](http://www.olliw.eu/2013/storm32bgc/) ( Ver 0.96).      
 [MAVLINK setup and usage](http://www.olliw.eu/storm32bgc-wiki/MAVLink_Communication).
@@ -265,6 +307,16 @@ The first set indicates it has Started setup and second state is being used for 
 Nav to vision     
 Run ComArduino2.py (setup appropriate ports).        
 
+Check if opencv is installed correctly 
+
+run 
+```
+python -c "import cv2; print(cv2.getBuildInformation())" | grep -i ffmpeg
+```
+it should return    
+```
+FFMPEG:                      YES
+```
 
 ### And coding style tests
 

@@ -31,14 +31,15 @@ if __name__ == '__main__':
   import cv2
   import statistics 
   import signal
-
+  import socket
   from scipy.interpolate import CubicSpline
   from enum import Enum 
   
   import greenBallTracker as GBT 
   import aruco_tracking as ART
   import curveplanner as CPLN
-  
+  import goproAlive
+
   if INCLUDE_STM == True:
     import ComArduino2 as stcom
   
@@ -56,7 +57,7 @@ IP_FEED = INPUT_FEED.GOPRO_STREAM
 VIDEO_SOURCE = "../tests/aruco.mp4"
 SPLINE_COEFFS_LOG = "../pilotdash/splineCoeffs.txt"
 GIMBAL_ANGLES_LOG = "../pilotdash/logAngles.txt"
-
+LOCALHOST_STREAM_URI = "udp://127.0.0.1:10000"
 
 ####### CAMERA AND FRAMES PARAMS #########
 # 3, 2, 1 for ext webcam 0 for webcam use camtesting.py in tests directly 
@@ -131,7 +132,7 @@ def frame_grabber_thread(event, imgQ = imageQ):
   elif IP_FEED == INPUT_FEED.WEBCAM :
     cap = cv2.VideoCapture(WEBCAM_INDEX)
   elif IP_FEED == INPUT_FEED.GOPRO_STREAM :
-    cap = cv2.VideoCapture("udp://127.0.0.1:10000")
+    cap = cv2.VideoCapture(LOCALHOST_STREAM_URI)
 
   time.sleep(1.0)
   grabberLock = threading.Lock()
@@ -404,10 +405,11 @@ def main():
     stcom.waitForArduino()
     logging.info("Arduino ready.")
   # Takes care of joining, threads, ie main wont after this until all threads are finished.
-  
   with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(process_thread, GlobalEvent)
     executor.submit(frame_grabber_thread, GlobalEvent)   
+    if IP_FEED == INPUT_FEED.GOPRO_STREAM:
+      
 
 
 

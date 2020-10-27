@@ -60,3 +60,10 @@ code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/
 code/stm_baremetal/.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.version
 code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/com.st.stm32cube.common.preferences.prefs
 code/stm_baremetal/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.editors.prefs
+code/stm_baremetal/stm_baremetal/Debug/makefile
+code/stm_baremetal/stm_baremetal/Debug/objects.mk
+code/stm_baremetal/stm_baremetal/Debug/sources.mk
+code/stm_baremetal/stm_baremetal/Debug/Core/Startup/subdir.mk
+references/pwm-input-capture/pwm-input/.settings/language.settings.xml
+code/stm_baremetal/stm_baremetal/Debug/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
+references/pwm-input-capture/pwm-input/.settings/language.settings.xml
